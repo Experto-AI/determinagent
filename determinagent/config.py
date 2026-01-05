@@ -39,8 +39,8 @@ def load_config(
         and `required` is False.
 
     Raises:
-        ConfigurationError: If required=True and config file not found,
-                           or if YAML parsing fails.
+        `ConfigurationError`: If required=True and config file not found,
+                             or if YAML parsing fails.
 
     Example:
         ```python
@@ -92,7 +92,7 @@ def load_config_from_string(content: str) -> dict[str, Any]:
         Dictionary containing the configuration.
 
     Raises:
-        ConfigurationError: If YAML parsing fails.
+        `ConfigurationError`: If YAML parsing fails.
 
     Example:
         ```python

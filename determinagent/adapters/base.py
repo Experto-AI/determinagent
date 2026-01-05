@@ -163,11 +163,11 @@ class ProviderAdapter(ABC):
             Parsed response text.
 
         Raises:
-            ProviderNotAvailable: CLI not installed.
-            RateLimitExceeded: Rate limit exceeded.
-            ExecutionError: Command execution failed.
-            DeterminAgentTimeoutError: Command timed out.
-            KeyboardInterrupt: User interrupted.
+            `ProviderNotAvailable`: CLI not installed.
+            `RateLimitExceeded`: Rate limit exceeded.
+            `ExecutionError`: Command execution failed.
+            `DeterminAgentTimeoutError`: Command timed out.
+            `KeyboardInterrupt`: User interrupted.
         """
         cmd = self.build_command(prompt, model, session_flags, allow_web)
 

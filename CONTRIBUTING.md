@@ -17,7 +17,7 @@ Thank you for your interest in contributing to DeterminAgent! This document prov
 
 ## Code of Conduct
 
-This project adheres to the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the maintainers.
+This project adheres to the [Contributor Covenant Code of Conduct](code-of-conduct.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the maintainers.
 
 ---
 
@@ -29,7 +29,7 @@ This project adheres to the [Contributor Covenant Code of Conduct](./CODE_OF_CON
 - **Git** for version control
 - At least one supported CLI tool installed:
   - [Claude Code](https://claude.ai/code) (`claude`)
-  - [GitHub Copilot CLI](https://githubnext.com/projects/copilot-cli/) (`gh copilot`)
+  - [GitHub Copilot CLI](https://github.com/features/copilot/cli) (`gh copilot`)
   - [Gemini CLI](https://github.com/google-gemini/gemini-cli) (`gemini`)
   - [OpenAI Codex](https://openai.com/codex) (`codex`)
 
@@ -312,7 +312,7 @@ Use the **Feature Request** issue template and include:
 
 ### Security Issues
 
-**Do not** open public issues for security vulnerabilities. See [SECURITY.md](./SECURITY.md) for responsible disclosure.
+**Do not** open public issues for security vulnerabilities. See [SECURITY.md](security.md) for responsible disclosure.
 
 ---
 
@@ -320,6 +320,6 @@ Use the **Feature Request** issue template and include:
 
 - Check existing [Issues](https://github.com/Experto-AI/determinagent/issues)
 - Open a [Discussion](https://github.com/Experto-AI/determinagent/discussions)
-- Read the [Architecture](./ARCHITECTURE.md) documentation
+- Read the [Architecture](architecture.md) documentation
 
 Thank you for contributing! 🎉

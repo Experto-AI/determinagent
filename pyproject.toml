@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "determinagent"
-version = "0.11.0"
+version = "0.12.0"
 description = "CLI-First deterministic multi-agent orchestration library"
 authors = ["DeterminAgent Team <victor@experto.ai>"]
 license = "Apache-2.0"
@@ -44,6 +44,10 @@ mkdocstrings-python = ">=1.0.0"
 mkdocs-htmlproofer-plugin = ">=1.0.0"
 bandit = ">=1.7.0"
 pip-audit = ">=2.6.0"
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-include-markdown-plugin = "^7.2.0"
 
 [tool.poetry.urls]
 Issues = "https://github.com/Experto-AI/determinagent/issues"

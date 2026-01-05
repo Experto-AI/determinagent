@@ -8,15 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Production readiness documentation (CHANGELOG, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY)
-- GitHub Issue and PR templates
-- Enhanced README with installation instructions and troubleshooting
+- **Documentation SSOT**: Implemented Single Source of Truth pattern for documentation using `mkdocs-include-markdown-plugin`
+- **Documentation Wrappers**: Created minimal wrapper files in `docs/` directory that include root markdown files
+- **Documentation Navigation**: Added PLAN and Release Checklist pages to mkdocs navigation
 
 ### Changed
-- Improved error handling in Blog Flow (uses exception type inspection instead of string matching)
+- **Documentation Structure**: Refactored to eliminate duplicate documentation files between root and `docs/` folder
+- **Documentation Links**: Updated cross-file references in CONTRIBUTING.md to use proper markdown file paths
 
 ### Fixed
-- Implemented `filename_template` configuration option in Blog Flow (previously unused)
+- **Documentation Build**: Resolved all link warnings in documentation build process
+- **Documentation Sync**: Eliminated manual sync issues by using include-markdown plugin
+
+---
+
+## [0.11.0] - 2026-01-04
+
+### Added
+- Enhanced GitHub project URL documentation
+
+### Changed
+- Migrated from Hatch/venv to Poetry for unified dependency management
 
 ---
 
@@ -53,17 +65,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Global CLI entry point (replaced by template flows)
 - Legacy framework components
 
----
 
-## [0.1.0] - 2025-12-15
-
-### Added
-- Initial prototype with Claude and Copilot adapters
-- Basic workflow orchestration using LangGraph
-- Proof-of-concept blog generation workflow
-
----
-
-[Unreleased]: https://github.com/Experto-AI/determinagent/compare/v0.10.0...HEAD
-[0.10.0]: https://github.com/Experto-AI/determinagent/compare/v0.1.0...v0.10.0
-[0.1.0]: https://github.com/Experto-AI/determinagent/releases/tag/v0.1.0

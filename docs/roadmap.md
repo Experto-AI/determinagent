@@ -43,8 +43,6 @@
 
 ### Phase 8: Robustness & Expansion
 - [ ] **Integration Test Suite**: Framework for testing with real (mocked) CLI binaries.
-- [ ] **Jupyter Notebooks**: Interactive tutorials for library usage.
-- [ ] **Docker Support**: Containerized environment for safely running `codex` and others.
 - [ ] **CI/CD**: GitHub Actions workflow for automated testing and publishing.
 
 ---

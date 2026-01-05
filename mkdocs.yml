@@ -33,6 +33,7 @@ theme:
 nav:
   - Welcome: index.md
   - Project Roadmap: roadmap.md
+  - Actionable Plan: plan.md
   - Changelog: changelog.md
   - Architecture: architecture.md
   - CLI Reference: cli-reference.md
@@ -48,15 +49,21 @@ nav:
       - Contributing: contributing.md
       - Code of Conduct: code-of-conduct.md
       - Security: security.md
+      - Release Checklist: release-checklist.md
 
 plugins:
   - search
+  - include-markdown:
+      rewrite_relative_urls: true
+      base_path: .
   - htmlproofer:
       raise_error: false
       ignore_urls:
         - "^http://localhost:"
         - "https://claude.ai/code"
         - "https://openai.com/codex"
+        - "../LICENSE"
+        - "../sessions/#determinagent.sessions.SessionManager"
   - mkdocstrings:
       handlers:
         python:

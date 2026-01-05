@@ -52,7 +52,7 @@ poetry run python -c "import determinagent; print(determinagent.__version__)"
 - **Python 3.10+**
 - **At least one supported AI CLI tool** installed and authenticated:
   - [Claude Code](https://claude.ai/code) (`claude`)
-  - [GitHub Copilot CLI](https://githubnext.com/projects/copilot-cli/) (`gh copilot`)
+  - [GitHub Copilot CLI](https://github.com/features/copilot/cli) (`gh copilot`)
   - [Gemini CLI](https://github.com/google-gemini/gemini-cli) (`gemini`)
   - [OpenAI Codex](https://openai.com/codex) (`codex`)
 

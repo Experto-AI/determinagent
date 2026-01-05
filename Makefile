@@ -15,7 +15,7 @@
 #   make verify-integrations - Run interactive integration verification
 #   make build     - Build distribution package
 
-.PHONY: setup test test-cov lint lint-fix typecheck security check env-check verify-integrations docs-build docs-serve build clean help version-check
+.PHONY: setup test test-cov lint lint-fix typecheck security check env-check verify-integrations docs-build docs-serve build clean help version-check bump-version
 
 # Default Python command
 PYTHON ?= poetry run python
@@ -110,6 +110,10 @@ check: lint typecheck security test
 # Verify version sync
 version-check:
 	@$(PYTHON) scripts/bump_version.py --check
+
+# Bump version
+bump-version:
+	@$(PYTHON) scripts/bump_version.py $(filter-out $@,$(MAKECMDGOALS))
 
 # Verify integrations (Interactive)
 verify-integrations:

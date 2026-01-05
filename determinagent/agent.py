@@ -57,7 +57,7 @@ def get_adapter(provider: Provider) -> ProviderAdapter:
         Instantiated adapter for the provider.
 
     Raises:
-        ConfigurationError: If provider is unknown.
+        `ConfigurationError`: If provider is unknown.
 
     Example:
         ```python
@@ -134,11 +134,11 @@ class UnifiedAgent:
             model: Model alias (fast/balanced/powerful/reasoning) or exact name.
             role: Agent role for identification (e.g., "writer", "reviewer").
             instructions: System prompt / instructions prepended to all prompts.
-            session: SessionManager instance for session handling.
+            session: `SessionManager` instance for session handling.
             sandbox: Sandbox mode for Codex (read-only/workspace-write/full-access).
 
         Raises:
-            ConfigurationError: If provider is unknown.
+            `ConfigurationError`: If provider is unknown.
         """
         self.provider: Provider = provider
         self.adapter: ProviderAdapter = get_adapter(provider)
@@ -177,8 +177,8 @@ class UnifiedAgent:
             The agent's response text.
 
         Raises:
-            ExecutionError: After all retries exhausted.
-            KeyboardInterrupt: If user interrupts (handled gracefully).
+            `ExecutionError`: After all retries exhausted.
+            `KeyboardInterrupt`: If user interrupts (handled gracefully).
 
         Example:
             ```python
@@ -282,7 +282,7 @@ class UnifiedAgent:
             Validated Pydantic model instance.
 
         Raises:
-            ValidationError: If parsing/validation fails after all retries.
+            `ValidationError`: If parsing/validation fails after all retries.
 
         Example:
             ```python
@@ -414,7 +414,7 @@ Output the requested content NOW."""
             Parsed JSON as dictionary.
 
         Raises:
-            ParseError: If no valid JSON found.
+            `ParseError`: If no valid JSON found.
         """
         parsed: dict[str, Any]
 
