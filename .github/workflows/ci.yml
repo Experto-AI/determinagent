@@ -225,7 +225,7 @@ jobs:
         run: |
           echo "Verifying flow imports..."
           poetry run python -c "from flows.blog.main import main; print('✅ Blog flow imports successfully')"
-          poetry run python -c "from flows.blog.graph import create_blog_graph; print('✅ Blog graph imports successfully')"
+          poetry run python -c "from flows.blog.main import create_blog_workflow; print('✅ Blog workflow imports successfully')"
 
       - name: Verify library exports
         run: |
@@ -271,7 +271,7 @@ jobs:
       - name: Verify package
         run: |
           pip install dist/*.whl
-          poetry run python -c "import determinagent; print(f'Version: {determinagent.__version__}')"
+          python -c "import determinagent; print(f'Version: {determinagent.__version__}')"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
