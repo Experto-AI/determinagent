@@ -97,7 +97,7 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 | **Session IDs** | ✅ `--session-id`, `-r` | ✅ `--resume` | ✅ `--resume`, `--continue` | ✅ `exec resume` |
 | **System Prompt** | ✅ `--system-prompt` | ⚠️ Via subagents | ⚠️ Via `.agent.md` | ⚠️ Via `AGENTS.md` |
 | **Output Format** | json/text/stream-json | json/text/stream-json | json/text | JSON Lines |
-| **Web Search** | `--allowedTools WebSearch` | Built-in | `--allow-all-tools` | config.toml |
+| **Web Search** | `--allowedTools WebSearch` | Built-in | `--allow-all-tools`, `--allow-all-urls` | config.toml |
 | **Sandbox Mode** | ❌ No | ✅ Docker | ❌ No | ✅ Built-in |
 
 ### When to Use Each Provider

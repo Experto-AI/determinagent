@@ -96,9 +96,9 @@ python flows/blog/main.py "My Blog Topic" --writer claude --editor copilot
 ## 🧩 Compatibility Matrix
 
 | Provider | Adapter Status | Session Support | Web Search | Native Models |
-| :--- | :---: | :---: | :---: | :---: |
+| :--- | :--- | :--- | :--- | :--- |
 | **Claude Code** | ✅ Stable | ✅ Native | ✅ Yes | fast, balanced, powerful |
-| **GH Copilot** | ✅ Stable | ✅ Simulated | ❌ No | fast, powerful |
+| **GH Copilot** | ✅ Stable | ✅ Native | ✅ Yes | fast, balanced, powerful |
 | **Gemini CLI** | ✅ Beta | ✅ Native | ✅ Yes | flash, pro |
 | **OpenAI Codex**| ✅ Beta | ✅ Native | ❌ No | fast, balanced |
 
