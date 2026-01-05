@@ -269,12 +269,7 @@ verify_python_library() {
         return 1
     fi
     
-    local python_cmd
-    if check_command "python3"; then
-        python_cmd="python3"
-    else
-        python_cmd="python"
-    fi
+    local python_cmd="poetry run python"
     
     # Version check
     local py_version

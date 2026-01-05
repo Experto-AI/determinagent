@@ -138,7 +138,7 @@ def parse_review(response: str, min_score: int = 8) -> ReviewResult:
 
         # Pattern 4: Markdown headers (## CATEGORY: 8 - feedback)
         if not score_val:
-            pattern4 = rf"#{1,3}\s*{cat_key}:\s*(\d+)(?:/10)?\s*-\s*(.+?)(?=\n#{1,3}\s*[A-Z]|OVERALL_FEEDBACK:|APPROVAL|$)"
+            pattern4 = rf"#{1, 3}\s*{cat_key}:\s*(\d+)(?:/10)?\s*-\s*(.+?)(?=\n#{1, 3}\s*[A-Z]|OVERALL_FEEDBACK:|APPROVAL|$)"
             match4 = re.search(pattern4, response, re.DOTALL | re.IGNORECASE)
             if match4:
                 score_val = int(match4.group(1))

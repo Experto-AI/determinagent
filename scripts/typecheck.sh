@@ -6,6 +6,6 @@ set -e
 
 echo "🔬 Running Mypy type checker..."
 
-python -m mypy determinagent --show-error-codes
+poetry run mypy determinagent --show-error-codes
 
 echo "✅ Type checking passed!"

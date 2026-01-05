@@ -32,16 +32,21 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
+        run: poetry install --no-interaction
 
       - name: Run Ruff linter
-        run: python -m ruff check determinagent tests flows
+        run: poetry run ruff check determinagent tests flows
 
       - name: Check Ruff formatting
-        run: python -m ruff format --check determinagent tests flows
+        run: poetry run ruff format --check determinagent tests flows
 
   typecheck:
     name: Type Check
@@ -57,13 +62,18 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
+        run: poetry install --no-interaction
 
       - name: Run Mypy type checker
-        run: python -m mypy determinagent flows --show-error-codes
+        run: poetry run mypy determinagent flows --show-error-codes
 
   security:
     name: Security Scan
@@ -79,21 +89,25 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
-          pip install bandit pip-audit
+        run: poetry install --no-interaction
 
       - name: Run Bandit security linter
         run: |
-          python -m bandit -r determinagent -c pyproject.toml -f json -o bandit-report.json || true
-          python -m bandit -r determinagent -c pyproject.toml
+          poetry run bandit -r determinagent -c pyproject.toml -f json -o bandit-report.json || true
+          poetry run bandit -r determinagent -c pyproject.toml
         continue-on-error: false
 
       - name: Run pip-audit dependency check
         run: |
-          pip-audit --desc on --fix --dry-run || echo "::warning::Some dependencies have known vulnerabilities"
+          poetry run pip-audit --desc on --fix --dry-run || echo "::warning::Some dependencies have known vulnerabilities"
         continue-on-error: true
 
       - name: Upload security reports
@@ -124,14 +138,19 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
 
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
+        run: poetry install --no-interaction
 
       - name: Run unit tests with strict coverage
         run: |
-          python -m pytest tests/ \
+          poetry run pytest tests/ \
             -v \
             --tb=short \
             --strict-markers \
@@ -141,15 +160,31 @@ jobs:
             --cov-report=xml \
             --cov-fail-under=90
 
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v4
+      - name: Generate Coverage Summary
+        uses: irongut/CodeCoverageSummary@v1.3.0
         if: matrix.python-version == '3.12'
         with:
-          file: ./coverage.xml
-          fail_ci_if_error: false
-          verbose: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          filename: coverage.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '70 90'
+
+      - name: Add Coverage Summary to Job Summary
+        if: matrix.python-version == '3.12'
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload HTML Coverage Report
+        uses: actions/upload-artifact@v4
+        if: matrix.python-version == '3.12'
+        with:
+          name: html-coverage-report
+          path: htmlcov/
+          retention-days: 7
 
   integration-smoke:
     name: Integration Smoke Tests
@@ -166,14 +201,19 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Install package
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Install dependencies
+        run: poetry install --no-interaction
 
       - name: Run integration smoke tests
         run: |
-          python -m pytest tests/ \
+          poetry run pytest tests/ \
             -v \
             --tb=short \
             -m "integration or smoke" \
@@ -184,13 +224,13 @@ jobs:
       - name: Verify flow imports
         run: |
           echo "Verifying flow imports..."
-          python -c "from flows.blog.main import main; print('✅ Blog flow imports successfully')"
-          python -c "from flows.blog.graph import create_blog_graph; print('✅ Blog graph imports successfully')"
+          poetry run python -c "from flows.blog.main import main; print('✅ Blog flow imports successfully')"
+          poetry run python -c "from flows.blog.graph import create_blog_graph; print('✅ Blog graph imports successfully')"
 
       - name: Verify library exports
         run: |
           echo "Verifying library exports..."
-          python -c "
+          poetry run python -c "
           from determinagent import (
               UnifiedAgent,
               SessionManager,
@@ -218,17 +258,20 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Install build dependencies
-        run: |
-          python -m pip install --upgrade pip build
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
 
       - name: Build package
-        run: python -m build
+        run: poetry build
 
       - name: Verify package
         run: |
           pip install dist/*.whl
-          python -c "import determinagent; print(f'Version: {determinagent.__version__}')"
+          poetry run python -c "import determinagent; print(f'Version: {determinagent.__version__}')"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

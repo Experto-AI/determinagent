@@ -53,13 +53,11 @@ This project adheres to the [Contributor Covenant Code of Conduct](./code-of-con
 ### Install Dependencies
 
 ```bash
-# Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/macOS
-# or: venv\Scripts\activate  # Windows
+# Install package with development dependencies using Poetry
+poetry install
 
-# Install package with development dependencies
-pip install -e ".[dev]"
+# Optionally activate the Poetry shell
+poetry shell
 ```
 
 ### Verify Setup

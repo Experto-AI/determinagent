@@ -21,7 +21,7 @@
 
 ### 9.3 Low Priority (P3-P4) - DX & Robustness
 - [x] **Integration Smoke Tests**: Added CI job to verify imports and flow structure.
-- [x] **Dynamic Versioning**: Added docs; Hatch dynamic versioning ready for migration (optional).
+- [x] **Poetry Migration**: Successfully migrated from Hatch/venv to Poetry for dependency management and build automation.
 - [x] **README Expansion**: Added "Installation from source" and deep-links to the new API reference.
 
 ---

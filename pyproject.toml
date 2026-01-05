@@ -1,11 +1,13 @@
-[project]
+[tool.poetry]
 name = "determinagent"
-version = "0.10.0"
+version = "0.11.0"
 description = "CLI-First deterministic multi-agent orchestration library"
-authors = [{ name = "DeterminAgent Team", email = "victor@experto.ai" }]
-license = { text = "Apache-2.0" }
+authors = ["DeterminAgent Team <victor@experto.ai>"]
+license = "Apache-2.0"
 readme = "README.md"
-requires-python = ">=3.10"
+homepage = "https://github.com/determinagent/determinagent"
+documentation = "https://github.com/determinagent/determinagent#readme"
+repository = "https://github.com/determinagent/determinagent"
 keywords = ["ai", "agents", "cli", "orchestration", "langgraph"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -18,55 +20,37 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
-dependencies = [
-    "langgraph>=1.0.0",
-    "pydantic>=2.0",
-    "pyyaml>=6.0",
-    "markdown>=3.0",
-    "beautifulsoup4>=4.9.0",
-]
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+langgraph = ">=1.0.0"
+pydantic = ">=2.0"
+pyyaml = ">=6.0"
+markdown = ">=3.0"
+beautifulsoup4 = ">=4.9.0"
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0",
-    "pytest-cov>=4.0",
-    "pytest-asyncio>=0.21.0",
-    "black>=23.0",
-    "mypy>=1.0",
-    "ruff>=0.1.0",
-    "types-pyyaml>=6.0",
-    "types-markdown>=3.0",
-    "types-beautifulsoup4>=4.9.0",
-    "mkdocs>=1.5.0",
-    "mkdocs-material>=9.0.0",
-    "mkdocstrings-python>=1.0.0",
-    "mkdocs-htmlproofer-plugin>=1.0.0",
-    # Security scanning
-    "bandit>=1.7.0",
-    "pip-audit>=2.6.0",
-]
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.0"
+pytest-cov = ">=4.0"
+pytest-asyncio = ">=0.21.0"
+black = ">=23.0"
+mypy = ">=1.0"
+ruff = ">=0.1.0"
+types-pyyaml = ">=6.0"
+types-markdown = ">=3.0"
+types-beautifulsoup4 = ">=4.9.0"
+mkdocs = ">=1.5.0"
+mkdocs-material = ">=9.0.0"
+mkdocstrings-python = ">=1.0.0"
+mkdocs-htmlproofer-plugin = ">=1.0.0"
+bandit = ">=1.7.0"
+pip-audit = ">=2.6.0"
 
-# Global CLI removed in favor of template flows
-#[project.scripts]
-#determinagent = "determinagent.cli:cli_main"
-
-[project.urls]
-Homepage = "https://github.com/determinagent/determinagent"
-Documentation = "https://github.com/determinagent/determinagent#readme"
-Repository = "https://github.com/determinagent/determinagent"
+[tool.poetry.urls]
 Issues = "https://github.com/determinagent/determinagent/issues"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.sdist]
-include = [
-    "/determinagent",
-]
-
-[tool.hatch.build.targets.wheel]
-packages = ["determinagent"]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 # ============================================================================
 # Ruff Configuration

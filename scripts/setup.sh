@@ -5,43 +5,28 @@
 
 set -e
 
-echo "🔧 Setting up DeterminAgent development environment..."
+echo "🔧 Setting up DeterminAgent development environment with Poetry..."
 
-# Check Python version
-PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-REQUIRED_VERSION="3.10"
-
-if [[ "$(printf '%s\n' "$REQUIRED_VERSION" "$PYTHON_VERSION" | sort -V | head -n1)" != "$REQUIRED_VERSION" ]]; then
-    echo "❌ Python $REQUIRED_VERSION or higher is required (found: $PYTHON_VERSION)"
+# Check if poetry is installed
+if ! command -v poetry &> /dev/null; then
+    echo "❌ Poetry is not installed. Please install it first: https://python-poetry.org/docs/#installation"
     exit 1
 fi
-echo "✅ Python $PYTHON_VERSION detected"
 
-# Create virtual environment if not exists
-if [ ! -d "venv" ]; then
-    echo "📦 Creating virtual environment..."
-    python3 -m venv venv
-fi
-
-# Activate virtual environment
-source venv/bin/activate
-
-# Upgrade pip
-echo "⬆️  Upgrading pip..."
-pip install --upgrade pip
-
-# Install package in editable mode with dev dependencies
-echo "📦 Installing package with dev dependencies..."
-pip install -e ".[dev]"
+# Install dependencies
+echo "📦 Installing dependencies..."
+poetry install
 
 echo ""
 echo "✅ Setup complete!"
 echo ""
-echo "To activate the environment, run:"
-echo "  source venv/bin/activate"
+echo "To run commands in the environment, use:"
+echo "  poetry run <command>"
+echo "Or activate the environment with:"
+echo "  poetry shell"
 echo ""
 echo "Available commands:"
-echo "  ./scripts/test.sh      - Run tests"
-echo "  ./scripts/lint.sh      - Run linting"
-echo "  ./scripts/typecheck.sh - Run type checking"
-echo "  ./scripts/check-all.sh - Run all checks"
+echo "  make test      - Run tests"
+echo "  make lint      - Run linting"
+echo "  make typecheck - Run type checking"
+echo "  make check     - Run all checks"

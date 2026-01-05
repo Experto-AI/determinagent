@@ -23,11 +23,11 @@ fi
 case $COMMAND in
     build)
         echo "🏗️  Building documentation..."
-        mkdocs build
+        poetry run mkdocs build
         ;;
     serve)
         echo "🚀 Serving documentation at http://127.0.0.1:$PORT"
-        mkdocs serve -a 127.0.0.1:$PORT
+        poetry run mkdocs serve -a 127.0.0.1:$PORT
         ;;
     *)
         echo "❌ Unknown command: $COMMAND"

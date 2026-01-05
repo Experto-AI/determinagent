@@ -1,6 +1,6 @@
 # DeterminAgent Release Checklist
 
-**Version:** `v{VERSION}`  
+**Version:** `{VERSION}`  
 **Release Date:** `YYYY-MM-DD`  
 **Release Manager:** `@your-github-handle`
 
@@ -18,16 +18,15 @@ Complete all items before creating a release tag.
 | ✅ Coverage ≥90% | `make test-cov` | ⬜ |
 | ✅ Linting passes | `make lint` | ⬜ |
 | ✅ Type checking passes | `make typecheck` | ⬜ |
-| ✅ No security issues | `bandit -r determinagent` | ⬜ |
-| ✅ Dependencies audited | `pip-audit` | ⬜ |
+| ✅ No security issues | `make security` | ⬜ |
 
 ### Version Sync
 
 | Check | Command | Status |
 |-------|---------|--------|
-| ✅ Versions match | `python scripts/bump_version.py --check` | ⬜ |
+| ✅ Versions match | `make version-check` | ⬜ |
 | ✅ CHANGELOG.md updated | Manual review | ⬜ |
-| ✅ Version bumped correctly | `python scripts/bump_version.py {VERSION}` | ⬜ |
+| ✅ Version bumped correctly | `poetry run python scripts/bump_version.py {VERSION}` | ⬜ |
 
 ### Documentation
 
@@ -44,8 +43,8 @@ Complete all items before creating a release tag.
 |-------|---------|--------|
 | ✅ Package builds | `make build` | ⬜ |
 | ✅ Install from wheel | `pip install dist/*.whl` | ⬜ |
-| ✅ Import works | `python -c "import determinagent"` | ⬜ |
-| ✅ Version correct | `python -c "print(determinagent.__version__)"` | ⬜ |
+| ✅ Import works | `poetry run python -c "import determinagent"` | ⬜ |
+| ✅ Version correct | `poetry run python -c "print(determinagent.__version__)"` | ⬜ |
 
 ---
 
@@ -54,7 +53,7 @@ Complete all items before creating a release tag.
 ### Step 1: Version Bump
 ```bash
 # Bump version in all files
-python scripts/bump_version.py {VERSION}
+poetry run python scripts/bump_version.py {VERSION}
 
 # Commit the change
 git add pyproject.toml determinagent/__init__.py CHANGELOG.md
@@ -64,7 +63,7 @@ git commit -m "chore: bump version to {VERSION}"
 ### Step 2: Create Release Tag
 ```bash
 # Create annotated tag
-git tag -a v{VERSION} -m "Release v{VERSION}"
+git tag -a {VERSION} -m "Release {VERSION}"
 
 # Push to remote
 git push origin main --tags
@@ -80,7 +79,7 @@ git push origin main --tags
 ```bash
 # Verify on PyPI (may take a few minutes)
 pip install --upgrade determinagent
-python -c "import determinagent; print(determinagent.__version__)"
+poetry run python -c "import determinagent; print(determinagent.__version__)"
 ```
 
 ---
@@ -91,16 +90,16 @@ If issues are discovered after release:
 
 ```bash
 # Delete the tag locally
-git tag -d v{VERSION}
+git tag -d {VERSION}
 
 # Delete the tag on remote
-git push origin --delete v{VERSION}
+git push origin --delete {VERSION}
 
 # Yank the release on PyPI (if necessary, via pypi.org web UI)
 # Note: Yanking hides but doesn't delete the release
 
 # Create a patch version with fixes
-python scripts/bump_version.py {PATCH_VERSION}
+poetry run python scripts/bump_version.py {PATCH_VERSION}
 ```
 
 ---
@@ -122,7 +121,7 @@ python scripts/bump_version.py {PATCH_VERSION}
 ### 🏗️ Internal
 - Refactoring (#PR)
 
-**Full Changelog**: https://github.com/determinagent/determinagent/compare/v{PREV}...v{VERSION}
+**Full Changelog**: https://github.com/determinagent/determinagent/compare/{PREV}...{VERSION}
 ```
 
 ---

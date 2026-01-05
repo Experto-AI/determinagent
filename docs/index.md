@@ -111,5 +111,5 @@ Set `LOG_LEVEL=DEBUG` to see the full subprocess commands and raw output.
 ---
 
 ## 📜 License
-Apache License 2.0 - see [LICENSE](https://github.com/determinagent/determinagent/blob/main/LICENSE) for details.
+Apache License 2.0 - see [LICENSE](./LICENSE) for details.
 

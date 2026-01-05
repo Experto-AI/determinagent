@@ -5,10 +5,10 @@
 # Secondary: Windows (via WSL or Git Bash)
 #
 # Usage:
-#   make setup     - Set up development environment
-#   make test      - Run tests
-#   make lint      - Run linting
-#   make typecheck - Run type checking
+#   make setup     - Initialize Poetry environment and dependencies
+#   make test      - Run tests (via poetry run)
+#   make lint      - Run linting (via poetry run)
+#   make typecheck - Run type checking (via poetry run)
 #   make security  - Run security scans
 #   make check     - Run all checks
 #   make env-check - Verify environment and tools
@@ -18,23 +18,23 @@
 .PHONY: setup test test-cov lint lint-fix typecheck security check env-check verify-integrations docs-build docs-serve build clean help version-check
 
 # Default Python command
-PYTHON ?= python3
+PYTHON ?= poetry run python
 
 help:
 	@echo "DeterminAgent Development Commands"
 	@echo ""
 	@echo "Setup:"
-	@echo "  make setup                - Create venv and install dependencies"
+	@echo "  make setup                - Initialize Poetry environment and dependencies"
 	@echo "  make env-check            - Verify local environment and CLI tools"
 	@echo ""
-	@echo "Quality Checks:"
+	@echo "Quality Checks (via poetry run):"
 	@echo "  make test                 - Run tests"
 	@echo "  make test-cov             - Run tests with coverage (90% threshold)"
 	@echo "  make lint                 - Check linting (no changes)"
 	@echo "  make lint-fix             - Fix linting issues"
 	@echo "  make typecheck            - Run type checking"
 	@echo "  make security             - Run security scans (bandit, pip-audit)"
-	@echo "  make check                - Run all checks (lint, typecheck, security, test)"
+	@echo "  make check                - Run all checks"
 	@echo ""
 	@echo "Documentation:"
 	@echo "  make docs-build           - Build documentation (with link checking)"
@@ -50,7 +50,7 @@ help:
 
 # Setup development environment
 setup:
-	@./scripts/setup.sh
+	@poetry install
 
 # Verify environment
 env-check:
@@ -99,7 +99,7 @@ security:
 	@$(PYTHON) -m bandit -r determinagent -c pyproject.toml || (echo "❌ Bandit found issues" && exit 1)
 	@echo ""
 	@echo "🔒 Running pip-audit dependency check..."
-	@pip-audit --desc on || (echo "⚠️ pip-audit found vulnerabilities" && exit 0)
+	@poetry run pip-audit --desc on || (echo "⚠️ pip-audit found vulnerabilities" && exit 0)
 	@echo "✅ Security scan passed!"
 
 # Run all checks
@@ -118,8 +118,7 @@ verify-integrations:
 # Build distribution
 build:
 	@rm -rf dist/ build/ *.egg-info/
-	@$(PYTHON) -m pip install --upgrade build
-	@$(PYTHON) -m build
+	@poetry build
 	@echo "✅ Build complete! See dist/"
 
 # Clean build artifacts

@@ -10,8 +10,9 @@ class TestBlogFlow:
 
     @pytest.fixture
     def mock_agents(self):
-        with patch("flows.blog.main.UnifiedAgent") as mock_agent_cls, patch(
-            "flows.blog.main.SessionManager"
+        with (
+            patch("flows.blog.main.UnifiedAgent") as mock_agent_cls,
+            patch("flows.blog.main.SessionManager"),
         ):
             # Create mock instances for each role
             mock_writer = MagicMock()
@@ -64,8 +65,9 @@ class TestBlogFlow:
         state = {"topic": "Unit Testing", "min_words": 500, "max_words": 1500, "max_revisions": 3}
 
         # Mock user input to 'y' (approve)
-        with patch("builtins.input", return_value="y"), patch(
-            "builtins.print"
+        with (
+            patch("builtins.input", return_value="y"),
+            patch("builtins.print"),
         ):  # Silence print output
             result = app.invoke(state)
 
@@ -179,8 +181,9 @@ class TestBlogFlow:
         state = {"topic": "Human Loop", "min_words": 500, "max_words": 1500, "max_revisions": 3}
 
         # User rejects first ('n'), gives feedback, then approves second ('y')
-        with patch("builtins.input", side_effect=["n", "Make it punchier", "y"]), patch(
-            "builtins.print"
+        with (
+            patch("builtins.input", side_effect=["n", "Make it punchier", "y"]),
+            patch("builtins.print"),
         ):
             result = app.invoke(state)
 

@@ -10,8 +10,7 @@ echo "📦 Building package..."
 rm -rf dist/ build/ *.egg-info/
 
 # Build sdist and wheel
-python -m pip install --upgrade build
-python -m build
+poetry build
 
 echo ""
 echo "✅ Build complete! Artifacts in dist/"

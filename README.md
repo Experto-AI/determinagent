@@ -40,15 +40,11 @@ For the latest development version or to contribute:
 git clone https://github.com/determinagent/determinagent.git
 cd determinagent
 
-# Create and activate virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install in development mode with all dependencies
-pip install -e ".[dev]"
+# Install dependencies and set up environment
+poetry install
 
 # Verify installation
-python -c "import determinagent; print(determinagent.__version__)"
+poetry run python -c "import determinagent; print(determinagent.__version__)"
 ```
 
 ### Prerequisites

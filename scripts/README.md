@@ -5,15 +5,14 @@ Development tools for DeterminAgent. Run all scripts from the **project root**.
 ## Prerequisites
 
 - Python 3.10+
-- Virtual environment recommended
+- [Poetry](https://python-poetry.org/) (recommended)
 
 ## Scripts
 
 ### `setup.sh`
-Initialize dev environment: creates venv, installs dependencies with dev extras.
+Initialize dev environment: installs dependencies using Poetry.
 ```bash
 ./scripts/setup.sh
-source venv/bin/activate
 ```
 
 ### `test.sh`

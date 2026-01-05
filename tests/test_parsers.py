@@ -4,7 +4,6 @@ Tests for review parsing.
 Tests edge case handling for regex patterns in the review parser.
 """
 
-
 from determinagent.parsers import (
     REVIEW_CATEGORIES_LIST,
     CategoryScore,
