@@ -5,15 +5,19 @@
 # Secondary: Windows (via WSL or Git Bash)
 #
 # Usage:
-#   make setup     - Initialize Poetry environment and dependencies
-#   make test      - Run tests (via poetry run)
-#   make lint      - Run linting (via poetry run)
-#   make typecheck - Run type checking (via poetry run)
-#   make security  - Run security scans
-#   make check     - Run all checks
-#   make env-check - Verify environment and tools
-#   make verify-integrations - Run interactive integration verification
-#   make build     - Build distribution package
+#   make setup                - Initialize Poetry environment and dependencies
+#   make check                - Run all checks (lint, typecheck, security, test)
+#   make test                 - Run tests
+#   make test-cov             - Run tests with coverage
+#   make lint                 - Run linting
+#   make typecheck            - Run type checking
+#   make security             - Run security scans
+#   make docs-build           - Build documentation
+#   make verify-integrations  - Run integration verification
+#   make version-check        - Verify version sync
+#   make bump-version <ver>   - Bump version across files
+#   make build                - Build distribution package
+#   make clean                - Remove build artifacts
 
 .PHONY: setup test test-cov lint lint-fix typecheck security check env-check verify-integrations docs-build docs-serve build clean help version-check bump-version
 
@@ -45,6 +49,7 @@ help:
 	@echo ""
 	@echo "Release:"
 	@echo "  make version-check        - Verify version sync across files"
+	@echo "  make bump-version <ver>   - Bump version across all files"
 	@echo "  make build                - Build distribution package"
 	@echo "  make clean                - Remove build artifacts"
 
