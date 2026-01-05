@@ -64,6 +64,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/determinagent/determinagent/compare/v0.10.0...HEAD
-[0.10.0]: https://github.com/determinagent/determinagent/compare/v0.1.0...v0.10.0
-[0.1.0]: https://github.com/determinagent/determinagent/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Experto-AI/determinagent/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/Experto-AI/determinagent/compare/v0.1.0...v0.10.0
+[0.1.0]: https://github.com/Experto-AI/determinagent/releases/tag/v0.1.0

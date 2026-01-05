@@ -5,7 +5,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/determinagent.svg)](https://pypi.org/project/determinagent/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Coverage](https://img.shields.io/badge/coverage-90%25-green.svg)](https://github.com/determinagent/determinagent)
+[![Coverage](https://img.shields.io/badge/coverage-90%25-green.svg)](https://github.com/Experto-AI/determinagent)
 
 > **Orchestrate powerful AI workflows at zero extra cost.** DeterminAgent controls multiple AI CLI tools (Claude Code, GH Copilot, Gemini CLI, OpenAI Codex) using LangGraph to create deterministic pipelines powered by your existing flat-rate subscriptions.
 
@@ -37,7 +37,7 @@ For the latest development version or to contribute:
 
 ```bash
 # Clone the repository
-git clone https://github.com/determinagent/determinagent.git
+git clone https://github.com/Experto-AI/determinagent.git
 cd determinagent
 
 # Install dependencies and set up environment

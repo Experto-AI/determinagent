@@ -20,7 +20,7 @@ IGNORE_PATTERNS = [
     r"^#",  # Internal anchors on same page
 ]
 # GitHub link construction for this project
-REPO_URL = "https://github.com/determinagent/determinagent"
+REPO_URL = "https://github.com/Experto-AI/determinagent"
 BRANCH = "main"
 
 def get_markdown_files(root_dir: Path) -> List[Path]:

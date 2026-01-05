@@ -1,7 +1,7 @@
 site_name: DeterminAgent
 site_description: CLI-First deterministic multi-agent orchestration library
 site_url: https://determinagent.github.io/determinagent/
-repo_url: https://github.com/determinagent/determinagent
+repo_url: https://github.com/Experto-AI/determinagent
 repo_name: determinagent/determinagent
 
 theme:

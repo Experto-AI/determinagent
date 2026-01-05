@@ -121,7 +121,7 @@ poetry run python scripts/bump_version.py {PATCH_VERSION}
 ### 🏗️ Internal
 - Refactoring (#PR)
 
-**Full Changelog**: https://github.com/determinagent/determinagent/compare/{PREV}...{VERSION}
+**Full Changelog**: https://github.com/Experto-AI/determinagent/compare/{PREV}...{VERSION}
 ```
 
 ---

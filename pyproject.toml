@@ -5,9 +5,9 @@ description = "CLI-First deterministic multi-agent orchestration library"
 authors = ["DeterminAgent Team <victor@experto.ai>"]
 license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/determinagent/determinagent"
-documentation = "https://github.com/determinagent/determinagent#readme"
-repository = "https://github.com/determinagent/determinagent"
+homepage = "https://github.com/Experto-AI/determinagent"
+documentation = "https://github.com/Experto-AI/determinagent#readme"
+repository = "https://github.com/Experto-AI/determinagent"
 keywords = ["ai", "agents", "cli", "orchestration", "langgraph"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -46,7 +46,7 @@ bandit = ">=1.7.0"
 pip-audit = ">=2.6.0"
 
 [tool.poetry.urls]
-Issues = "https://github.com/determinagent/determinagent/issues"
+Issues = "https://github.com/Experto-AI/determinagent/issues"
 
 [build-system]
 requires = ["poetry-core"]

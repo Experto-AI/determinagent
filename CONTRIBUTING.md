@@ -43,7 +43,7 @@ This project adheres to the [Contributor Covenant Code of Conduct](./CODE_OF_CON
    ```
 3. Add the upstream remote:
    ```bash
-   git remote add upstream https://github.com/determinagent/determinagent.git
+   git remote add upstream https://github.com/Experto-AI/determinagent.git
    ```
 
 ---
@@ -318,8 +318,8 @@ Use the **Feature Request** issue template and include:
 
 ## Questions?
 
-- Check existing [Issues](https://github.com/determinagent/determinagent/issues)
-- Open a [Discussion](https://github.com/determinagent/determinagent/discussions)
+- Check existing [Issues](https://github.com/Experto-AI/determinagent/issues)
+- Open a [Discussion](https://github.com/Experto-AI/determinagent/discussions)
 - Read the [Architecture](./ARCHITECTURE.md) documentation
 
 Thank you for contributing! 🎉

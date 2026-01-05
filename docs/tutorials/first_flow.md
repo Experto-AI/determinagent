@@ -473,8 +473,8 @@ Congratulations! You've built your first DeterminAgent flow. Here's what to expl
 - **[Architecture](../architecture.md)**: Deep dive into the library internals
 - **[CLI Reference](../cli-reference.md)**: Provider-specific flag mappings
 - **[API Documentation](../api/index.md)**: Full API reference
-- **[Blog Flow Example](https://github.com/determinagent/determinagent/tree/main/flows/blog)**: Complete production flow
+- **[Blog Flow Example](https://github.com/Experto-AI/determinagent/tree/main/flows/blog)**: Complete production flow
 
 ---
 
-*Need help? Open an issue on [GitHub](https://github.com/determinagent/determinagent/issues).*
+*Need help? Open an issue on [GitHub](https://github.com/Experto-AI/determinagent/issues).*
