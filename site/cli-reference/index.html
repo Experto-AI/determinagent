@@ -1,0 +1,2740 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="CLI-First deterministic multi-agent orchestration library">
+      
+      
+      
+        <link rel="canonical" href="https://determinagent.github.io/determinagent/cli-reference/">
+      
+      
+        <link rel="prev" href="../architecture/">
+      
+      
+        <link rel="next" href="../api/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>CLI Reference - DeterminAgent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cli-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="DeterminAgent" class="md-header__button md-logo" aria-label="DeterminAgent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DeterminAgent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CLI Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/determinagent/determinagent" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    determinagent/determinagent
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Welcome
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../roadmap/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Project Roadmap
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  CLI Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../tutorials/first_flow/" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../contributing/" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="DeterminAgent" class="md-nav__button md-logo" aria-label="DeterminAgent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    DeterminAgent
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/determinagent/determinagent" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    determinagent/determinagent
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#claude-code-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Claude Code CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Claude Code CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Control
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output &amp; Debug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gemini-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gemini CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Gemini CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#execution-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution &amp; Prompts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-selection_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-management_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safety &amp; Approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-formatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Formatting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-copilot-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub Copilot CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GitHub Copilot CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-management_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-selection_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agent-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openai-codex-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAI Codex CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenAI Codex CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#execution-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution Modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-selection_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approval-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approval Policies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sandbox-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sandbox Modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output &amp; Debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#directory-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directory &amp; Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcp-server-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCP Server Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Priority
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exceptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/first_flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Your First Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code-of-conduct/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code of Conduct
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#claude-code-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Claude Code CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Claude Code CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Control
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output &amp; Debug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gemini-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gemini CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Gemini CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#execution-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution &amp; Prompts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-selection_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-management_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safety &amp; Approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-formatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Formatting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-copilot-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub Copilot CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GitHub Copilot CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-management_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-selection_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agent-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openai-codex-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAI Codex CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenAI Codex CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#execution-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution Modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-selection_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approval-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approval Policies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sandbox-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sandbox Modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output &amp; Debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#directory-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directory &amp; Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcp-server-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCP Server Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Priority
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="cli-reference">CLI Reference</h1>
+<!--
+  DOCUMENT SCOPE:
+  - Purpose: Technical dictionary of CLI provider interactions.
+  - Include: Command flags, environment variables, and configuration file paths.
+  - Do NOT include: Project roadmap, installation steps, or general architectural design.
+-->
+
+<p>Complete command-line reference for all supported AI CLI tools.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#claude-code-cli">Claude Code CLI</a></li>
+<li><a href="#gemini-cli">Gemini CLI</a></li>
+<li><a href="#github-copilot-cli">GitHub Copilot CLI</a></li>
+<li><a href="#openai-codex-cli">OpenAI Codex CLI</a></li>
+<li><a href="#configuration-priority">Configuration Priority</a></li>
+</ol>
+<hr />
+<h2 id="claude-code-cli">Claude Code CLI</h2>
+<h3 id="session-management">Session Management</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code></td>
+<td><code>claude -p "query"</code></td>
+<td>Print/headless mode (non-interactive)</td>
+</tr>
+<tr>
+<td><code>-c</code> / <code>--continue</code></td>
+<td><code>claude -c</code></td>
+<td>Continue most recent conversation</td>
+</tr>
+<tr>
+<td><code>-r</code> / <code>--resume</code></td>
+<td><code>claude -r "session-id"</code></td>
+<td>Resume specific session by ID</td>
+</tr>
+<tr>
+<td><code>--session-id</code></td>
+<td><code>claude --session-id "uuid"</code></td>
+<td>Create/use specific session ID</td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-selection">Model Selection</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--model</code></td>
+<td><code>claude --model &lt;alias&gt;</code></td>
+<td>Specify model: <code>sonnet</code>, <code>opus</code>, <code>haiku</code>, <code>opusplan</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Available Models:</strong> <code>sonnet</code> (latest), <code>opus</code> (latest), <code>haiku</code>, <code>opusplan</code> (hybrid)</p>
+<h3 id="system-prompt">System Prompt</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--system-prompt</code></td>
+<td><code>claude --system-prompt "..."</code></td>
+<td>Override default instructions</td>
+</tr>
+<tr>
+<td><code>--system-prompt-file</code></td>
+<td><code>claude --system-prompt-file /path</code></td>
+<td>Load from file</td>
+</tr>
+<tr>
+<td><code>--append-system-prompt</code></td>
+<td><code>claude --append-system-prompt "..."</code></td>
+<td>Add to defaults</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tool-control">Tool Control</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--allowedTools</code></td>
+<td><code>claude --allowedTools "Read,Bash(git:*)"</code></td>
+<td>Allow only specified tools</td>
+</tr>
+<tr>
+<td><code>--disallowedTools</code></td>
+<td><code>claude --disallowedTools "Bash(rm:*)"</code></td>
+<td>Deny specific tools</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Available Tools:</strong> <code>Read</code>, <code>Write</code>, <code>Bash</code>, <code>Grep</code>, <code>Glob</code>, <code>WebSearch</code>, <code>WebFetch</code></p>
+<h3 id="output-debug">Output &amp; Debug</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--output-format</code></td>
+<td><code>claude -p --output-format json</code></td>
+<td>Format: <code>text</code>, <code>json</code>, <code>stream-json</code></td>
+</tr>
+<tr>
+<td><code>--verbose</code></td>
+<td><code>claude --verbose</code></td>
+<td>Enable verbose logging</td>
+</tr>
+<tr>
+<td><code>--mcp-debug</code></td>
+<td><code>claude --mcp-debug</code></td>
+<td>Debug MCP server connections</td>
+</tr>
+</tbody>
+</table>
+<h3 id="examples">Examples</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Headless with specific model and JSON output</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;analyze this&quot;</span><span class="w"> </span>--model<span class="w"> </span>opus<span class="w"> </span>--output-format<span class="w"> </span>json
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Continue conversation with custom instructions</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>claude<span class="w"> </span>-c<span class="w"> </span>--append-system-prompt<span class="w"> </span><span class="s2">&quot;Focus on security&quot;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Use only safe tools</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>claude<span class="w"> </span>--allowedTools<span class="w"> </span><span class="s2">&quot;Read,Grep&quot;</span><span class="w"> </span><span class="s2">&quot;search the codebase&quot;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Resume with debugging</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>claude<span class="w"> </span>--continue<span class="w"> </span>--verbose<span class="w"> </span><span class="s2">&quot;next steps&quot;</span>
+</span></code></pre></div>
+<hr />
+<h2 id="gemini-cli">Gemini CLI</h2>
+<h3 id="execution-prompts">Execution &amp; Prompts</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code> / <code>--prompt</code></td>
+<td><code>gemini -p "query"</code></td>
+<td>Single prompt (non-interactive)</td>
+</tr>
+<tr>
+<td><code>-i</code> / <code>--prompt-interactive</code></td>
+<td><code>gemini -i "text"</code></td>
+<td>Start interactive with prompt</td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-selection_1">Model Selection</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-m</code> / <code>--model</code></td>
+<td><code>gemini -m gemini-2.5-flash</code></td>
+<td>Specify model</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Available Models:</strong> <code>gemini-2.5-flash</code>, <code>gemini-2.5-pro</code></p>
+<h3 id="session-management_1">Session Management</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--resume</code></td>
+<td><code>gemini --resume</code></td>
+<td>Resume most recent session</td>
+</tr>
+<tr>
+<td><code>--resume &lt;index&gt;</code></td>
+<td><code>gemini --resume 1</code></td>
+<td>Resume by index</td>
+</tr>
+<tr>
+<td><code>--resume &lt;uuid&gt;</code></td>
+<td><code>gemini --resume abc-123</code></td>
+<td>Resume by UUID</td>
+</tr>
+<tr>
+<td><code>--list-sessions</code></td>
+<td><code>gemini --list-sessions</code></td>
+<td>List all sessions</td>
+</tr>
+<tr>
+<td><code>--delete-session</code></td>
+<td><code>gemini --delete-session 2</code></td>
+<td>Delete session</td>
+</tr>
+</tbody>
+</table>
+<h3 id="safety-approval">Safety &amp; Approval</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-s</code> / <code>--sandbox</code></td>
+<td><code>gemini --sandbox</code></td>
+<td>Enable sandbox mode</td>
+</tr>
+<tr>
+<td><code>--sandbox-image</code></td>
+<td><code>gemini --sandbox-image ubuntu:22.04</code></td>
+<td>Custom Docker image</td>
+</tr>
+<tr>
+<td><code>-y</code> / <code>--yolo</code></td>
+<td><code>gemini --yolo</code></td>
+<td>Auto-approve all tool calls</td>
+</tr>
+<tr>
+<td><code>--approval-mode</code></td>
+<td><code>gemini --approval-mode default</code></td>
+<td><code>default</code>, <code>auto_edit</code>, <code>yolo</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="output-formatting">Output Formatting</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--output-format</code></td>
+<td><code>gemini --output-format json</code></td>
+<td><code>text</code>, <code>json</code>, <code>stream-json</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-parameters">Model Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-t</code> / <code>--temperature</code></td>
+<td><code>gemini -t 0.5</code></td>
+<td>Set temperature (0.0-2.0)</td>
+</tr>
+<tr>
+<td><code>-b</code> / <code>--thinking-budget</code></td>
+<td><code>gemini -b 8192</code></td>
+<td>Max thinking tokens</td>
+</tr>
+</tbody>
+</table>
+<h3 id="examples_1">Examples</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Headless with JSON output</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>gemini<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;analyze code&quot;</span><span class="w"> </span>--output-format<span class="w"> </span>json
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Resume with auto-approval and streaming</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>gemini<span class="w"> </span>--resume<span class="w"> </span>--yolo<span class="w"> </span>--output-format<span class="w"> </span>stream-json
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Custom model and temperature</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>gemini<span class="w"> </span>-m<span class="w"> </span>gemini-2.5-pro<span class="w"> </span>-t<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;complex task&quot;</span>
+</span></code></pre></div>
+<hr />
+<h2 id="github-copilot-cli">GitHub Copilot CLI</h2>
+<h3 id="session-management_2">Session Management</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--resume</code></td>
+<td><code>copilot --resume</code></td>
+<td>Resume previous session</td>
+</tr>
+<tr>
+<td><code>--resume &lt;id&gt;</code></td>
+<td><code>copilot --resume abc123</code></td>
+<td>Resume by session ID</td>
+</tr>
+<tr>
+<td><code>--continue</code></td>
+<td><code>copilot --continue</code></td>
+<td>Resume most recent session</td>
+</tr>
+</tbody>
+</table>
+<h3 id="execution-mode">Execution Mode</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code> / <code>--prompt</code></td>
+<td><code>copilot -p "task"</code></td>
+<td>Programmatic (non-interactive) mode</td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-selection_2">Model Selection</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--model</code></td>
+<td><code>copilot --model "claude-sonnet-4"</code></td>
+<td>Specify model</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Available Models:</strong> <code>claude-sonnet-4-5</code> (default), <code>claude-sonnet-4</code>, <code>gpt-5</code>, <code>claude-haiku-4.5</code></p>
+<h3 id="tool-approval">Tool Approval</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--allow-all-tools</code></td>
+<td><code>copilot --allow-all-tools</code></td>
+<td>Allow any tool</td>
+</tr>
+<tr>
+<td><code>--allow-tool</code></td>
+<td><code>copilot --allow-tool 'shell(npm test:*)'</code></td>
+<td>Allow specific tool</td>
+</tr>
+<tr>
+<td><code>--deny-tool</code></td>
+<td><code>copilot --deny-tool 'shell(rm)'</code></td>
+<td>Deny specific tool</td>
+</tr>
+<tr>
+<td><code>--allow-all-urls</code></td>
+<td><code>copilot --allow-all-urls</code></td>
+<td>Allow web requests</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output-format">Output Format</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--format</code></td>
+<td><code>copilot --format json</code></td>
+<td><code>json</code> or <code>text</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent-selection">Agent Selection</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--agent</code></td>
+<td><code>copilot --agent=refactor-agent</code></td>
+<td>Use custom agent</td>
+</tr>
+</tbody>
+</table>
+<h3 id="examples_2">Examples</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Programmatic mode with tool control</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>copilot<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;Run tests&quot;</span><span class="w"> </span>--allow-tool<span class="w"> </span><span class="s1">&#39;shell(npm test:*)&#39;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Using custom agent</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>copilot<span class="w"> </span>--agent<span class="o">=</span>refactor-agent<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;Refactor this&quot;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Restrict dangerous operations</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>copilot<span class="w"> </span>--allow-all-tools<span class="w"> </span>--deny-tool<span class="w"> </span><span class="s1">&#39;shell(rm)&#39;</span><span class="w"> </span>--deny-tool<span class="w"> </span><span class="s1">&#39;shell(sudo)&#39;</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># JSON output for automation</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>copilot<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;Fix bug&quot;</span><span class="w"> </span>--format<span class="w"> </span>json
+</span></code></pre></div>
+<hr />
+<h2 id="openai-codex-cli">OpenAI Codex CLI</h2>
+<h3 id="execution-modes">Execution Modes</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codex</code></td>
+<td>Interactive TUI mode</td>
+</tr>
+<tr>
+<td><code>codex "prompt"</code></td>
+<td>Interactive with initial prompt</td>
+</tr>
+<tr>
+<td><code>codex exec "prompt"</code></td>
+<td>Non-interactive automation</td>
+</tr>
+<tr>
+<td><code>codex exec resume &lt;id&gt;</code></td>
+<td>Resume non-interactive session</td>
+</tr>
+<tr>
+<td><code>codex resume</code></td>
+<td>Resume picker for interactive</td>
+</tr>
+<tr>
+<td><code>codex resume --last</code></td>
+<td>Resume most recent session</td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-selection_3">Model Selection</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-m</code> / <code>--model</code></td>
+<td><code>codex -m gpt-5.1</code></td>
+<td>Specify model</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Available Models:</strong> <code>gpt-5.1-codex-max</code> (default), <code>gpt-5.1</code>, <code>gpt-5.1-codex-mini</code>, <code>o3</code>, <code>o4-mini</code></p>
+<h3 id="approval-policies">Approval Policies</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-a</code> / <code>--ask-for-approval</code></td>
+<td><code>codex -a untrusted</code></td>
+<td>Set approval policy</td>
+</tr>
+<tr>
+<td><code>--full-auto</code></td>
+<td><code>codex --full-auto</code></td>
+<td>Auto-approve (on-failure + workspace-write)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Approval Values:</strong> <code>suggest</code>, <code>auto-edit</code>, <code>untrusted</code>, <code>on-failure</code>, <code>on-request</code>, <code>never</code></p>
+<h3 id="sandbox-modes">Sandbox Modes</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--sandbox</code></td>
+<td><code>codex --sandbox read-only</code></td>
+<td>Set sandbox mode</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sandbox Values:</strong>
+- <code>read-only</code> - Read files only (default for exec)
+- <code>workspace-write</code> - Allow writes to cwd and $TMPDIR
+- <code>danger-full-access</code> - No restrictions</p>
+<h3 id="output-debugging">Output &amp; Debugging</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td><code>codex exec --json "task"</code></td>
+<td>Stream JSON Lines output</td>
+</tr>
+<tr>
+<td><code>-o</code> / <code>--output-last-message</code></td>
+<td><code>codex exec -o file.txt "task"</code></td>
+<td>Write final output to file</td>
+</tr>
+<tr>
+<td><code>--output-schema</code></td>
+<td><code>codex exec --output-schema schema.json</code></td>
+<td>Structured JSON output</td>
+</tr>
+<tr>
+<td><code>-d</code> / <code>--debug</code></td>
+<td><code>codex --debug</code></td>
+<td>Enable debug logging</td>
+</tr>
+</tbody>
+</table>
+<h3 id="directory-context">Directory &amp; Context</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Format</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-C</code> / <code>--cd</code></td>
+<td><code>codex -C /path/to/project</code></td>
+<td>Set working directory</td>
+</tr>
+<tr>
+<td><code>--add-dir</code></td>
+<td><code>codex --add-dir ../backend</code></td>
+<td>Add extra writable roots</td>
+</tr>
+<tr>
+<td><code>-i</code> / <code>--image</code></td>
+<td><code>codex -i screenshot.png "explain"</code></td>
+<td>Attach images</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mcp-server-management">MCP Server Management</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codex mcp add name -- command args</code></td>
+<td>Add STDIO MCP server</td>
+</tr>
+<tr>
+<td><code>codex mcp list</code></td>
+<td>List configured servers</td>
+</tr>
+<tr>
+<td><code>codex mcp get server-name</code></td>
+<td>Show server config</td>
+</tr>
+<tr>
+<td><code>codex mcp remove server-name</code></td>
+<td>Remove MCP server</td>
+</tr>
+</tbody>
+</table>
+<h3 id="examples_3">Examples</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Non-interactive with full automation</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>codex<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--full-auto<span class="w"> </span><span class="s2">&quot;add unit tests for auth&quot;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Read-only analysis with JSON output</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>codex<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--json<span class="w"> </span><span class="s2">&quot;count lines of code&quot;</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Full access for network operations</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>codex<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--sandbox<span class="w"> </span>danger-full-access<span class="w"> </span><span class="s2">&quot;fetch and summarize API docs&quot;</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># Resume and continue previous work</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>codex<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>resume<span class="w"> </span>--last<span class="w"> </span><span class="s2">&quot;fix the remaining issues&quot;</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># Multi-directory project</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>codex<span class="w"> </span>--cd<span class="w"> </span>frontend<span class="w"> </span>--add-dir<span class="w"> </span>../backend<span class="w"> </span>--add-dir<span class="w"> </span>../shared
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="c1"># With specific model</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>codex<span class="w"> </span>-m<span class="w"> </span>o3<span class="w"> </span><span class="s2">&quot;optimize this algorithm&quot;</span>
+</span></code></pre></div>
+<hr />
+<h2 id="configuration-priority">Configuration Priority</h2>
+<p>All four CLIs apply settings in this order (highest to lowest priority):</p>
+<ol>
+<li><strong>Command-line arguments</strong> (always wins)</li>
+<li><strong>Environment variables</strong></li>
+<li><strong>Project/local config</strong> (<code>./&lt;cli&gt;/settings.json</code>, <code>.github/</code>, <code>.codex/config.toml</code>)</li>
+<li><strong>User config</strong> (<code>~/.claude/</code>, <code>~/.gemini/</code>, <code>~/.copilot/</code>, <code>~/.codex/</code>)</li>
+<li><strong>System defaults</strong></li>
+</ol>
+<p><strong>Key Insight:</strong> Command-line flags override everything, making them ideal for orchestration scripts.</p>
+<hr />
+<h2 id="environment-variables">Environment Variables</h2>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Variable</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude</td>
+<td><code>ANTHROPIC_MODEL</code></td>
+<td>Default model</td>
+</tr>
+<tr>
+<td>Gemini</td>
+<td><code>GEMINI_API_KEY</code></td>
+<td>API authentication</td>
+</tr>
+<tr>
+<td>Gemini</td>
+<td><code>GEMINI_MODEL</code></td>
+<td>Default model</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td><code>OPENAI_API_KEY</code></td>
+<td>API authentication (alternative to login)</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td><code>CODEX_HOME</code></td>
+<td>Override config directory</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="configuration-files">Configuration Files</h2>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>User Config</th>
+<th>Project Config</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude</td>
+<td><code>~/.claude/settings.json</code></td>
+<td><code>.claude/settings.json</code></td>
+</tr>
+<tr>
+<td>Gemini</td>
+<td><code>~/.gemini/settings.json</code></td>
+<td><code>.gemini/settings.json</code></td>
+</tr>
+<tr>
+<td>Copilot</td>
+<td><code>~/.copilot/config</code></td>
+<td><code>.github/copilot-instructions.md</code></td>
+</tr>
+<tr>
+<td>Codex</td>
+<td><code>~/.codex/config.toml</code></td>
+<td><code>.codex/config.toml</code>, <code>AGENTS.md</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>See official documentation for complete reference:</em>
+- <a href="https://code.claude.com/docs/en/cli-reference">Claude Code CLI</a>
+- <a href="https://github.com/google-gemini/gemini-cli">Gemini CLI</a>
+- <a href="https://docs.github.com/en/copilot">GitHub Copilot CLI</a>
+- <a href="https://github.com/openai/codex">OpenAI Codex CLI</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.code.annotate", "navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

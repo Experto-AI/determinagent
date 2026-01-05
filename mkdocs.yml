@@ -1,0 +1,82 @@
+site_name: DeterminAgent
+site_description: CLI-First deterministic multi-agent orchestration library
+site_url: https://determinagent.github.io/determinagent/
+repo_url: https://github.com/determinagent/determinagent
+repo_name: determinagent/determinagent
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - content.code.copy
+    - content.code.annotate
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Welcome: index.md
+  - Project Roadmap: roadmap.md
+  - Changelog: changelog.md
+  - Architecture: architecture.md
+  - CLI Reference: cli-reference.md
+  - API Reference:
+      - Overview: api/index.md
+      - Core Agent: api/agent.md
+      - Adapters: api/adapters.md
+      - Sessions: api/sessions.md
+      - Exceptions: api/exceptions.md
+  - Tutorials:
+      - Your First Flow: tutorials/first_flow.md
+  - Development:
+      - Contributing: contributing.md
+      - Code of Conduct: code-of-conduct.md
+      - Security: security.md
+
+plugins:
+  - search
+  - htmlproofer:
+      raise_error: false
+      ignore_urls:
+        - "^http://localhost:"
+        - "https://claude.ai/code"
+        - "https://openai.com/codex"
+  - mkdocstrings:
+      handlers:
+        python:
+          setup_commands:
+            - import sys
+            - sys.path.append(".")
+          options:
+            show_root_heading: true
+            show_source: true
+            members_order: alphabetical
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables

@@ -1,0 +1,51 @@
+name: Bug Report
+description: Report a bug to help us improve DeterminAgent
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Thank you for reporting a bug! 
+        Please provide as much information as possible to help us reproduce and fix the issue.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we recreate this issue?
+      placeholder: |
+        1. Run `python flows/blog/main.py "My Topic"`
+        2. Enter 'n' at human review
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Environment Context
+      description: |
+        Please provide details about your environment:
+        - OS: [e.g. Ubuntu 22.04, Windows 11 WSL]
+        - Python version: [e.g. 3.10.12]
+        - CLI tool(s) being used: [e.g. Claude Code v0.5.1, Copilot CLI]
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or Error Messages
+      description: Please paste any relevant error messages or console output.
+      render: shell
