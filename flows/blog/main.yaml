@@ -20,11 +20,11 @@ defaults:
     provider: claude
     model: balanced
   editor:
-    provider: copilot
+    provider: claude
     model: fast
   reviewer:
     provider: claude
-    model: balanced
+    model: powerful
 
 # =============================================================================
 # Review Settings

@@ -73,7 +73,7 @@ class UnifiedAgent:
 #### SessionManager
 Handles native session flags for all providers. It ensures that conversation history is maintained within the CLI tool's local context.
 - **Claude**: `--session-id <uuid>` for first call, `-r <uuid>` for resume.
-- **Gemini**: `--resume <uuid>`
+- **Gemini**: `--resume latest` or `--resume <index>`
 - **Copilot**: `--resume [sessionId]`, `--continue`
 - **Codex**: `exec` / `exec resume <id>`
 
@@ -89,11 +89,11 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 
 | Feature | Claude Code | Gemini CLI | GitHub Copilot | OpenAI Codex |
 |---------|-------------|------------|----------------|--------------|
-| **Session IDs** | ✅ `--session-id`, `-r` | ✅ `--resume` | ✅ `--resume`, `--continue` | ✅ `exec resume` |
-| **System Prompt** | ✅ `--system-prompt` | ⚠️ Via subagents | ⚠️ Via `.agent.md` | ⚠️ Via `AGENTS.md` |
-| **Output Format** | json/text/stream-json | json/text/stream-json | json/text | JSON Lines |
-| **Web Search** | `--allowedTools WebSearch` | Built-in | `--allow-all-tools` | config.toml |
-| **Sandbox Mode** | ❌ No | ✅ Docker | ❌ No | ✅ Built-in |
+| **Session IDs** | ✅ `--session-id`, `-r` | ✅ `--resume latest` / index | ✅ `--resume`, `--continue` | ✅ `exec resume` |
+| **System Prompt** | ✅ `--system-prompt` | ⚠️ No direct flag | ⚠️ Via AGENTS/custom instructions | ⚠️ Via `AGENTS.md` |
+| **Output Format** | text/json/stream-json (print mode) | text/json/stream-json | text (optional streaming) | text (JSONL with `--json`) |
+| **Tool Permissions** | `--allowed-tools`, `--disallowed-tools` | `--allowed-tools`, `--approval-mode` | `--allow-all-tools`, `--allow-tool` | `--search` (web), config.toml |
+| **Sandbox Mode** | ❌ No | ✅ `--sandbox` | ❌ No | ✅ `--sandbox` |
 
 ### When to Use Each Provider
 
@@ -125,16 +125,16 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 | Alias | Claude | Copilot | Gemini | Codex |
 |-------|--------|---------|--------|-------|
 | `fast` | haiku | claude-haiku-4.5 | gemini-2.5-flash | gpt-5.1-codex-mini |
-| `balanced` | sonnet | claude-sonnet-4-5 | gemini-2.5-pro | gpt-5.1 |
+| `balanced` | sonnet | claude-sonnet-4.5 | gemini-2.5-pro | gpt-5.1 |
 | `powerful` | opus | gpt-5 | gemini-2.5-pro | gpt-5.1-codex-max |
 | `reasoning` | opusplan | gpt-5 | gemini-2.5-pro | o3 |
 | `free` | haiku | claude-haiku-4.5 | gemini-2.5-flash | gpt-5.1-codex-mini |
 
 ### Tool Permissions
-- **Claude**: `["--allowedTools", "WebSearch,WebFetch"]`
-- **Gemini**: Built-in.
-- **Copilot**: `["--allow-all-tools"]`
-- **Codex**: Via `config.toml`: `web_search_request = true`.
+- **Claude**: `["--allowed-tools", "..."]` or `["--disallowed-tools", "..."]`
+- **Gemini**: `["--allowed-tools", "..."]` and `["--approval-mode", "..."]`
+- **Copilot**: `["--allow-all-tools"]` (required for non-interactive prompts)
+- **Codex**: `["--search"]` for web search; other permissions via config.toml
 
 ---
 

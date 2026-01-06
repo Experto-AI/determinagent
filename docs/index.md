@@ -73,12 +73,31 @@ python flows/blog/main.py "My Blog Topic" --writer claude --editor copilot
 
 ## 🧩 Compatibility Matrix
 
-| Provider | Adapter Status | Session Support | Web Search | Native Models |
+| Provider | Adapter Status | Session Support | Web Search | Model Aliases |
 | :--- | :--- | :--- | :--- | :--- |
-| **Claude Code** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful |
-| **Copilot** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful |
-| **Gemini CLI** | ✅ Alpha | ✅ Native | ✅ Yes | flash, pro |
-| **OpenAI Codex**| ✅ Alpha | ✅ Native | ❌ No | fast, balanced |
+| **Claude Code** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful, reasoning, free |
+| **Copilot** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful, reasoning, free |
+| **Gemini CLI** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful, reasoning, free |
+| **OpenAI Codex**| ✅ Alpha | ✅ Native | ❌ No | fast, balanced, powerful, reasoning, free |
+
+---
+
+## 🎯 Model Alias Map
+
+DeterminAgent resolves model aliases per provider so you can keep flows consistent.
+
+| Alias | Claude Code | Gemini CLI | Copilot | OpenAI Codex |
+| :--- | :--- | :--- | :--- | :--- |
+| fast | haiku | gemini-2.5-flash | claude-haiku-4.5 | gpt-5.1-codex-mini |
+| balanced | sonnet | gemini-2.5-pro | claude-sonnet-4.5 | gpt-5.1-codex |
+| powerful | opus | gemini-2.5-pro | claude-opus-4.5 | gpt-5.1-codex-max |
+| reasoning | opus | gemini-2.5-pro | gpt-5.2 | gpt-5.1-codex |
+| free | haiku | gemini-2.5-flash | claude-haiku-4.5 | gpt-5.1-codex-mini |
+
+Notes:
+- You can always pass an exact model string to override the alias.
+- Availability depends on your provider plan and CLI version.
+- Codex CLI does not enumerate models in `--help`; defaults mirror Codex model names exposed by Copilot CLI.
 
 ---
 

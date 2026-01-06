@@ -26,7 +26,7 @@ Example:
     ```
 """
 
-__version__ = "0.12.2"
+__version__ = "0.13.0"
 
 # Core classes
 # Adapters
@@ -64,6 +64,11 @@ from .exceptions import (
 )
 from .parsers import CategoryScore, ReviewResult, parse_review
 from .sessions import SessionManager
+from .validation import (
+    validate_provider,
+    validate_providers,
+    validate_providers_by_list,
+)
 
 __all__ = [
     # Version
@@ -100,4 +105,8 @@ __all__ = [
     "parse_review",
     "ReviewResult",
     "CategoryScore",
+    # Validation
+    "validate_provider",
+    "validate_providers",
+    "validate_providers_by_list",
 ]

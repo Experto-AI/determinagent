@@ -4,7 +4,7 @@ Blog Workflow
 Demonstrates the DeterminAgent library with provider interchangeability.
 
 Usage:
-    python blog-flow.py "AI Agents" --writer claude --editor copilot --reviewer claude
+    python blog-flow.py "AI Agents" --writer claude --editor claude --reviewer claude
     python blog-flow.py "Topic" --provider claude  # Use same provider for all
 """
 
@@ -19,9 +19,11 @@ from langgraph.graph import END, StateGraph
 from determinagent import cli_utils, ui, utils
 from determinagent.adapters import Provider
 from determinagent.agent import UnifiedAgent
+from determinagent.constants import resolve_model_alias
 from determinagent.exceptions import DeterminAgentError, ProviderNotAvailable
 from determinagent.parsers import format_text_stats, parse_review
 from determinagent.sessions import SessionManager
+from determinagent.validation import validate_providers
 
 # ============================================================================
 # Default Prompts (if not provided in config)
@@ -187,7 +189,7 @@ class BlogState(TypedDict):
 
 def create_blog_workflow(
     writer_provider: Provider = "claude",
-    editor_provider: Provider = "copilot",
+    editor_provider: Provider = "claude",
     reviewer_provider: Provider = "claude",
     writer_model: str = "balanced",
     editor_model: str = "fast",
@@ -585,8 +587,11 @@ def main() -> None:
 
     defaults_cfg = config.get("defaults", {})
     writer_def = defaults_cfg.get("writer", {}).get("provider", "claude")
-    editor_def = defaults_cfg.get("editor", {}).get("provider", "copilot")
+    editor_def = defaults_cfg.get("editor", {}).get("provider", "claude")
     reviewer_def = defaults_cfg.get("reviewer", {}).get("provider", "claude")
+    writer_model_def = defaults_cfg.get("writer", {}).get("model", "balanced")
+    editor_model_def = defaults_cfg.get("editor", {}).get("model", "fast")
+    reviewer_model_def = defaults_cfg.get("reviewer", {}).get("model", "balanced")
 
     word_count_cfg = config.get("word_count", {})
     min_words_def = word_count_cfg.get("min", 800)
@@ -633,9 +638,42 @@ def main() -> None:
     editor_provider = cast(Provider, providers["editor"])
     reviewer_provider = cast(Provider, providers["reviewer"])
 
+    # Validate providers are installed and accessible
+    print()
+    all_valid, validation_results = validate_providers(
+        writer_provider, editor_provider, reviewer_provider, verbose=True
+    )
+
+    if not all_valid:
+        print()
+        print("❌ Provider validation failed. Some providers are not available.")
+        print()
+        print("Options:")
+        print("  1. Install the missing provider(s)")
+        print("  2. Switch to a different provider using --writer, --editor, or --reviewer")
+        print()
+        for result in validation_results:
+            if result["status"] != "✅ available":
+                print(f"  {result['role'].upper()}: {result['error']}")
+        print()
+        sys.exit(1)
+
+    # Resolve model aliases to actual model names
+    writer_model_resolved = resolve_model_alias(writer_model_def, writer_provider)
+    editor_model_resolved = resolve_model_alias(editor_model_def, editor_provider)
+    reviewer_model_resolved = resolve_model_alias(reviewer_model_def, reviewer_provider)
+
+    # Display provider and model configuration
+    print()
+    ui.print_header("CONFIGURATION", icon="⚙️")
+    print(f"  WRITER:   {writer_provider} ({writer_model_def} → {writer_model_resolved})")
+    print(f"  EDITOR:   {editor_provider} ({editor_model_def} → {editor_model_resolved})")
+    print(f"  REVIEWER: {reviewer_provider} ({reviewer_model_def} → {reviewer_model_resolved})")
+    ui.print_separator("-")
+
     ui.print_header(
         "BLOG WORKFLOW",
-        f"Topic: {args.topic}\nWriter: {writer_provider} | Editor: {editor_provider} | Reviewer: {reviewer_provider}",
+        f"Topic: {args.topic}",
         icon="🚀",
     )
 
@@ -651,6 +689,9 @@ def main() -> None:
         writer_provider=writer_provider,
         editor_provider=editor_provider,
         reviewer_provider=reviewer_provider,
+        writer_model=writer_model_def,
+        editor_model=editor_model_def,
+        reviewer_model=reviewer_model_def,
         prompts=config.get("prompts"),
     )
 

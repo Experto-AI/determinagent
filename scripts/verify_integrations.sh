@@ -289,6 +289,7 @@ verify_python_library() {
     if $python_cmd -c "
 from determinagent import UnifiedAgent, SessionManager, load_config
 from determinagent import ProviderNotAvailable, DeterminAgentError
+from determinagent.validation import validate_providers, validate_provider
 print('All core imports successful')
 " 2>&1; then
         print_pass "Core components import successful"
@@ -296,7 +297,21 @@ print('All core imports successful')
         print_fail "Core components import failed"
         return 1
     fi
-    
+
+    # Validation module test
+    echo ""
+    print_info "Testing provider validation module..."
+    if $python_cmd -c "
+from determinagent.validation import validate_provider
+result = validate_provider('claude', 'test')
+print(f'Validation check successful: {result[\"status\"]}')
+" 2>&1; then
+        print_pass "Validation module works"
+    else
+        print_fail "Validation module test failed"
+        return 1
+    fi
+
     return 0
 }
 

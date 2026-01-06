@@ -6,7 +6,6 @@
   - Do NOT include: Project roadmap, installation steps, or general architectural design.
 -->
 
-
 Complete command-line reference for all supported AI CLI tools.
 
 ---
@@ -17,68 +16,73 @@ Complete command-line reference for all supported AI CLI tools.
 2. [Gemini CLI](#gemini-cli)
 3. [Copilot CLI](#copilot-cli)
 4. [OpenAI Codex CLI](#openai-codex-cli)
-5. [Configuration Priority](#configuration-priority)
+5. [Configuration and Environment](#configuration-and-environment)
 
 ---
 
 ## Claude Code CLI
 
+### Execution & Prompts
+
+| Flag | Format | Purpose |
+|------|--------|---------|
+| `-p` / `--print` | `claude -p "query"` | Print response and exit (non-interactive) |
+| `prompt` | `claude "query"` | Start interactive with initial prompt |
+
 ### Session Management
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `-p` | `claude -p "query"` | Print/headless mode (non-interactive) |
 | `-c` / `--continue` | `claude -c` | Continue most recent conversation |
-| `-r` / `--resume` | `claude -r "session-id"` | Resume specific session by ID |
+| `-r` / `--resume` | `claude -r "session-id"` | Resume by session ID or open picker |
 | `--session-id` | `claude --session-id "uuid"` | Create/use specific session ID |
 
 ### Model Selection
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--model` | `claude --model <alias>` | Specify model: `sonnet`, `opus`, `haiku`, `opusplan` |
-
-**Available Models:** `sonnet` (latest), `opus` (latest), `haiku`, `opusplan` (hybrid)
+| `--model` | `claude --model <model>` | Use a model alias (e.g., `sonnet`, `opus`) or full model name |
 
 ### System Prompt
 
 | Flag | Format | Purpose |
 |------|--------|---------|
 | `--system-prompt` | `claude --system-prompt "..."` | Override default instructions |
-| `--system-prompt-file` | `claude --system-prompt-file /path` | Load from file |
 | `--append-system-prompt` | `claude --append-system-prompt "..."` | Add to defaults |
 
 ### Tool Control
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--allowedTools` | `claude --allowedTools "Read,Bash(git:*)"` | Allow only specified tools |
-| `--disallowedTools` | `claude --disallowedTools "Bash(rm:*)"` | Deny specific tools |
-
-**Available Tools:** `Read`, `Write`, `Bash`, `Grep`, `Glob`, `WebSearch`, `WebFetch`
+| `--allowedTools` / `--allowed-tools` | `claude --allowed-tools "Bash,Read"` | Allow only specified tools |
+| `--disallowedTools` / `--disallowed-tools` | `claude --disallowed-tools "Bash(rm:*)"` | Deny specific tools |
+| `--tools` | `claude --tools "Bash,Edit,Read"` | Select which built-in tools are available (print mode only) |
 
 ### Output & Debug
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--output-format` | `claude -p --output-format json` | Format: `text`, `json`, `stream-json` |
-| `--verbose` | `claude --verbose` | Enable verbose logging |
-| `--mcp-debug` | `claude --mcp-debug` | Debug MCP server connections |
+| `--output-format` | `claude -p --output-format json` | `text`, `json`, `stream-json` (print mode only) |
+| `--json-schema` | `claude -p --json-schema '{"type":"object"}'` | Validate structured output against JSON schema |
+| `--input-format` | `claude -p --input-format stream-json` | `text`, `stream-json` (print mode only) |
+| `--include-partial-messages` | `claude -p --output-format stream-json --include-partial-messages` | Include partial chunks (print mode only) |
+| `--debug` | `claude --debug` | Enable debug mode (optional category filter) |
+| `--verbose` | `claude --verbose` | Override verbose mode setting |
 
 ### Examples
 
 ```bash
 # Headless with specific model and JSON output
-claude -p "analyze this" --model opus --output-format json
+claude -p "analyze this" --model sonnet --output-format json
 
 # Continue conversation with custom instructions
 claude -c --append-system-prompt "Focus on security"
 
-# Use only safe tools
-claude --allowedTools "Read,Grep" "search the codebase"
+# Restrict tools (print mode)
+claude -p "search the codebase" --allowed-tools "Bash,Read"
 
 # Resume with debugging
-claude --continue --verbose "next steps"
+claude --continue --debug "next steps"
 ```
 
 ---
@@ -89,130 +93,123 @@ claude --continue --verbose "next steps"
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `-p` / `--prompt` | `gemini -p "query"` | Single prompt (non-interactive) |
-| `-i` / `--prompt-interactive` | `gemini -i "text"` | Start interactive with prompt |
+| `prompt` | `gemini "query"` | One-shot prompt (non-interactive) |
+| `-i` / `--prompt-interactive` | `gemini -i "text"` | Execute prompt and continue interactively |
+| `-p` / `--prompt` | `gemini -p "query"` | Deprecated (use positional prompt) |
 
 ### Model Selection
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `-m` / `--model` | `gemini -m gemini-2.5-flash` | Specify model |
-
-**Available Models:** `gemini-2.5-flash`, `gemini-2.5-pro`
+| `-m` / `--model` | `gemini -m <model>` | Specify model |
 
 ### Session Management
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--resume` | `gemini --resume` | Resume most recent session |
-| `--resume <index>` | `gemini --resume 1` | Resume by index |
-| `--resume <uuid>` | `gemini --resume abc-123` | Resume by UUID |
+| `-r` / `--resume` | `gemini --resume latest` | Resume most recent session or by index |
 | `--list-sessions` | `gemini --list-sessions` | List all sessions |
-| `--delete-session` | `gemini --delete-session 2` | Delete session |
+| `--delete-session` | `gemini --delete-session 2` | Delete session by index |
 
 ### Safety & Approval
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `-s` / `--sandbox` | `gemini --sandbox` | Enable sandbox mode |
-| `--sandbox-image` | `gemini --sandbox-image ubuntu:22.04` | Custom Docker image |
-| `-y` / `--yolo` | `gemini --yolo` | Auto-approve all tool calls |
-| `--approval-mode` | `gemini --approval-mode default` | `default`, `auto_edit`, `yolo` |
+| `-s` / `--sandbox` | `gemini --sandbox` | Run in sandbox mode |
+| `-y` / `--yolo` | `gemini --yolo` | Auto-approve all actions |
+| `--approval-mode` | `gemini --approval-mode auto_edit` | `default`, `auto_edit`, `yolo` |
+| `--allowed-tools` | `gemini --allowed-tools read_file` | Allow tools without confirmation |
+| `--allowed-mcp-server-names` | `gemini --allowed-mcp-server-names foo` | Allow MCP servers by name |
 
 ### Output Formatting
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--output-format` | `gemini --output-format json` | `text`, `json`, `stream-json` |
+| `-o` / `--output-format` | `gemini --output-format json` | `text`, `json`, `stream-json` |
 
-### Model Parameters
+### Workspace & Extensions
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `-t` / `--temperature` | `gemini -t 0.5` | Set temperature (0.0-2.0) |
-| `-b` / `--thinking-budget` | `gemini -b 8192` | Max thinking tokens |
+| `--include-directories` | `gemini --include-directories ../shared` | Add extra workspace roots |
+| `-e` / `--extensions` | `gemini --extensions a b` | Use specific extensions |
+| `-l` / `--list-extensions` | `gemini --list-extensions` | List available extensions |
 
 ### Examples
 
 ```bash
-# Headless with JSON output
-gemini -p "analyze code" --output-format json
+# One-shot with JSON output
+gemini "analyze code" --output-format json
 
-# Resume with auto-approval and streaming
-gemini --resume --yolo --output-format stream-json
+# Resume most recent session with auto-approval and streaming
+gemini --resume latest --yolo --output-format stream-json
 
-# Custom model and temperature
-gemini -m gemini-2.5-pro -t 0.3 -p "complex task"
+# Custom model and interactive follow-up
+gemini -m <model> -i "complex task"
 ```
 
 ---
 
 ## Copilot CLI
 
-### Session Management
-
-| Flag | Format | Purpose |
-|------|--------|---------|
-| `--resume` | `copilot --resume` | Resume previous session |
-| `--resume <id>` | `copilot --resume abc123` | Resume by session ID |
-| `--continue` | `copilot --continue` | Resume most recent session |
-
 ### Execution Mode
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `-p` / `--prompt` | `copilot -p "task"` | Programmatic (non-interactive) mode |
+| `-p` / `--prompt` | `copilot -p "task"` | Non-interactive prompt (requires `--allow-all-tools`) |
+| `-i` / `--interactive` | `copilot -i "prompt"` | Start interactive mode and run prompt |
+
+### Session Management
+
+| Flag | Format | Purpose |
+|------|--------|---------|
+| `--resume` | `copilot --resume` | Resume previous session (picker) |
+| `--resume <id>` | `copilot --resume abc123` | Resume by session ID |
+| `--continue` | `copilot --continue` | Resume most recent session |
 
 ### Model Selection
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--model` | `copilot --model "claude-sonnet-4-5"` | Specify model (run `copilot help config` for valid names) |
+| `--model` | `copilot --model gpt-5` | Specify model (see `copilot --help` for choices) |
 
-**Available Models:** `claude-sonnet-4-5` (default), `claude-sonnet-4`, `gpt-5`
+**Available Models:** `claude-sonnet-4.5`, `claude-haiku-4.5`, `claude-opus-4.5`, `claude-sonnet-4`, `gpt-5.1-codex-max`, `gpt-5.1-codex`, `gpt-5.2`, `gpt-5.1`, `gpt-5`, `gpt-5.1-codex-mini`, `gpt-5-mini`, `gpt-4.1`, `gemini-3-pro-preview`
 
-### Tool Approval
-
-| Flag | Format | Purpose |
-|------|--------|---------|
-| `--allow-all-tools` | `copilot --allow-all-tools` | Allow any tool without approval |
-| `--allow-tool` | `copilot --allow-tool 'My-MCP-Server'` | Allow specific tool (supports glob patterns) |
-| `--deny-tool` | `copilot --deny-tool 'My-MCP-Server(tool_name)'` | Deny specific tool (takes precedence) |
-
-### Output Format
+### Tool & URL Permissions
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--format` | `copilot --format json` | Output format (verify with `copilot help` for current support) |
+| `--allow-all-tools` | `copilot --allow-all-tools` | Allow all tools without confirmation |
+| `--allow-tool` | `copilot --allow-tool 'shell(git:*)'` | Allow specific tools |
+| `--deny-tool` | `copilot --deny-tool 'shell(git push)'` | Deny specific tools |
+| `--available-tools` | `copilot --available-tools write` | Limit tools to this set |
+| `--excluded-tools` | `copilot --excluded-tools shell` | Exclude tools from availability |
+| `--allow-url` | `copilot --allow-url github.com` | Allow URLs or domains |
+| `--deny-url` | `copilot --deny-url https://example.com` | Deny URLs or domains |
+| `--allow-all-urls` | `copilot --allow-all-urls` | Allow all URLs without confirmation |
 
-*Note: JSON output support is in development. Check `copilot help` for currently available format options.*
-
-### Agent Selection
+### Output & Logging
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--agent` | `copilot --agent=refactor-agent` | Use custom agent |
+| `-s` / `--silent` | `copilot -s -p "task"` | Output only response (no stats) |
+| `--stream` | `copilot --stream off` | Toggle streaming (`on`/`off`) |
+| `--log-level` | `copilot --log-level debug` | Set log level |
 
 ### Examples
 
 ```bash
-# Programmatic mode with tool control
-copilot -p "List all open issues assigned to me" --allow-tool 'gh-cli'
+# Non-interactive mode (requires allow-all-tools)
+copilot -p "List all open issues assigned to me" --allow-all-tools
 
 # Using custom agent
-copilot --agent=refactor-agent -p "Refactor this code block"
-
-# Allow all tools (use with caution)
-copilot --allow-all-tools -p "Run comprehensive analysis"
+copilot --agent=refactor-agent -p "Refactor this code" --allow-all-tools
 
 # Resume previous session
 copilot --resume
 
-# Continue most recent session
-copilot --continue
-
 # Select specific model
-copilot --model "claude-sonnet-4-5" -p "Analyze this code"
+copilot --model "claude-sonnet-4.5" -p "Analyze this code" --allow-all-tools
 ```
 
 ---
@@ -227,45 +224,40 @@ copilot --model "claude-sonnet-4-5" -p "Analyze this code"
 | `codex "prompt"` | Interactive with initial prompt |
 | `codex exec "prompt"` | Non-interactive automation |
 | `codex exec resume <id>` | Resume non-interactive session |
+| `codex exec resume --last` | Resume most recent non-interactive session |
 | `codex resume` | Resume picker for interactive |
-| `codex resume --last` | Resume most recent session |
+| `codex resume --last` | Resume most recent interactive session |
+| `codex review` | Non-interactive code review |
 
 ### Model Selection
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `-m` / `--model` | `codex -m gpt-5.1` | Specify model |
-
-**Available Models:** `gpt-5.1-codex-max` (default), `gpt-5.1`, `gpt-5.1-codex-mini`, `o3`, `o4-mini`
+| `-m` / `--model` | `codex -m o3` | Specify model |
+| `--oss` | `codex --oss` | Use local open-source model provider |
+| `--local-provider` | `codex --local-provider ollama` | Choose local provider |
 
 ### Approval Policies
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `-a` / `--ask-for-approval` | `codex -a untrusted` | Set approval policy |
-| `--full-auto` | `codex --full-auto` | Auto-approve (on-failure + workspace-write) |
-
-**Approval Values:** `suggest`, `auto-edit`, `untrusted`, `on-failure`, `on-request`, `never`
+| `-a` / `--ask-for-approval` | `codex -a on-request` | `untrusted`, `on-failure`, `on-request`, `never` |
+| `--full-auto` | `codex --full-auto` | Alias for `-a on-request` + `--sandbox workspace-write` |
+| `--dangerously-bypass-approvals-and-sandbox` | `codex --dangerously-bypass-approvals-and-sandbox` | Disable approvals and sandboxing |
 
 ### Sandbox Modes
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--sandbox` | `codex --sandbox read-only` | Set sandbox mode |
-
-**Sandbox Values:**
-- `read-only` - Read files only (default for exec)
-- `workspace-write` - Allow writes to cwd and $TMPDIR
-- `danger-full-access` - No restrictions
+| `-s` / `--sandbox` | `codex --sandbox read-only` | `read-only`, `workspace-write`, `danger-full-access` |
 
 ### Output & Debugging
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--json` | `codex exec --json "task"` | Stream JSON Lines output |
-| `-o` / `--output-last-message` | `codex exec -o file.txt "task"` | Write final output to file |
-| `--output-schema` | `codex exec --output-schema schema.json` | Structured JSON output |
-| `-d` / `--debug` | `codex --debug` | Enable debug logging |
+| `--json` | `codex exec --json "task"` | Stream JSONL events |
+| `-o` / `--output-last-message` | `codex exec -o output.txt "task"` | Write final response to file |
+| `--output-schema` | `codex exec --output-schema schema.json "task"` | Enforce JSON schema on final response |
 
 ### Directory & Context
 
@@ -274,12 +266,14 @@ copilot --model "claude-sonnet-4-5" -p "Analyze this code"
 | `-C` / `--cd` | `codex -C /path/to/project` | Set working directory |
 | `--add-dir` | `codex --add-dir ../backend` | Add extra writable roots |
 | `-i` / `--image` | `codex -i screenshot.png "explain"` | Attach images |
+| `--search` | `codex --search` | Enable web search tool |
 
 ### MCP Server Management
 
 | Command | Purpose |
 |---------|---------|
 | `codex mcp add name -- command args` | Add STDIO MCP server |
+| `codex mcp add name --url https://...` | Add HTTP MCP server |
 | `codex mcp list` | List configured servers |
 | `codex mcp get server-name` | Show server config |
 | `codex mcp remove server-name` | Remove MCP server |
@@ -303,50 +297,34 @@ codex exec resume --last "fix the remaining issues"
 codex --cd frontend --add-dir ../backend --add-dir ../shared
 
 # With specific model
-codex -m o3 "optimize this algorithm"
+codex -m <model> "optimize this algorithm"
 ```
 
 ---
 
-## Configuration Priority
+## Configuration and Environment
 
-All four CLIs apply settings in this order (highest to lowest priority):
+### Codex Config
 
-1. **Command-line arguments** (always wins)
-2. **Environment variables**
-3. **Project/local config** (`./<cli>/settings.json`, `.github/`, `.codex/config.toml`)
-4. **User config** (`~/.claude/`, `~/.gemini/`, `~/.copilot/`, `~/.codex/`)
-5. **System defaults**
+| Item | Location | Notes |
+|------|----------|-------|
+| Config file | `~/.codex/config.toml` | Primary configuration file |
+| Override config | `codex -c key=value` | Inline TOML overrides |
 
-**Key Insight:** Command-line flags override everything, making them ideal for orchestration scripts.
+### Copilot Environment Variables
 
----
+From `copilot help environment`:
 
-## Environment Variables
+| Variable | Purpose |
+|----------|---------|
+| `COPILOT_ALLOW_ALL` | Allow all tools without confirmation (`true`) |
+| `COPILOT_AUTO_UPDATE` | Disable auto-updates when set to `false` |
+| `COPILOT_CUSTOM_INSTRUCTIONS_DIRS` | Extra dirs for custom instructions |
+| `COPILOT_MODEL` | Default model override |
+| `COPILOT_GITHUB_TOKEN` / `GH_TOKEN` / `GITHUB_TOKEN` | Auth token precedence |
+| `USE_BUILTIN_RIPGREP` | Use bundled `rg` when not `false` |
+| `PLAIN_DIFF` | Disable rich diff rendering when `true` |
+| `XDG_CONFIG_HOME` | Override config root (defaults to `~/.copilot`) |
+| `XDG_STATE_HOME` | Override state root (defaults to `~/.copilot`) |
 
-| Provider | Variable | Purpose |
-|----------|----------|---------|
-| Claude | `ANTHROPIC_MODEL` | Default model |
-| Gemini | `GEMINI_API_KEY` | API authentication |
-| Gemini | `GEMINI_MODEL` | Default model |
-| Codex | `OPENAI_API_KEY` | API authentication (alternative to login) |
-| Codex | `CODEX_HOME` | Override config directory |
-
----
-
-## Configuration Files
-
-| Provider | User Config | Project Config |
-|----------|-------------|----------------|
-| Claude | `~/.claude/settings.json` | `.claude/settings.json` |
-| Gemini | `~/.gemini/settings.json` | `.gemini/settings.json` |
-| Copilot | `~/.copilot/config` | `.github/copilot-instructions.md` |
-| Codex | `~/.codex/config.toml` | `.codex/config.toml`, `AGENTS.md` |
-
----
-
-*See official documentation for complete reference:*
-- [Claude Code CLI](https://code.claude.com/docs/en/cli-reference)
-- [Gemini CLI](https://github.com/google-gemini/gemini-cli)
-- [Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli)
-- [OpenAI Codex CLI](https://github.com/openai/codex)
+For Claude and Gemini environment variables, refer to each provider's official documentation.

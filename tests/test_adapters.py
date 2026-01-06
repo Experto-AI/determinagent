@@ -269,7 +269,7 @@ class TestCopilotAdapter:
         assert "claude-haiku-4.5" in cmd_fast
 
         cmd_balanced = adapter.build_command("test", "balanced", [])
-        assert "claude-sonnet-4-5" in cmd_balanced
+        assert "claude-sonnet-4.5" in cmd_balanced
 
         cmd_powerful = adapter.build_command("test", "powerful", [])
         assert "gpt-5" in cmd_powerful
@@ -359,7 +359,6 @@ class TestGeminiAdapter:
         )
         # Assert
         assert "gemini" in cmd
-        assert "-p" in cmd
         assert "Explain this" in cmd
         assert "--model" in cmd
         assert "gemini-1.5-pro" in cmd

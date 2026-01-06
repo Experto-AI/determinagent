@@ -20,7 +20,7 @@ class SessionManager:
 
     All four supported CLIs have native session support:
     - Claude:  `--session-id <uuid>`, `-r <uuid>` for resume
-    - Gemini:  `--resume <uuid>` for resume
+    - Gemini:  `--resume latest` or `--resume <index>` for resume
     - Copilot: `--resume <sessionId>` for resume
     - Codex:   `exec resume <id>` subcommand
 
@@ -59,10 +59,13 @@ class SessionManager:
         Args:
             provider: CLI provider (claude, gemini, copilot, codex).
             session_id: Optional explicit session ID. If not provided,
-                       a new UUID will be generated.
+                       a new UUID will be generated (Gemini defaults to
+                       "latest" since it resumes by latest or index).
         """
         self.provider: Provider = provider
-        self.session_id: str = session_id or str(uuid.uuid4())
+        if session_id is None:
+            session_id = "latest" if provider == "gemini" else str(uuid.uuid4())
+        self.session_id: str = session_id
         self.call_count: int = 0
 
     def get_session_flags(
@@ -74,7 +77,7 @@ class SessionManager:
 
         Each provider has its own syntax for session management:
         - Claude: `--session-id <uuid>` for first call, `-r <uuid>` for resume
-        - Gemini: (none) for first call, `--resume <uuid>` for resume
+        - Gemini: (none) for first call, `--resume latest` or `--resume <index>`
         - Copilot: (none) for first call, `--resume <id>` for resume
         - Codex: Returns `["resume", "<id>"]` which the adapter handles
 

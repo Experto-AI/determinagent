@@ -35,7 +35,7 @@ class GeminiAdapter(ProviderAdapter):
             model="gemini-1.5-pro",
             session_flags=["--resume", "abc-123"],
         )
-        # Returns: ["gemini", "-p", "Explain this", "--resume", "abc-123",
+        # Returns: ["gemini", "Explain this", "--resume", "abc-123",
         #           "--output-format", "json", "--model", "gemini-1.5-pro"]
         ```
     """
@@ -65,7 +65,8 @@ class GeminiAdapter(ProviderAdapter):
         Returns:
             Command array for subprocess execution.
         """
-        cmd = ["gemini", "-p", prompt]
+        # Prompt is positional; -p/--prompt is deprecated.
+        cmd = ["gemini", prompt]
 
         # Add session flags (e.g., --resume <uuid>)
         cmd.extend(session_flags)

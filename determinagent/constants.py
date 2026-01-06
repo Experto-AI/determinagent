@@ -18,25 +18,24 @@ MODEL_MAPPING: dict[str, dict[str, str]] = {
     "balanced": {
         "claude": "sonnet",
         "gemini": "gemini-2.5-pro",
-        "copilot": "claude-sonnet-4-5",
-        "codex": "gpt-5.1",
+        "copilot": "claude-sonnet-4.5",
+        "codex": "gpt-5.1-codex",
     },
     "powerful": {
         "claude": "opus",
-        "gemini": "gemini-2.5-pro",  # No opus equivalent
-        "copilot": "gpt-5",
+        "gemini": "gemini-2.5-pro",  # No higher tier exposed in Gemini CLI
+        "copilot": "claude-opus-4.5",
         "codex": "gpt-5.1-codex-max",
     },
     "reasoning": {
-        "claude": "opusplan",
+        "claude": "opus",  # Best available reasoning model alias in Claude Code
         "gemini": "gemini-2.5-pro",
-        "copilot": "gpt-5",
-        "codex": "o3",
+        "copilot": "gpt-5.2",
+        "codex": "gpt-5.1-codex",
     },
     # "free" category: Models with no additional per-token cost.
-    # Since CLI tools use subscription-based access (not API billing),
-    # all models are effectively $0 cost. We default to fast/efficient models.
-    # For Gemini, gemini-2.5-flash is available in the free tier via Google AI Studio.
+    # Since CLI tools use subscription-based access, we default to fast/efficient models.
+    # Gemini's free tier commonly exposes Flash-class models.
     "free": {
         "claude": "haiku",  # Fastest, included in subscription
         "gemini": "gemini-2.5-flash",  # Free tier available
@@ -59,7 +58,7 @@ def resolve_model_alias(alias: str, provider: str) -> str:
 
     Examples:
         resolve_model_alias("fast", "claude") → "haiku"
-        resolve_model_alias("balanced", "copilot") → "claude-sonnet-4-5"
+        resolve_model_alias("balanced", "copilot") → "claude-sonnet-4.5"
         resolve_model_alias("opus", "claude") → "opus" (passthrough)
     """
     if alias in MODEL_MAPPING:

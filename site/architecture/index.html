@@ -1875,7 +1875,7 @@
 <h4 id="sessionmanager">SessionManager</h4>
 <p>Handles native session flags for all providers. It ensures that conversation history is maintained within the CLI tool's local context.
 - <strong>Claude</strong>: <code>--session-id &lt;uuid&gt;</code> for first call, <code>-r &lt;uuid&gt;</code> for resume.
-- <strong>Gemini</strong>: <code>--resume &lt;uuid&gt;</code>
+- <strong>Gemini</strong>: <code>--resume latest</code> or <code>--resume &lt;index&gt;</code>
 - <strong>Copilot</strong>: <code>--resume [sessionId]</code>, <code>--continue</code>
 - <strong>Codex</strong>: <code>exec</code> / <code>exec resume &lt;id&gt;</code></p>
 <h4 id="provider-adapters">Provider Adapters</h4>
@@ -1899,37 +1899,37 @@
 <tr>
 <td><strong>Session IDs</strong></td>
 <td>✅ <code>--session-id</code>, <code>-r</code></td>
-<td>✅ <code>--resume</code></td>
+<td>✅ <code>--resume latest</code> / index</td>
 <td>✅ <code>--resume</code>, <code>--continue</code></td>
 <td>✅ <code>exec resume</code></td>
 </tr>
 <tr>
 <td><strong>System Prompt</strong></td>
 <td>✅ <code>--system-prompt</code></td>
-<td>⚠️ Via subagents</td>
-<td>⚠️ Via <code>.agent.md</code></td>
+<td>⚠️ No direct flag</td>
+<td>⚠️ Via AGENTS/custom instructions</td>
 <td>⚠️ Via <code>AGENTS.md</code></td>
 </tr>
 <tr>
 <td><strong>Output Format</strong></td>
-<td>json/text/stream-json</td>
-<td>json/text/stream-json</td>
-<td>json/text</td>
-<td>JSON Lines</td>
+<td>text/json/stream-json (print mode)</td>
+<td>text/json/stream-json</td>
+<td>text (optional streaming)</td>
+<td>text (JSONL with <code>--json</code>)</td>
 </tr>
 <tr>
-<td><strong>Web Search</strong></td>
-<td><code>--allowedTools WebSearch</code></td>
-<td>Built-in</td>
-<td><code>--allow-all-tools</code></td>
-<td>config.toml</td>
+<td><strong>Tool Permissions</strong></td>
+<td><code>--allowed-tools</code>, <code>--disallowed-tools</code></td>
+<td><code>--allowed-tools</code>, <code>--approval-mode</code></td>
+<td><code>--allow-all-tools</code>, <code>--allow-tool</code></td>
+<td><code>--search</code> (web), config.toml</td>
 </tr>
 <tr>
 <td><strong>Sandbox Mode</strong></td>
 <td>❌ No</td>
-<td>✅ Docker</td>
+<td>✅ <code>--sandbox</code></td>
 <td>❌ No</td>
-<td>✅ Built-in</td>
+<td>✅ <code>--sandbox</code></td>
 </tr>
 </tbody>
 </table>
@@ -2002,7 +2002,7 @@
 <tr>
 <td><code>balanced</code></td>
 <td>sonnet</td>
-<td>claude-sonnet-4-5</td>
+<td>claude-sonnet-4.5</td>
 <td>gemini-2.5-pro</td>
 <td>gpt-5.1</td>
 </tr>
@@ -2031,10 +2031,10 @@
 </table>
 <h3 id="tool-permissions">Tool Permissions</h3>
 <ul>
-<li><strong>Claude</strong>: <code>["--allowedTools", "WebSearch,WebFetch"]</code></li>
-<li><strong>Gemini</strong>: Built-in.</li>
-<li><strong>Copilot</strong>: <code>["--allow-all-tools"]</code></li>
-<li><strong>Codex</strong>: Via <code>config.toml</code>: <code>web_search_request = true</code>.</li>
+<li><strong>Claude</strong>: <code>["--allowed-tools", "..."]</code> or <code>["--disallowed-tools", "..."]</code></li>
+<li><strong>Gemini</strong>: <code>["--allowed-tools", "..."]</code> and <code>["--approval-mode", "..."]</code></li>
+<li><strong>Copilot</strong>: <code>["--allow-all-tools"]</code> (required for non-interactive prompts)</li>
+<li><strong>Codex</strong>: <code>["--search"]</code> for web search; other permissions via config.toml</li>
 </ul>
 <hr />
 <h2 id="7-testing-risk-mitigation">7. Testing &amp; Risk Mitigation</h2>

@@ -22,7 +22,7 @@ class CopilotAdapter(ProviderAdapter):
     Supports:
     - Session management via --resume flag
     - Model selection via --model flag
-    - Tool access via --allow-all-tools
+    - Tool access via --allow-all-tools (required for non-interactive prompts)
 
     Note: Copilot uses different model naming conventions than Claude.
     This adapter provides a mapping for convenient aliasing.
@@ -43,11 +43,13 @@ class CopilotAdapter(ProviderAdapter):
     # Copilot-specific model name mappings
     MODEL_MAPPING: dict[str, str] = {
         "haiku": "claude-haiku-4.5",
-        "sonnet": "claude-sonnet-4-5",
-        "opus": "claude-sonnet-4",  # No direct Opus equivalent in Copilot
+        "sonnet": "claude-sonnet-4.5",
+        "opus": "claude-opus-4.5",
         "fast": "claude-haiku-4.5",
-        "balanced": "claude-sonnet-4-5",
-        "powerful": "gpt-5",
+        "balanced": "claude-sonnet-4.5",
+        "powerful": "claude-opus-4.5",
+        "reasoning": "gpt-5.2",
+        "free": "claude-haiku-4.5",
     }
 
     def build_command(
@@ -74,11 +76,11 @@ class CopilotAdapter(ProviderAdapter):
             Command array for subprocess execution.
 
         Examples:
-            First call:  ["copilot", "-p", "prompt"]
+            First call:  ["copilot", "-p", "prompt", "--allow-all-tools"]
             Resume:      ["copilot", "-p", "prompt", "--resume", "uuid"]
             With tools:  ["copilot", "-p", "prompt", "--allow-all-tools"]
         """
-        cmd = ["copilot", "-p", prompt]
+        cmd = ["copilot", "-p", prompt, "--allow-all-tools"]
 
         # Add session flags
         cmd.extend(session_flags)
@@ -88,9 +90,7 @@ class CopilotAdapter(ProviderAdapter):
         if copilot_model:
             cmd.extend(["--model", copilot_model])
 
-        # Copilot uses --allow-all-tools for extended access
-        if allow_web or tools:
-            cmd.append("--allow-all-tools")
+        # --allow-all-tools is required for non-interactive mode.
 
         return cmd
 
