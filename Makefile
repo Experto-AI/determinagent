@@ -76,9 +76,10 @@ docs-serve:
 test:
 	@$(PYTHON) -m pytest tests/ -v --tb=short
 
-# Run tests with coverage (strict 90% threshold)
+# Run tests with coverage (90% total, 80% per-file threshold)
 test-cov:
-	@$(PYTHON) -m pytest tests/ -v --cov=determinagent --cov-report=term-missing --cov-report=html --cov-fail-under=90
+	@$(PYTHON) -m pytest tests/ -v --cov=determinagent --cov-report=term-missing --cov-report=html --cov-report=json
+	@$(PYTHON) scripts/check_coverage.py --total 90 --file 80
 	@echo "📊 Coverage report: htmlcov/index.html"
 
 # Run linting (check only)
