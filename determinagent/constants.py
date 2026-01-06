@@ -11,34 +11,35 @@ from collections.abc import Callable
 MODEL_MAPPING: dict[str, dict[str, str]] = {
     "fast": {
         "claude": "haiku",
-        "gemini": "gemini-2.5-flash",
+        "gemini": "gemini-3-flash-preview",
         "copilot": "claude-haiku-4.5",
         "codex": "gpt-5.1-codex-mini",
     },
     "balanced": {
         "claude": "sonnet",
-        "gemini": "gemini-2.5-pro",
+        "gemini": "gemini-3-pro-preview",
         "copilot": "claude-sonnet-4.5",
         "codex": "gpt-5.1-codex",
     },
     "powerful": {
         "claude": "opus",
-        "gemini": "gemini-2.5-pro",  # No higher tier exposed in Gemini CLI
+        "gemini": "gemini-3-pro-preview",  # Requires Gemini CLI preview features
         "copilot": "claude-opus-4.5",
         "codex": "gpt-5.1-codex-max",
     },
     "reasoning": {
         "claude": "opus",  # Best available reasoning model alias in Claude Code
-        "gemini": "gemini-2.5-pro",
+        "gemini": "gemini-3-pro-preview",
         "copilot": "gpt-5.2",
         "codex": "gpt-5.1-codex",
     },
     # "free" category: Models with no additional per-token cost.
     # Since CLI tools use subscription-based access, we default to fast/efficient models.
-    # Gemini's free tier commonly exposes Flash-class models.
+    # Gemini's free tier commonly exposes Flash-class models, but Gemini 3
+    # requires preview features and may not be enabled for all accounts.
     "free": {
         "claude": "haiku",  # Fastest, included in subscription
-        "gemini": "gemini-2.5-flash",  # Free tier available
+        "gemini": "gemini-3-flash-preview",  # Requires Gemini CLI preview features
         "copilot": "claude-haiku-4.5",  # Fastest, included in subscription
         "codex": "gpt-5.1-codex-mini",  # Fastest, included in subscription
     },

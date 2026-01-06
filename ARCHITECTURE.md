@@ -126,11 +126,11 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 ### Model Aliases
 | Alias | Claude | Copilot | Gemini | Codex |
 |-------|--------|---------|--------|-------|
-| `fast` | haiku | claude-haiku-4.5 | gemini-2.5-flash | gpt-5.1-codex-mini |
-| `balanced` | sonnet | claude-sonnet-4.5 | gemini-2.5-pro | gpt-5.1 |
-| `powerful` | opus | gpt-5 | gemini-2.5-pro | gpt-5.1-codex-max |
-| `reasoning` | opusplan | gpt-5 | gemini-2.5-pro | o3 |
-| `free` | haiku | claude-haiku-4.5 | gemini-2.5-flash | gpt-5.1-codex-mini |
+| `fast` | haiku | claude-haiku-4.5 | gemini-3-flash-preview | gpt-5.1-codex-mini |
+| `balanced` | sonnet | claude-sonnet-4.5 | gemini-3-pro-preview | gpt-5.1 |
+| `powerful` | opus | gpt-5 | gemini-3-pro-preview | gpt-5.1-codex-max |
+| `reasoning` | opusplan | gpt-5 | gemini-3-pro-preview | o3 |
+| `free` | haiku | claude-haiku-4.5 | gemini-3-flash-preview | gpt-5.1-codex-mini |
 
 ### Tool Permissions
 - **Claude**: `["--allowed-tools", "..."]` or `["--disallowed-tools", "..."]`

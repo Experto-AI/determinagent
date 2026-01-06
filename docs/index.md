@@ -88,15 +88,16 @@ DeterminAgent resolves model aliases per provider so you can keep flows consiste
 
 | Alias | Claude Code | Gemini CLI | Copilot | OpenAI Codex |
 | :--- | :--- | :--- | :--- | :--- |
-| fast | haiku | gemini-2.5-flash | claude-haiku-4.5 | gpt-5.1-codex-mini |
-| balanced | sonnet | gemini-2.5-pro | claude-sonnet-4.5 | gpt-5.1-codex |
-| powerful | opus | gemini-2.5-pro | claude-opus-4.5 | gpt-5.1-codex-max |
-| reasoning | opus | gemini-2.5-pro | gpt-5.2 | gpt-5.1-codex |
-| free | haiku | gemini-2.5-flash | claude-haiku-4.5 | gpt-5.1-codex-mini |
+| fast | haiku | gemini-3-flash-preview | claude-haiku-4.5 | gpt-5.1-codex-mini |
+| balanced | sonnet | gemini-3-pro-preview | claude-sonnet-4.5 | gpt-5.1-codex |
+| powerful | opus | gemini-3-pro-preview | claude-opus-4.5 | gpt-5.1-codex-max |
+| reasoning | opus | gemini-3-pro-preview | gpt-5.2 | gpt-5.1-codex |
+| free | haiku | gemini-3-flash-preview | claude-haiku-4.5 | gpt-5.1-codex-mini |
 
 Notes:
 - You can always pass an exact model string to override the alias.
 - Availability depends on your provider plan and CLI version.
+- Gemini 3 preview models require enabling Preview Features in Gemini CLI; if unavailable, pass `gemini-2.5-pro` or `gemini-2.5-flash`.
 - Codex CLI does not enumerate models in `--help`; defaults mirror Codex model names exposed by Copilot CLI.
 
 ---
