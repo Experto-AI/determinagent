@@ -43,11 +43,11 @@ def validate_provider(provider: Provider, role: str = "test") -> ValidationResul
 
     try:
         # Attempt to get adapter to verify provider exists
-        adapter = get_adapter(provider)
+        _ = get_adapter(provider)
 
         # Try a simple version-like check by creating a test session
         # This will cause the adapter to be invoked minimally
-        session = SessionManager(provider, "validation-test")
+        _ = SessionManager(provider, "validation-test")
 
         # Mark as valid
         result["status"] = "✅ available"

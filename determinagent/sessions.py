@@ -18,14 +18,17 @@ class SessionManager:
     """
     Manages CLI sessions using native provider capabilities.
 
-    All four supported CLIs have native session support:
-    - Claude:  `--session-id <uuid>`, `-r <uuid>` for resume
-    - Gemini:  `--resume latest` or `--resume <index>` for resume
-    - Copilot: `--resume <sessionId>` for resume
-    - Codex:   `exec resume <id>` subcommand
+    Session support by provider:
+    - **Claude**: Full support via `--session-id <uuid>` and `-r <uuid>`
+    - **Gemini**: No session resume (always fresh sessions)
+    - **Copilot**: No session resume (always fresh sessions)
+    - **Codex**: No session resume (always fresh sessions)
 
-    Using native sessions provides optimal performance as the provider
-    handles context storage and management.
+    Note:
+        Only Claude supports creating sessions with a custom ID on the first call.
+        Other providers (Gemini, Copilot, Codex) generate session IDs internally
+        and don't expose them for use in multi-agent workflows. For reliability,
+        session resume is only enabled for Claude.
 
     Example:
         ```python
@@ -75,22 +78,23 @@ class SessionManager:
         """
         Return provider-specific session flags.
 
-        Each provider has its own syntax for session management:
+        Session support:
         - Claude: `--session-id <uuid>` for first call, `-r <uuid>` for resume
-        - Gemini: (none) for first call, `--resume latest` or `--resume <index>`
-        - Copilot: (none) for first call, `--resume <id>` for resume
-        - Codex: Returns `["resume", "<id>"]` which the adapter handles
+        - Gemini: Always empty (no session resume support)
+        - Copilot: Always empty (no session resume support)
+        - Codex: Always empty (no session resume support)
 
         Args:
             is_first_call: Override for first-call detection. If None,
                           uses `call_count == 0` to determine.
 
         Returns:
-            List of CLI flags for session management.
+            List of CLI flags for session management (only non-empty for Claude).
 
         Note:
-            For Codex, the adapter (not session manager) handles the
-            subcommand structure (`exec` vs `exec resume <id>`).
+            Only Claude supports creating sessions with custom IDs. Other providers
+            generate session IDs internally, making them incompatible with
+            multi-agent workflows where each agent needs its own persistent session.
         """
         if is_first_call is None:
             is_first_call = self.call_count == 0
@@ -102,24 +106,22 @@ class SessionManager:
                 return ["-r", self.session_id]
 
         elif self.provider == "gemini":
-            if is_first_call:
-                return []  # Gemini auto-creates session
-            else:
-                return ["--resume", self.session_id]
+            # Gemini doesn't support custom session IDs on creation (unlike Claude).
+            # Its --resume only works with IDs/indices that gemini itself created.
+            # For simplicity and reliability, we always start fresh sessions.
+            return []
 
         elif self.provider == "copilot":
-            if is_first_call:
-                return []  # Copilot auto-creates session
-            else:
-                return ["--resume", self.session_id]
+            # Copilot doesn't support custom session IDs on creation (unlike Claude).
+            # Its --resume only works with IDs that copilot itself created.
+            # For simplicity and reliability, we always start fresh sessions.
+            return []
 
         elif self.provider == "codex":
-            # Codex uses subcommands, not flags
-            # The adapter handles "exec" vs "exec resume <id>"
-            if is_first_call:
-                return []
-            else:
-                return ["resume", self.session_id]
+            # Codex doesn't support custom session IDs on creation (unlike Claude).
+            # Its resume subcommand only works with IDs that codex itself created.
+            # For simplicity and reliability, we always start fresh sessions.
+            return []
 
         return []
 

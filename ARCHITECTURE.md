@@ -71,11 +71,13 @@ class UnifiedAgent:
 ```
 
 #### SessionManager
-Handles native session flags for all providers. It ensures that conversation history is maintained within the CLI tool's local context.
-- **Claude**: `--session-id <uuid>` for first call, `-r <uuid>` for resume.
-- **Gemini**: `--resume latest` or `--resume <index>`
-- **Copilot**: `--resume [sessionId]`, `--continue`
-- **Codex**: `exec` / `exec resume <id>`
+Handles native session flags for providers that support custom session IDs.
+- **Claude**: Full support via `--session-id <uuid>` for first call, `-r <uuid>` for resume.
+- **Gemini**: No session resume (always fresh sessions)
+- **Copilot**: No session resume (always fresh sessions)
+- **Codex**: No session resume (always fresh sessions)
+
+> **Note:** Only Claude supports creating sessions with a custom ID. Other providers generate session IDs internally, making them incompatible with multi-agent workflows where each agent needs its own persistent session.
 
 #### Provider Adapters
 Specific implementations for each CLI tool. Each adapter handles command building, output parsing, and error normalization.
@@ -89,7 +91,7 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 
 | Feature | Claude Code | Gemini CLI | GitHub Copilot | OpenAI Codex |
 |---------|-------------|------------|----------------|--------------|
-| **Session IDs** | ✅ `--session-id`, `-r` | ✅ `--resume latest` / index | ✅ `--resume`, `--continue` | ✅ `exec resume` |
+| **Session IDs** | ✅ `--session-id`, `-r` | ❌ Not supported | ❌ Not supported | ❌ Not supported |
 | **System Prompt** | ✅ `--system-prompt` | ⚠️ No direct flag | ⚠️ Via AGENTS/custom instructions | ⚠️ Via `AGENTS.md` |
 | **Output Format** | text/json/stream-json (print mode) | text/json/stream-json | text (optional streaming) | text (JSONL with `--json`) |
 | **Tool Permissions** | `--allowed-tools`, `--disallowed-tools` | `--allowed-tools`, `--approval-mode` | `--allow-all-tools`, `--allow-tool` | `--search` (web), config.toml |

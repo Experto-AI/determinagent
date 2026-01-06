@@ -6,14 +6,12 @@ Tests provider validation, error handling, and result reporting.
 
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from determinagent.exceptions import ProviderAuthError, ProviderNotAvailable
 from determinagent.validation import (
+    ValidationResult,
     validate_provider,
     validate_providers,
     validate_providers_by_list,
-    ValidationResult,
 )
 
 
@@ -49,9 +47,7 @@ class TestValidateProvider:
     ) -> None:
         """Test that missing provider returns not installed status."""
         # Arrange
-        mock_get_adapter.side_effect = ProviderNotAvailable(
-            "CLI not found", provider="missing"
-        )
+        mock_get_adapter.side_effect = ProviderNotAvailable("CLI not found", provider="missing")
 
         # Act
         result = validate_provider("missing", role="editor")
@@ -67,9 +63,7 @@ class TestValidateProvider:
     ) -> None:
         """Test that auth error returns auth failed status."""
         # Arrange
-        mock_get_adapter.side_effect = ProviderAuthError(
-            "Authentication failed", provider="claude"
-        )
+        mock_get_adapter.side_effect = ProviderAuthError("Authentication failed", provider="claude")
 
         # Act
         result = validate_provider("claude", role="reviewer")
@@ -101,9 +95,7 @@ class TestValidateProviders:
     def test_validate_providers_all_valid_returns_true(self) -> None:
         """Test that validation returns True when all providers are valid."""
         # Act
-        all_valid, results = validate_providers(
-            "claude", "claude", "claude", verbose=False
-        )
+        all_valid, results = validate_providers("claude", "claude", "claude", verbose=False)
 
         # Assert
         assert all_valid is True
@@ -114,9 +106,7 @@ class TestValidateProviders:
     def test_validate_providers_returns_list_with_three_results(self) -> None:
         """Test that validation returns results for all three providers."""
         # Act
-        all_valid, results = validate_providers(
-            "claude", "claude", "claude", verbose=False
-        )
+        all_valid, results = validate_providers("claude", "claude", "claude", verbose=False)
 
         # Assert
         assert len(results) == 3
@@ -131,14 +121,17 @@ class TestValidateProviders:
         # Arrange
         mock_validate.side_effect = [
             {"role": "writer", "provider": "claude", "status": "✅ available", "error": None},
-            {"role": "editor", "provider": "gemini", "status": "❌ not installed", "error": "Not found"},
+            {
+                "role": "editor",
+                "provider": "gemini",
+                "status": "❌ not installed",
+                "error": "Not found",
+            },
             {"role": "reviewer", "provider": "claude", "status": "✅ available", "error": None},
         ]
 
         # Act
-        all_valid, results = validate_providers(
-            "claude", "gemini", "claude", verbose=False
-        )
+        all_valid, results = validate_providers("claude", "gemini", "claude", verbose=False)
 
         # Assert
         assert all_valid is False
@@ -150,15 +143,28 @@ class TestValidateProviders:
         """Test that validation returns False with multiple failures."""
         # Arrange
         mock_validate.side_effect = [
-            {"role": "writer", "provider": "missing1", "status": "❌ not installed", "error": "Not found"},
-            {"role": "editor", "provider": "missing2", "status": "❌ not installed", "error": "Not found"},
-            {"role": "reviewer", "provider": "missing3", "status": "❌ not installed", "error": "Not found"},
+            {
+                "role": "writer",
+                "provider": "missing1",
+                "status": "❌ not installed",
+                "error": "Not found",
+            },
+            {
+                "role": "editor",
+                "provider": "missing2",
+                "status": "❌ not installed",
+                "error": "Not found",
+            },
+            {
+                "role": "reviewer",
+                "provider": "missing3",
+                "status": "❌ not installed",
+                "error": "Not found",
+            },
         ]
 
         # Act
-        all_valid, results = validate_providers(
-            "missing1", "missing2", "missing3", verbose=False
-        )
+        all_valid, results = validate_providers("missing1", "missing2", "missing3", verbose=False)
 
         # Assert
         assert all_valid is False
@@ -167,9 +173,7 @@ class TestValidateProviders:
     def test_validate_providers_maps_providers_to_roles(self) -> None:
         """Test that providers are mapped to correct roles."""
         # Act
-        all_valid, results = validate_providers(
-            "claude", "copilot", "gemini", verbose=False
-        )
+        all_valid, results = validate_providers("claude", "copilot", "gemini", verbose=False)
 
         # Assert
         role_provider_map = {result["role"]: result["provider"] for result in results}
@@ -202,9 +206,7 @@ class TestValidateProvidersByList:
     def test_validate_providers_by_list_with_single_provider(self) -> None:
         """Test validation with custom list of providers."""
         # Act
-        all_valid, results = validate_providers_by_list(
-            {"tool": "claude"}, verbose=False
-        )
+        all_valid, results = validate_providers_by_list({"tool": "claude"}, verbose=False)
 
         # Assert
         assert all_valid is True
@@ -251,7 +253,12 @@ class TestValidateProvidersByList:
         # Arrange
         mock_validate.side_effect = [
             {"role": "primary", "provider": "claude", "status": "✅ available", "error": None},
-            {"role": "secondary", "provider": "missing", "status": "❌ not installed", "error": "Not found"},
+            {
+                "role": "secondary",
+                "provider": "missing",
+                "status": "❌ not installed",
+                "error": "Not found",
+            },
         ]
 
         # Act

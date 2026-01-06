@@ -22,9 +22,14 @@ class CodexAdapter(ProviderAdapter):
     Adapter for Codex CLI.
 
     Supports:
-    - Session management via `exec resume <id>` subcommand
     - Sandbox execution via --sandbox flag
     - JSONL output parsing (analyzing turn events)
+
+    Note:
+        Codex doesn't support custom session IDs on creation (unlike Claude's
+        --session-id). Its `exec resume` only works with IDs that Codex itself
+        created internally. For reliability in multi-agent workflows, session
+        resume is disabled - each call starts a fresh session.
 
     Example:
         ```python
@@ -32,10 +37,10 @@ class CodexAdapter(ProviderAdapter):
         cmd = adapter.build_command(
             prompt="Refactor this",
             model="default",
-            session_flags=["resume", "abc-123"],
+            session_flags=[],  # Ignored for Codex
             sandbox="workspace-write"
         )
-        # Returns: ["codex", "exec", "resume", "abc-123", "Refactor this",
+        # Returns: ["codex", "exec", "Refactor this",
         #           "--sandbox", "workspace-write", "--full-auto"]
         ```
     """
@@ -57,18 +62,21 @@ class CodexAdapter(ProviderAdapter):
         Args:
             prompt: The user prompt.
             model: Model name (often unused for Codex/default).
-            session_flags: Session flags (["resume", <id>] or []).
+            session_flags: Unused (Codex doesn't support session resume).
             allow_web: Enable web tools.
             tools: Additional tools.
             sandbox: Sandbox mode (read-only, workspace-write, etc).
 
         Returns:
             Command array for subprocess execution.
+
+        Note:
+            Codex doesn't support custom session IDs, so session_flags is ignored.
+            Each call starts a fresh session.
         """
         cmd = ["codex", "exec"]
 
-        # Add session flags (subcommand arguments)
-        cmd.extend(session_flags)
+        # session_flags ignored - Codex doesn't support custom session IDs
 
         # Prompt is positional for Codex exec
         cmd.append(prompt)

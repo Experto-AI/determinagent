@@ -23,9 +23,14 @@ class GeminiAdapter(ProviderAdapter):
     Adapter for Google Gemini CLI.
 
     Supports:
-    - Session management via --resume flag
     - JSON output parsing via --output-format json
     - Model selection via --model flag
+
+    Note:
+        Gemini doesn't support custom session IDs on creation (unlike Claude's
+        --session-id). Its --resume only works with IDs/indices that Gemini itself
+        created internally. For reliability in multi-agent workflows, session
+        resume is disabled - each call starts a fresh session.
 
     Example:
         ```python
@@ -33,10 +38,10 @@ class GeminiAdapter(ProviderAdapter):
         cmd = adapter.build_command(
             prompt="Explain this",
             model="gemini-1.5-pro",
-            session_flags=["--resume", "abc-123"],
+            session_flags=[],  # Ignored for Gemini
         )
-        # Returns: ["gemini", "Explain this", "--resume", "abc-123",
-        #           "--output-format", "json", "--model", "gemini-1.5-pro"]
+        # Returns: ["gemini", "Explain this", "--output-format", "json",
+        #           "--model", "gemini-1.5-pro"]
         ```
     """
 
@@ -57,19 +62,22 @@ class GeminiAdapter(ProviderAdapter):
         Args:
             prompt: The prompt to send to Gemini.
             model: Model name.
-            session_flags: Session management flags.
+            session_flags: Unused (Gemini doesn't support session resume).
             allow_web: Enable web tools (if supported).
             tools: Additional tools.
             sandbox: Unused.
 
         Returns:
             Command array for subprocess execution.
+
+        Note:
+            Gemini doesn't support custom session IDs, so session_flags is ignored.
+            Each call starts a fresh session.
         """
         # Prompt is positional; -p/--prompt is deprecated.
         cmd = ["gemini", prompt]
 
-        # Add session flags (e.g., --resume <uuid>)
-        cmd.extend(session_flags)
+        # session_flags ignored - Gemini doesn't support custom session IDs
 
         # Force JSON output format
         cmd.extend(["--output-format", "json"])

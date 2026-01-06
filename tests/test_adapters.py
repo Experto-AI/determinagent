@@ -272,7 +272,7 @@ class TestCopilotAdapter:
         assert "claude-sonnet-4.5" in cmd_balanced
 
         cmd_powerful = adapter.build_command("test", "powerful", [])
-        assert "gpt-5" in cmd_powerful
+        assert "claude-opus-4.5" in cmd_powerful
 
     def test_model_passthrough_keeps_unknown_names(self) -> None:
         """Test that unknown model names pass through unchanged."""
@@ -366,7 +366,7 @@ class TestGeminiAdapter:
         assert "json" in cmd
 
     def test_build_command_resume_returns_resume_flag(self) -> None:
-        """Test command building with session resume."""
+        """Test command building with session resume (Ignored for Gemini)."""
         # Arrange
         adapter = GeminiAdapter()
         # Act
@@ -376,8 +376,9 @@ class TestGeminiAdapter:
             session_flags=["--resume", "abc-123"],
         )
         # Assert
-        assert "--resume" in cmd
-        assert "abc-123" in cmd
+        # Gemini adapter ignores session flags
+        assert "--resume" not in cmd
+        assert "abc-123" not in cmd
 
     def test_parse_output_json_returns_content(self) -> None:
         """Test parsing valid JSON output."""
@@ -454,7 +455,7 @@ class TestCodexAdapter:
         assert "--full-auto" in cmd
 
     def test_build_command_resume_returns_resume_subcommand(self) -> None:
-        """Test command building with resume subcommand."""
+        """Test command building with resume subcommand (Ignored for Codex)."""
         # Arrange
         adapter = CodexAdapter()
         # Act
@@ -464,14 +465,9 @@ class TestCodexAdapter:
             session_flags=["resume", "session-123"],
         )
         # Assert
-        assert "exec" in cmd
-        assert "resume" in cmd
-        assert "session-123" in cmd
-        assert "Continue" in cmd
-        # Ensure order: exec resume <id> <prompt>
-        idx_resume = cmd.index("resume")
-        idx_prompt = cmd.index("Continue")
-        assert idx_resume < idx_prompt
+        # Codex adapter ignores session flags
+        assert "resume" not in cmd
+        assert "session-123" not in cmd
 
     def test_build_command_sandbox_returns_sandbox_flag(self) -> None:
         """Test command building with sandbox."""

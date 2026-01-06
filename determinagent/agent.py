@@ -30,6 +30,7 @@ from .exceptions import (
     ExecutionError,
     ParseError,
     ProviderNotAvailable,
+    SessionError,
     ValidationError,
 )
 from .sessions import SessionManager
@@ -227,6 +228,13 @@ class UnifiedAgent:
                     # Fail fast if provider is missing
                     if isinstance(e, ProviderNotAvailable):
                         raise
+
+                    # Handle corrupted session: reset and retry with fresh session
+                    if isinstance(e, SessionError):
+                        print("  → Session corrupted, resetting to fresh session...")
+                        self.session.reset_session()
+                        # Don't count this as a retry - continue with fresh session
+                        continue
 
                     # Mark session as started even on error
                     self._mark_session_started()

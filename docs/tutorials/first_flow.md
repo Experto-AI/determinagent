@@ -54,6 +54,8 @@ from determinagent import SessionManager
 session = SessionManager("claude")  # Provider name
 ```
 
+> **Note:** Session continuity (multi-turn conversations) only works with Claude. For Gemini, Copilot, and Codex, each call starts a fresh session because these providers don't support custom session IDs on creation.
+
 ### 2. **UnifiedAgent**
 The main interface for sending prompts to AI CLI tools.
 

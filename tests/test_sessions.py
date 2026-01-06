@@ -105,7 +105,7 @@ class TestGeminiSessionFlags:
         assert flags == []
 
     def test_get_session_flags_resume_returns_resume_flag(self) -> None:
-        """Test resume flags."""
+        """Test resume flags (Not supported for Gemini)."""
         # Arrange
         manager = SessionManager("gemini", session_id="test-uuid")
         manager.call_count = 1
@@ -113,7 +113,7 @@ class TestGeminiSessionFlags:
         flags = manager.get_session_flags()
 
         # Assert
-        assert flags == ["--resume", "test-uuid"]
+        assert flags == []
 
 
 class TestCopilotSessionFlags:
@@ -130,7 +130,7 @@ class TestCopilotSessionFlags:
         assert flags == []
 
     def test_get_session_flags_resume_returns_resume_flag(self) -> None:
-        """Test resume flags."""
+        """Test resume flags (Not supported for Copilot)."""
         # Arrange
         manager = SessionManager("copilot", session_id="test-uuid")
         manager.call_count = 1
@@ -138,7 +138,7 @@ class TestCopilotSessionFlags:
         flags = manager.get_session_flags()
 
         # Assert
-        assert flags == ["--resume", "test-uuid"]
+        assert flags == []
 
 
 class TestCodexSessionFlags:
@@ -155,7 +155,7 @@ class TestCodexSessionFlags:
         assert flags == []
 
     def test_get_session_flags_resume_returns_resume_subcommand(self) -> None:
-        """Test resume flags (adapter handles subcommand)."""
+        """Test resume flags (Not supported for Codex)."""
         # Arrange
         manager = SessionManager("codex", session_id="test-uuid")
         manager.call_count = 1
@@ -163,8 +163,8 @@ class TestCodexSessionFlags:
         flags = manager.get_session_flags()
 
         # Assert
-        # Codex returns flags that the adapter transforms into subcommand
-        assert flags == ["resume", "test-uuid"]
+        # Codex returns empty flags as session resume is not supported
+        assert flags == []
 
 
 class TestSessionLifecycle:

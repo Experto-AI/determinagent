@@ -11,6 +11,7 @@ from ..exceptions import (
     ProviderAuthError,
     ProviderNotAvailable,
     RateLimitExceeded,
+    SessionError,
 )
 from .base import ProviderAdapter
 
@@ -20,12 +21,14 @@ class CopilotAdapter(ProviderAdapter):
     Adapter for the standalone Copilot CLI.
 
     Supports:
-    - Session management via --resume flag
     - Model selection via --model flag
     - Tool access via --allow-all-tools (required for non-interactive prompts)
 
-    Note: Copilot uses different model naming conventions than Claude.
-    This adapter provides a mapping for convenient aliasing.
+    Note:
+        Copilot doesn't support custom session IDs on creation (unlike Claude's
+        --session-id). Its --resume only works with IDs that copilot itself
+        created internally. For reliability in multi-agent workflows, session
+        resume is disabled - each call starts a fresh session.
 
     Example:
         ```python
@@ -33,7 +36,7 @@ class CopilotAdapter(ProviderAdapter):
         cmd = adapter.build_command(
             prompt="Explain this code",
             model="balanced",
-            session_flags=["--resume", "session-id"],
+            session_flags=[],  # Ignored for copilot
         )
         ```
     """
@@ -67,7 +70,7 @@ class CopilotAdapter(ProviderAdapter):
         Args:
             prompt: The prompt to send to Copilot.
             model: Model name or alias (will be mapped to Copilot model names).
-            session_flags: Session management flags (--resume or empty).
+            session_flags: Unused (copilot doesn't support session resume).
             allow_web: Enable broader tool access via --allow-all-tools.
             tools: Additional tools (Copilot uses --allow-all-tools).
             sandbox: Unused (Copilot doesn't support sandbox mode).
@@ -75,10 +78,9 @@ class CopilotAdapter(ProviderAdapter):
         Returns:
             Command array for subprocess execution.
 
-        Examples:
-            First call:  ["copilot", "-p", "prompt", "--allow-all-tools"]
-            Resume:      ["copilot", "-p", "prompt", "--resume", "uuid"]
-            With tools:  ["copilot", "-p", "prompt", "--allow-all-tools"]
+        Note:
+            Copilot doesn't support custom session IDs, so session_flags is ignored.
+            Each call starts a fresh session.
         """
         cmd = ["copilot", "-p", prompt, "--allow-all-tools"]
 
@@ -144,6 +146,12 @@ class CopilotAdapter(ProviderAdapter):
         elif "github copilot" in err_lower and "access" in err_lower:
             return ProviderAuthError(
                 "Copilot access required. Ensure your account has an active Copilot subscription.",
+                provider=self.provider_name,
+            )
+        elif "session file is corrupted" in err_lower or "incompatible" in err_lower:
+            return SessionError(
+                "Copilot session file is corrupted. "
+                "Fix: Delete session files with 'rm -rf ~/.copilot/sessions' and retry.",
                 provider=self.provider_name,
             )
         else:

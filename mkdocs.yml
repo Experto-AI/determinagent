@@ -29,31 +29,33 @@ theme:
     - navigation.top
     - search.suggest
     - search.highlight
+    - search.share
 
 nav:
-  - Welcome: index.md
-  - Project Roadmap: roadmap.md
-  - Actionable Plan: plan.md
-  - Changelog: changelog.md
-  - Architecture: architecture.md
-  - CLI Reference: cli-reference.md
-  - API Reference:
-      - Overview: api/index.md
+  - Home: index.md
+  - Tutorials:
+      - Your First Flow: tutorials/first_flow.md
+  - Reference:
+      - Architecture: architecture.md
+      - CLI Reference: cli-reference.md
+      - API Overview: api/index.md
       - Core Agent: api/agent.md
       - Adapters: api/adapters.md
       - Sessions: api/sessions.md
       - Exceptions: api/exceptions.md
-  - Tutorials:
-      - Your First Flow: tutorials/first_flow.md
-  - Development:
+  - Project:
+      - Roadmap: roadmap.md
+      - Actionable Plan: plan.md
+      - Changelog: changelog.md
       - Contributing: contributing.md
-      - Code of Conduct: code-of-conduct.md
-      - Security: security.md
-      - License: license.md
       - Release Checklist: release-checklist.md
+      - Security: security.md
+      - Code of Conduct: code-of-conduct.md
+      - License: license.md
 
 plugins:
-  - search
+  - search:
+      lang: en
   - include-markdown:
       rewrite_relative_urls: true
   - htmlproofer:

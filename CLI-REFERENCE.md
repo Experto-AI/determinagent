@@ -111,6 +111,8 @@ claude --continue --debug "next steps"
 | `--list-sessions` | `gemini --list-sessions` | List all sessions |
 | `--delete-session` | `gemini --delete-session 2` | Delete session by index |
 
+> **Note:** Gemini's session resume only works with session IDs/indices that Gemini itself created. Unlike Claude's `--session-id`, you cannot specify a custom session ID on the first call. **DeterminAgent does not use Gemini's session resume** for this reason—each call starts a fresh session.
+
 ### Safety & Approval
 
 | Flag | Format | Purpose |
@@ -166,6 +168,8 @@ gemini -m <model> -i "complex task"
 | `--resume` | `copilot --resume` | Resume previous session (picker) |
 | `--resume <id>` | `copilot --resume abc123` | Resume by session ID |
 | `--continue` | `copilot --continue` | Resume most recent session |
+
+> **Note:** Copilot's session resume only works with session IDs that Copilot itself created. Unlike Claude's `--session-id`, you cannot specify a custom session ID on the first call. **DeterminAgent does not use Copilot's session resume** for this reason—each call starts a fresh session.
 
 ### Model Selection
 
@@ -228,6 +232,8 @@ copilot --model "claude-sonnet-4.5" -p "Analyze this code" --allow-all-tools
 | `codex resume` | Resume picker for interactive |
 | `codex resume --last` | Resume most recent interactive session |
 | `codex review` | Non-interactive code review |
+
+> **Note:** Codex's session resume only works with session IDs that Codex itself created. Unlike Claude's `--session-id`, you cannot specify a custom session ID on the first call. **DeterminAgent does not use Codex's session resume** for this reason—each call starts a fresh session.
 
 ### Model Selection
 
