@@ -5,21 +5,26 @@ All notable changes to DeterminAgent will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.13.0] - 2026-01-06
 
 ### Added
-- **Alpha Status Unification**: Updated all provider adapters (Claude, Copilot, Gemini, Codex) to Alpha version across documentation for consistency.
-- **Documentation SSOT**: Implemented Single Source of Truth pattern for documentation using `mkdocs-include-markdown-plugin`
-- **Documentation Wrappers**: Created minimal wrapper files in `docs/` directory that include root markdown files
-- **Documentation Navigation**: Added PLAN and Release Checklist pages to mkdocs navigation
+- **Gemini 3 Support**: Updated model aliases to support `gemini-3-flash-preview` and `gemini-3-pro-preview`.
+- **Coverage Enforcement**: Added `scripts/check_coverage.py` to enforce strict 90% total and 80% per-file test coverage thresholds.
+- **Provider Validation**: Implemented comprehensive provider validation logic to ensure CLI tools are correctly installed and configured before use.
+- **Architecture Diagrams**: Added detailed architecture diagrams to documentation.
+- **Alpha Status Unification**: Updated all provider adapters (Claude, Copilot, Gemini, Codex) to Alpha version across documentation.
+- **Documentation SSOT**: Implemented Single Source of Truth pattern using `mkdocs-include-markdown-plugin`.
+- **Documentation Wrappers**: Created wrapper files for root markdown documents in `docs/`.
 
 ### Changed
-- **Documentation Structure**: Refactored to eliminate duplicate documentation files between root and `docs/` folder
-- **Documentation Links**: Updated cross-file references in CONTRIBUTING.md to use proper markdown file paths
+- **Session Management**: Refactored Gemini, Copilot, and Codex adapters to use stateless sessions (native session limitations prevented reliable resume).
+- **Documentation Structure**: Refactored to eliminate duplicate documentation files.
+- **Documentation Links**: Fixed cross-file references in all markdown files.
 
 ### Fixed
-- **Documentation Build**: Resolved all link warnings in documentation build process
-- **Documentation Sync**: Eliminated manual sync issues by using include-markdown plugin
+- **Session Recovery**: Added automatic session reset and retry logic for corrupted session files (e.g., Copilot).
+- **Blog Flow**: Fixed output normalization issues in the blog writing workflow.
+- **Documentation Build**: Resolved link warnings and sync issues.
 
 ---
 
