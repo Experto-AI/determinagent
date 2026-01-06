@@ -9,6 +9,7 @@ Usage:
 """
 
 import argparse
+import re
 import sys
 import uuid
 from datetime import datetime
@@ -38,8 +39,8 @@ DEFAULT_REVISION_PROMPT = "Revise the blog post based on: {review}"
 DEFAULT_WRITER_HUMAN_REVISION = """HUMAN REVIEWER FEEDBACK:
 {user_feedback}
 
-PREVIOUS VERSION (in your session memory):
-Review your previous draft from this session.
+PREVIOUS VERSION:
+{draft}
 
 INSTRUCTIONS:
 1. Address the human feedback above by REVISING your previous draft.
@@ -157,6 +158,34 @@ APPROVAL_STATUS: [APPROVED if all >= 8, else NEEDS_REVISION]"""
 # State Definition
 # ============================================================================
 
+TITLE_LINE_PATTERN = re.compile(r"^\s*#\s*\S")
+
+
+def normalize_blog_markdown(text: str) -> str:
+    """Normalize blog output to ensure it starts at the title line."""
+    if not text:
+        return text
+
+    cleaned = text.lstrip("\ufeff").strip()
+    fenced = re.match(r"^```(?:markdown|md)?\s*\n(.*)\n```$", cleaned, re.DOTALL)
+    if fenced:
+        cleaned = fenced.group(1).strip()
+
+    lines = cleaned.splitlines()
+    for idx, line in enumerate(lines):
+        if TITLE_LINE_PATTERN.match(line):
+            return "\n".join(lines[idx:]).strip()
+
+    return cleaned
+
+
+def format_session_label(session: SessionManager, is_first: bool) -> str:
+    """Format session info for display, accounting for stateless providers."""
+    if session.supports_resume():
+        status = "NEW" if is_first else "RESUMED"
+        return f"{utils.truncate_id(session.session_id)} ({status})"
+    return "stateless (no resume)"
+
 
 class BlogState(TypedDict):
     """LangGraph state for blog workflow."""
@@ -263,10 +292,10 @@ def create_blog_workflow(
         else:
             status = "Revising"
 
-        session_suffix = "(NEW)" if is_first else "(RESUMED)"
+        session_label = format_session_label(writer.session, is_first)
         ui.print_header(
             f"WRITER - {status} blog post draft",
-            f"📋 Session ID: {utils.truncate_id(writer.session.session_id)} {session_suffix}",
+            f"📋 Session: {session_label}",
             icon="🖊️ ",
         )
         print(f"Topic: '{state['topic']}'")
@@ -281,6 +310,7 @@ def create_blog_workflow(
                 user_feedback=user_feedback,
                 min_words=state["min_words"],
                 max_words=state["max_words"],
+                draft=state.get("edited") or state["draft"],
             )
         else:
             prompt = writer_task_template.format(
@@ -288,6 +318,7 @@ def create_blog_workflow(
             )
 
         draft = writer.send(prompt, allow_web=True)
+        draft = normalize_blog_markdown(draft)
 
         # Calculate stats
         stats = format_text_stats(draft)
@@ -303,32 +334,34 @@ def create_blog_workflow(
 
     def editor_node(state: BlogState) -> dict:
         """Edit the draft."""
-        is_first = editor.session.call_count == 0
+        supports_resume = editor.session.supports_resume()
+        is_first = editor.session.call_count == 0 or not supports_resume
 
-        session_suffix = "(NEW)" if is_first else "(RESUMED)"
+        session_label = format_session_label(editor.session, is_first)
         ui.print_header(
             "EDITOR - Polishing the draft",
-            f"📋 Session ID: {utils.truncate_id(editor.session.session_id)} {session_suffix}",
+            f"📋 Session: {session_label}",
             icon="✏️ ",
         )
 
         min_words = state.get("min_words", 800)
         max_words = state.get("max_words", 1200)
 
-        if is_first:
+        if supports_resume and not is_first:
+            # On subsequent calls, reference the session memory
+            prompt = editor_subsequent_task.format(
+                draft=state["draft"], min_words=min_words, max_words=max_words
+            )
+        else:
             prompt = editor_initial_task.format(
                 editor_instructions=editor_instructions,
                 min_words=min_words,
                 max_words=max_words,
                 draft=state["draft"],
             )
-        else:
-            # On subsequent calls, reference the session memory
-            prompt = editor_subsequent_task.format(
-                draft=state["draft"], min_words=min_words, max_words=max_words
-            )
 
         edited = editor.send(prompt)
+        edited = normalize_blog_markdown(edited)
 
         # Calculate stats
         stats = format_text_stats(edited)
@@ -341,13 +374,14 @@ def create_blog_workflow(
     def reviewer_node(state: BlogState) -> dict:
         """Review and score the draft."""
         iteration = state.get("revision_count", 0)
-        is_first = reviewer.session.call_count == 0
+        supports_resume = reviewer.session.supports_resume()
+        is_first = reviewer.session.call_count == 0 or not supports_resume
 
         max_revs = state.get("max_revisions", 3)
-        session_suffix = "(NEW)" if is_first else "(RESUMED)"
+        session_label = format_session_label(reviewer.session, is_first)
         ui.print_header(
             f"REVIEWER - Evaluating quality (Revision: {iteration + 1}/{max_revs})",
-            f"📋 Session ID: {utils.truncate_id(reviewer.session.session_id)} {session_suffix}",
+            f"📋 Session: {session_label}",
             icon="🤖",
         )
 
@@ -367,21 +401,21 @@ def create_blog_workflow(
         _, content_words, _ = count_text_stats(plain_text)
 
         # Build the detailed reviewer prompt
-        if is_first:
-            prompt = reviewer_initial_task.format(
-                min_words=min_words,
-                max_words=max_words,
-                content_words=content_words,
-                content=content,
-                reviewer_categories=reviewer_categories,
-            )
-        else:
+        if supports_resume and not is_first:
             prompt = reviewer_subsequent_task.format(
                 iteration=iteration + 1,
                 content=content,
                 content_words=content_words,
                 min_words=min_words,
                 max_words=max_words,
+                reviewer_categories=reviewer_categories,
+            )
+        else:
+            prompt = reviewer_initial_task.format(
+                min_words=min_words,
+                max_words=max_words,
+                content_words=content_words,
+                content=content,
                 reviewer_categories=reviewer_categories,
             )
 
@@ -407,9 +441,10 @@ def create_blog_workflow(
 
     def revision_node(state: BlogState) -> dict:
         """Revise draft based on feedback."""
+        session_label = format_session_label(writer.session, False)
         ui.print_header(
             "WRITER - Applying revisions",
-            f"📋 Session ID: {utils.truncate_id(writer.session.session_id)} (RESUMED)",
+            f"📋 Session: {session_label}",
             icon="🖊️ ",
         )
 
@@ -434,6 +469,7 @@ def create_blog_workflow(
         )
 
         revised_draft = writer.send(prompt)
+        revised_draft = normalize_blog_markdown(revised_draft)
         revision_count = state.get("revision_count", 0) + 1
 
         # Calculate stats
@@ -449,7 +485,8 @@ def create_blog_workflow(
         ui.print_header("HUMAN REVIEW", icon="👤")
 
         # Display the blog post
-        ui.display_content("BLOG POST FOR YOUR REVIEW", state.get("edited") or state["draft"])
+        content = normalize_blog_markdown(state.get("edited") or state["draft"])
+        ui.display_content("BLOG POST FOR YOUR REVIEW", content)
 
         # Show review summary
         review_result = parse_review(state.get("review", ""), min_score=8)
@@ -468,7 +505,7 @@ def create_blog_workflow(
                 return {
                     "user_approved": True,
                     "in_human_phase": True,
-                    "final_output": state.get("edited") or state["draft"],
+                    "final_output": content,
                 }
             elif choice == "n":
                 feedback = input(
@@ -495,10 +532,9 @@ def create_blog_workflow(
         ui.print_header("SUCCESS - Workflow complete", icon="🎉")
 
         final = state.get("final_output") or state.get("edited") or state["draft"]
+        final = normalize_blog_markdown(final)
 
         # Clean up any HTML comments that may have been added by the editor
-        import re
-
         final_clean = re.sub(r"<!--.*?-->", "", final, flags=re.DOTALL)
         # Clean up any double line breaks that remain after removing comments
         final_clean = re.sub(r"\n\s*\n\s*\n", "\n\n", final_clean)
@@ -695,7 +731,7 @@ def main() -> None:
         prompts=config.get("prompts"),
     )
 
-    # Note: Session IDs are displayed within the workflow nodes during execution
+    # Note: Session details are displayed within the workflow nodes during execution
 
     # Execute workflow
     initial_state = {

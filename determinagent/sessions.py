@@ -71,6 +71,10 @@ class SessionManager:
         self.session_id: str = session_id
         self.call_count: int = 0
 
+    def supports_resume(self) -> bool:
+        """Return True if the provider supports session resume flags."""
+        return self.provider == "claude"
+
     def get_session_flags(
         self,
         is_first_call: bool | None = None,
@@ -96,34 +100,15 @@ class SessionManager:
             generate session IDs internally, making them incompatible with
             multi-agent workflows where each agent needs its own persistent session.
         """
+        if not self.supports_resume():
+            return []
+
         if is_first_call is None:
             is_first_call = self.call_count == 0
 
-        if self.provider == "claude":
-            if is_first_call:
-                return ["--session-id", self.session_id]
-            else:
-                return ["-r", self.session_id]
-
-        elif self.provider == "gemini":
-            # Gemini doesn't support custom session IDs on creation (unlike Claude).
-            # Its --resume only works with IDs/indices that gemini itself created.
-            # For simplicity and reliability, we always start fresh sessions.
-            return []
-
-        elif self.provider == "copilot":
-            # Copilot doesn't support custom session IDs on creation (unlike Claude).
-            # Its --resume only works with IDs that copilot itself created.
-            # For simplicity and reliability, we always start fresh sessions.
-            return []
-
-        elif self.provider == "codex":
-            # Codex doesn't support custom session IDs on creation (unlike Claude).
-            # Its resume subcommand only works with IDs that codex itself created.
-            # For simplicity and reliability, we always start fresh sessions.
-            return []
-
-        return []
+        if is_first_call:
+            return ["--session-id", self.session_id]
+        return ["-r", self.session_id]
 
     def build_prompt(self, prompt: str) -> str:
         """

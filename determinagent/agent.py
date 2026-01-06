@@ -393,7 +393,7 @@ class UnifiedAgent:
 
     def _mark_session_started(self) -> None:
         """Mark the session as started after first call."""
-        if self.session.call_count == 0:
+        if self.session.call_count == 0 and self.session.supports_resume():
             self.session.call_count += 1
 
     def _make_explicit_format_prompt(self, prompt: str) -> str:

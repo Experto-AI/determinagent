@@ -219,6 +219,7 @@ prompts:
        - Code blocks properly tagged
        - Lists and emphasis used well
        - Visual hierarchy clear
+       - MUST start with a single H1 title line (# ...) and no text before it
 
     8. DEPTH
        - Comprehensive coverage
@@ -299,8 +300,8 @@ prompts:
     HUMAN REVIEWER FEEDBACK:
     {user_feedback}
 
-    PREVIOUS VERSION (in your session memory):
-    Review your previous draft from this session.
+    PREVIOUS VERSION:
+    {draft}
 
     INSTRUCTIONS:
     1. Address the human feedback above by REVISING your previous draft.
