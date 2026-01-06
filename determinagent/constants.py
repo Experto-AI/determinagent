@@ -81,7 +81,7 @@ TOOL_COMMANDS: dict[str, Callable[[list[str]], list[str]]] = {
 WEB_SEARCH_CONFIG: dict[str, list[str]] = {
     "claude": ["--allowedTools", "WebSearch,WebFetch"],
     "gemini": [],  # Built-in
-    "copilot": ["--allow-all-tools", "--allow-all-urls"],
+    "copilot": ["--allow-all-tools"],
     "codex": [],  # Enabled via config.toml: web_search_request = true
 }
 

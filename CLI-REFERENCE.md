@@ -15,7 +15,7 @@ Complete command-line reference for all supported AI CLI tools.
 
 1. [Claude Code CLI](#claude-code-cli)
 2. [Gemini CLI](#gemini-cli)
-3. [GitHub Copilot CLI](#github-copilot-cli)
+3. [Copilot CLI](#copilot-cli)
 4. [OpenAI Codex CLI](#openai-codex-cli)
 5. [Configuration Priority](#configuration-priority)
 
@@ -147,7 +147,7 @@ gemini -m gemini-2.5-pro -t 0.3 -p "complex task"
 
 ---
 
-## GitHub Copilot CLI
+## Copilot CLI
 
 ### Session Management
 
@@ -167,24 +167,25 @@ gemini -m gemini-2.5-pro -t 0.3 -p "complex task"
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--model` | `copilot --model "claude-sonnet-4"` | Specify model |
+| `--model` | `copilot --model "claude-sonnet-4-5"` | Specify model (run `copilot help config` for valid names) |
 
-**Available Models:** `claude-sonnet-4-5` (default), `claude-sonnet-4`, `gpt-5`, `claude-haiku-4.5`
+**Available Models:** `claude-sonnet-4-5` (default), `claude-sonnet-4`, `gpt-5`
 
 ### Tool Approval
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--allow-all-tools` | `copilot --allow-all-tools` | Allow any tool |
-| `--allow-tool` | `copilot --allow-tool 'shell(npm test:*)'` | Allow specific tool |
-| `--deny-tool` | `copilot --deny-tool 'shell(rm)'` | Deny specific tool |
-| `--allow-all-urls` | `copilot --allow-all-urls` | Allow web requests |
+| `--allow-all-tools` | `copilot --allow-all-tools` | Allow any tool without approval |
+| `--allow-tool` | `copilot --allow-tool 'My-MCP-Server'` | Allow specific tool (supports glob patterns) |
+| `--deny-tool` | `copilot --deny-tool 'My-MCP-Server(tool_name)'` | Deny specific tool (takes precedence) |
 
 ### Output Format
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `--format` | `copilot --format json` | `json` or `text` |
+| `--format` | `copilot --format json` | Output format (verify with `copilot help` for current support) |
+
+*Note: JSON output support is in development. Check `copilot help` for currently available format options.*
 
 ### Agent Selection
 
@@ -196,16 +197,22 @@ gemini -m gemini-2.5-pro -t 0.3 -p "complex task"
 
 ```bash
 # Programmatic mode with tool control
-copilot -p "Run tests" --allow-tool 'shell(npm test:*)'
+copilot -p "List all open issues assigned to me" --allow-tool 'gh-cli'
 
 # Using custom agent
-copilot --agent=refactor-agent -p "Refactor this"
+copilot --agent=refactor-agent -p "Refactor this code block"
 
-# Restrict dangerous operations
-copilot --allow-all-tools --deny-tool 'shell(rm)' --deny-tool 'shell(sudo)'
+# Allow all tools (use with caution)
+copilot --allow-all-tools -p "Run comprehensive analysis"
 
-# JSON output for automation
-copilot -p "Fix bug" --format json
+# Resume previous session
+copilot --resume
+
+# Continue most recent session
+copilot --continue
+
+# Select specific model
+copilot --model "claude-sonnet-4-5" -p "Analyze this code"
 ```
 
 ---
@@ -341,5 +348,5 @@ All four CLIs apply settings in this order (highest to lowest priority):
 *See official documentation for complete reference:*
 - [Claude Code CLI](https://code.claude.com/docs/en/cli-reference)
 - [Gemini CLI](https://github.com/google-gemini/gemini-cli)
-- [GitHub Copilot CLI](https://docs.github.com/en/copilot)
+- [Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli)
 - [OpenAI Codex CLI](https://github.com/openai/codex)

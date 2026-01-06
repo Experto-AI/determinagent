@@ -29,7 +29,7 @@ This project adheres to the [Contributor Covenant Code of Conduct](code-of-condu
 - **Git** for version control
 - At least one supported CLI tool installed:
   - [Claude Code](https://claude.ai/code) (`claude`)
-  - [GitHub Copilot CLI](https://github.com/features/copilot/cli) (`gh copilot`)
+  - [Copilot CLI](https://github.com/features/copilot/cli) (`copilot`)
   - [Gemini CLI](https://github.com/google-gemini/gemini-cli) (`gemini`)
   - [OpenAI Codex](https://openai.com/codex) (`codex`)
 

@@ -135,35 +135,32 @@ verify_claude() {
 }
 
 verify_copilot() {
-    print_section "GitHub Copilot CLI"
-    
-    # Check if gh is installed
+    print_section "Copilot CLI"
+
+    # Check if Copilot CLI is installed
+    if ! check_command "copilot"; then
+        print_fail "Copilot CLI not found in PATH"
+        print_info "Install: https://github.com/github/copilot-cli"
+        return 1
+    fi
+
+    # Version check
+    local version
+    version=$(copilot --version 2>&1 | head -1 || echo "unknown")
+    print_pass "Copilot CLI found: $version"
+
+    if [[ "$QUICK_MODE" == "true" ]]; then
+        print_skip "Skipping authentication and prompt test (quick mode)"
+        return 0
+    fi
+
+    # Auth check (Copilot CLI uses GitHub CLI auth)
     if ! check_command "gh"; then
         print_fail "GitHub CLI (gh) not found in PATH"
         print_info "Install: https://cli.github.com/"
         return 1
     fi
-    
-    # Version check
-    local version
-    version=$(gh --version 2>&1 | head -1 || echo "unknown")
-    print_pass "GitHub CLI found: $version"
-    
-    # Check Copilot extension
-    if gh copilot --help &> /dev/null; then
-        print_pass "Copilot extension installed"
-    else
-        print_fail "Copilot extension not found"
-        print_info "Install: gh extension install github/gh-copilot"
-        return 1
-    fi
-    
-    if [[ "$QUICK_MODE" == "true" ]]; then
-        print_skip "Skipping authentication and prompt test (quick mode)"
-        return 0
-    fi
-    
-    # Auth check
+
     echo ""
     print_info "Testing GitHub authentication..."
     if gh auth status &> /dev/null; then
@@ -173,11 +170,10 @@ verify_copilot() {
         print_info "Run 'gh auth login' to authenticate"
         return 1
     fi
-    
-    # Note: Full prompt test skipped as Copilot CLI is interactive
-    print_skip "Interactive prompt test (requires manual verification)"
-    print_info "Manual test: gh copilot explain 'hello world'"
-    
+
+    print_skip "Prompt test skipped (manual verification recommended)"
+    print_info "Manual test: copilot -p \"hello world\""
+
     return 0
 }
 

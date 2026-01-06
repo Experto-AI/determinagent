@@ -49,13 +49,13 @@ nav:
       - Contributing: contributing.md
       - Code of Conduct: code-of-conduct.md
       - Security: security.md
+      - License: license.md
       - Release Checklist: release-checklist.md
 
 plugins:
   - search
   - include-markdown:
       rewrite_relative_urls: true
-      base_path: .
   - htmlproofer:
       raise_error: false
       ignore_urls:

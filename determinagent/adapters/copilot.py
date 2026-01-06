@@ -1,9 +1,9 @@
 """
-GitHub Copilot CLI adapter.
+Copilot CLI adapter.
 
-This adapter wraps the GitHub Copilot CLI tool for use with DeterminAgent.
-It handles command building, output parsing, and error mapping specific
-to the Copilot CLI interface.
+This adapter wraps the standalone `copilot` CLI tool for use with
+DeterminAgent. It handles command building, output parsing, and error
+mapping specific to the Copilot CLI interface.
 """
 
 from ..exceptions import (
@@ -17,12 +17,12 @@ from .base import ProviderAdapter
 
 class CopilotAdapter(ProviderAdapter):
     """
-    Adapter for GitHub Copilot CLI.
+    Adapter for the standalone Copilot CLI.
 
     Supports:
     - Session management via --resume flag
     - Model selection via --model flag
-    - Tool access via --allow-all-tools and --allow-all-urls
+    - Tool access via --allow-all-tools
 
     Note: Copilot uses different model naming conventions than Claude.
     This adapter provides a mapping for convenient aliasing.
@@ -66,7 +66,7 @@ class CopilotAdapter(ProviderAdapter):
             prompt: The prompt to send to Copilot.
             model: Model name or alias (will be mapped to Copilot model names).
             session_flags: Session management flags (--resume or empty).
-            allow_web: Enable web access via --allow-all-urls.
+            allow_web: Enable broader tool access via --allow-all-tools.
             tools: Additional tools (Copilot uses --allow-all-tools).
             sandbox: Unused (Copilot doesn't support sandbox mode).
 
@@ -76,7 +76,7 @@ class CopilotAdapter(ProviderAdapter):
         Examples:
             First call:  ["copilot", "-p", "prompt"]
             Resume:      ["copilot", "-p", "prompt", "--resume", "uuid"]
-            With web:    ["copilot", "-p", "prompt", "--allow-all-tools", "--allow-all-urls"]
+            With tools:  ["copilot", "-p", "prompt", "--allow-all-tools"]
         """
         cmd = ["copilot", "-p", prompt]
 
@@ -91,8 +91,6 @@ class CopilotAdapter(ProviderAdapter):
         # Copilot uses --allow-all-tools for extended access
         if allow_web or tools:
             cmd.append("--allow-all-tools")
-            if allow_web:
-                cmd.append("--allow-all-urls")
 
         return cmd
 
@@ -125,7 +123,7 @@ class CopilotAdapter(ProviderAdapter):
 
         if "command not found" in err_lower or "not found" in err_lower:
             return ProviderNotAvailable(
-                "Copilot CLI not installed. Install with: gh extension install github/copilot-cli",
+                "Copilot CLI not installed. Install: https://github.com/github/copilot-cli",
                 provider=self.provider_name,
             )
         elif "rate limit" in err_lower or "too many requests" in err_lower:
@@ -140,12 +138,12 @@ class CopilotAdapter(ProviderAdapter):
             or "not logged in" in err_lower
         ):
             return ProviderAuthError(
-                "Copilot authentication failed. Run 'gh auth login' to authenticate.",
+                "Copilot authentication failed. Run 'gh auth login' and retry.",
                 provider=self.provider_name,
             )
         elif "github copilot" in err_lower and "access" in err_lower:
             return ProviderAuthError(
-                "GitHub Copilot access required. Ensure you have an active Copilot subscription.",
+                "Copilot access required. Ensure your account has an active Copilot subscription.",
                 provider=self.provider_name,
             )
         else:

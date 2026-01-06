@@ -7,7 +7,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Coverage](https://img.shields.io/badge/coverage-90%25-green.svg)](https://github.com/Experto-AI/determinagent)
 
-> **Orchestrate powerful AI workflows at zero extra cost.** DeterminAgent controls multiple AI CLI tools (Claude Code, GH Copilot, Gemini CLI, OpenAI Codex) using LangGraph to create deterministic pipelines powered by your existing flat-rate subscriptions.
+> **Orchestrate powerful AI workflows at zero extra cost.** DeterminAgent controls multiple AI CLI tools (Claude Code, Copilot CLI, Gemini CLI, OpenAI Codex) using LangGraph to create deterministic pipelines powered by your existing flat-rate subscriptions.
 
 ---
 
@@ -52,7 +52,7 @@ poetry run python -c "import determinagent; print(determinagent.__version__)"
 - **Python 3.10+**
 - **At least one supported AI CLI tool** installed and authenticated:
   - [Claude Code](https://claude.ai/code) (`claude`)
-  - [GitHub Copilot CLI](https://github.com/features/copilot/cli) (`gh copilot`)
+  - [Copilot CLI](https://github.com/features/copilot/cli) (`copilot`)
   - [Gemini CLI](https://github.com/google-gemini/gemini-cli) (`gemini`)
   - [OpenAI Codex](https://openai.com/codex) (`codex`)
 
@@ -93,10 +93,10 @@ python flows/blog/main.py "My Blog Topic" --writer claude --editor copilot
 
 | Provider | Adapter Status | Session Support | Web Search | Native Models |
 | :--- | :--- | :--- | :--- | :--- |
-| **Claude Code** | ✅ Stable | ✅ Native | ✅ Yes | fast, balanced, powerful |
-| **GH Copilot** | ✅ Stable | ✅ Native | ✅ Yes | fast, balanced, powerful |
-| **Gemini CLI** | ✅ Beta | ✅ Native | ✅ Yes | flash, pro |
-| **OpenAI Codex**| ✅ Beta | ✅ Native | ❌ No | fast, balanced |
+| **Claude Code** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful |
+| **Copilot CLI** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful |
+| **Gemini CLI** | ✅ Alpha | ✅ Native | ✅ Yes | flash, pro |
+| **OpenAI Codex**| ✅ Alpha | ✅ Native | ❌ No | fast, balanced |
 
 ---
 
@@ -109,7 +109,7 @@ python flows/blog/main.py "My Blog Topic" --writer claude --editor copilot
    - Run `claude --version` manually to verify.
 
 2. **Authentication Errors**
-   - DeterminAgent uses your local sessions. Ensure you are logged in to the CLI tool (e.g., `gh auth status` or `claude login`).
+   - DeterminAgent uses your local sessions. Ensure you are logged in to the CLI tool (e.g., `copilot auth status` or `claude login`).
 
 3. **Subprocess Timeouts**
    - Some agents (like Writer) can take a few minutes for long content. Ensure your environment doesn't kill long-running processes.

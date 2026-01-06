@@ -245,8 +245,8 @@ class TestCopilotAdapter:
         assert "--resume" in cmd
         assert "session-123" in cmd
 
-    def test_build_command_with_web_returns_web_flags(self) -> None:
-        """Test command building with web access."""
+    def test_build_command_with_web_returns_tool_flags(self) -> None:
+        """Test command building with tool access."""
         # Arrange
         adapter = CopilotAdapter()
         # Act
@@ -258,7 +258,6 @@ class TestCopilotAdapter:
         )
         # Assert
         assert "--allow-all-tools" in cmd
-        assert "--allow-all-urls" in cmd
 
     def test_model_mapping_resolves_aliases(self) -> None:
         """Test that model aliases are correctly mapped."""

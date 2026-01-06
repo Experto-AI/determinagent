@@ -133,7 +133,7 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 ### Tool Permissions
 - **Claude**: `["--allowedTools", "WebSearch,WebFetch"]`
 - **Gemini**: Built-in.
-- **Copilot**: `["--allow-all-tools", "--allow-all-urls"]`
+- **Copilot**: `["--allow-all-tools"]`
 - **Codex**: Via `config.toml`: `web_search_request = true`.
 
 ---

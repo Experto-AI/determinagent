@@ -12,7 +12,7 @@ Before starting, ensure you have:
 - **DeterminAgent** installed: `pip install determinagent`
 - At least **one CLI tool** authenticated:
   - [Claude Code](https://claude.ai/code) (`claude`)
-  - [GitHub Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli/using-github-copilot-in-the-cli) (`gh copilot`)
+  - [Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli/using-github-copilot-in-the-cli) (`copilot`)
   - [Gemini CLI](https://github.com/google-gemini/gemini-cli) (`gemini`)
   - [OpenAI Codex](https://openai.com/codex) (`codex`)
 

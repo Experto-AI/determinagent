@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Alpha Status Unification**: Updated all provider adapters (Claude, Copilot, Gemini, Codex) to Alpha version across documentation for consistency.
 - **Documentation SSOT**: Implemented Single Source of Truth pattern for documentation using `mkdocs-include-markdown-plugin`
 - **Documentation Wrappers**: Created minimal wrapper files in `docs/` directory that include root markdown files
 - **Documentation Navigation**: Added PLAN and Release Checklist pages to mkdocs navigation

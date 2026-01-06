@@ -99,7 +99,7 @@ workflow = StateGraph(YourState)
 
 - Python 3.10+
 - DeterminAgent library: `pip install -e .`
-- At least one CLI tool installed (Claude Code, GH Copilot, etc.)
+- At least one CLI tool installed (Claude Code, Copilot, etc.)
 
 ---
 
