@@ -82,7 +82,7 @@ print(response)
 Don't start from scratch. Use our pre-built Python templates in the `flows/` directory:
 - `flows/blog/`: Complete Writer → Editor → Reviewer workflow with human review.
 
-<img src="docs/assets/blog_flow.svg" alt="Blog Flow" width="600">
+<img src="https://raw.githubusercontent.com/Experto-AI/determinagent/main/docs/assets/blog_flow.svg" alt="Blog Flow" width="600">
 
 To run the blog flow:
 ```bash
@@ -143,7 +143,7 @@ Set `LOG_LEVEL=DEBUG` to see the full subprocess commands and raw output.
 
 ## 📖 Documentation
 
-<img src="docs/assets/architecture.svg" alt="DeterminAgent Architecture" width="800">
+<img src="https://raw.githubusercontent.com/Experto-AI/determinagent/main/docs/assets/architecture.svg" alt="DeterminAgent Architecture" width="800">
 
 ### Core Documentation
 - **[Technical Architecture](./ARCHITECTURE.md)**: Design principles and system internals.
