@@ -31,7 +31,7 @@ MODEL_MAPPING: dict[str, dict[str, str]] = {
         "claude": "opus",  # Best available reasoning model alias in Claude Code
         "gemini": "gemini-3-pro-preview",
         "copilot": "gpt-5.2",
-        "codex": "gpt-5.1-codex",
+        "codex": "gpt-5.1-codex-max",
     },
     # "free" category: Models with no additional per-token cost.
     # Since CLI tools use subscription-based access, we default to fast/efficient models.

@@ -25,17 +25,7 @@ python main.py "DevOps" --min-words 1000 --max-words 1500 --max-revisions 5
 
 ## Workflow
 
-```
-Writer → Editor → Reviewer
-            ↓
-    (score < 8? → Revision loop)
-            ↓
-      Human Review
-            ↓
-   (rejected? → Back to Writer)
-            ↓
-        Save File
-```
+![Blog Workflow](../../docs/assets/blog_flow.png)
 
 ## Configuration
 

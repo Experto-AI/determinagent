@@ -129,7 +129,7 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 | `fast` | haiku | claude-haiku-4.5 | gemini-3-flash-preview | gpt-5.1-codex-mini |
 | `balanced` | sonnet | claude-sonnet-4.5 | gemini-3-pro-preview | gpt-5.1 |
 | `powerful` | opus | gpt-5 | gemini-3-pro-preview | gpt-5.1-codex-max |
-| `reasoning` | opusplan | gpt-5 | gemini-3-pro-preview | o3 |
+| `reasoning` | opus | gpt-5.2 | gemini-3-pro-preview | gpt-5.1-codex-max |
 | `free` | haiku | claude-haiku-4.5 | gemini-3-flash-preview | gpt-5.1-codex-mini |
 
 ### Tool Permissions

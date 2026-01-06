@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="500" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .component { rx: 6; ry: 6; stroke-width: 1.5; }
+      .start-end { rx: 15; ry: 15; stroke-width: 1.5; }
+      .title { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-weight: 700; font-size: 24px; fill: #1e293b; }
+      .label { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-weight: 600; font-size: 14px; fill: #1e293b; }
+      .sublabel { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-weight: 400; font-size: 11px; fill: #475569; }
+      .edge-label { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-weight: 500; font-size: 11px; fill: #64748b; background-color: white; }
+      .arrow { stroke: #6366f1; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .arrow-return { stroke: #f59e0b; stroke-width: 2; fill: none; marker-end: url(#arrowhead-orange); }
+      .arrow-success { stroke: #22c55e; stroke-width: 2; fill: none; marker-end: url(#arrowhead-green); }
+      .icon { font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif; font-size: 16px; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6366f1"/>
+    </marker>
+    <marker id="arrowhead-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#22c55e"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="500" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="450" y="40" text-anchor="middle" class="title">Blog Generation Workflow</text>
+
+  <!-- ==================== NODES ==================== -->
+
+  <!-- Writer Node -->
+  <rect x="50" y="200" width="140" height="70" class="component" fill="#e0e7ff" stroke="#6366f1"/>
+  <text x="120" y="225" text-anchor="middle" class="label">Writer 🌐</text>
+  <text x="120" y="243" text-anchor="middle" class="sublabel">Draft &amp; Revise</text>
+  <text x="120" y="258" text-anchor="middle" class="sublabel">(Internet Access)</text>
+
+  <!-- Editor Node -->
+  <rect x="250" y="200" width="140" height="70" class="component" fill="#e0e7ff" stroke="#6366f1"/>
+  <text x="320" y="230" text-anchor="middle" class="label">Editor</text>
+  <text x="320" y="248" text-anchor="middle" class="sublabel">Polishes &amp; Fixes</text>
+
+  <!-- Reviewer Node -->
+  <rect x="450" y="200" width="140" height="70" class="component" fill="#e0e7ff" stroke="#6366f1"/>
+  <text x="520" y="230" text-anchor="middle" class="label">Reviewer</text>
+  <text x="520" y="248" text-anchor="middle" class="sublabel">Scores Quality</text>
+
+  <!-- Human Review Node -->
+  <rect x="700" y="200" width="140" height="70" class="component" fill="#ffedd5" stroke="#f97316"/>
+  <text x="770" y="230" text-anchor="middle" class="label">Human Review</text>
+  <text x="770" y="248" text-anchor="middle" class="sublabel">Approve / Feedback</text>
+
+  <!-- Finalize Node -->
+  <rect x="700" y="380" width="140" height="70" class="component" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="770" y="410" text-anchor="middle" class="label">Finalize</text>
+  <text x="770" y="428" text-anchor="middle" class="sublabel">Clean &amp; Save</text>
+
+  <!-- ==================== EDGES ==================== -->
+
+  <!-- Writer -> Editor -->
+  <path d="M190 235 L250 235" class="arrow"/>
+  
+  <!-- Editor -> Reviewer -->
+  <path d="M390 235 L450 235" class="arrow"/>
+
+  <!-- Reviewer -> Writer (Loop - AI Revision) -->
+  <!-- Path goes under the nodes -->
+  <path d="M520 270 L520 320 L120 320 L120 270" class="arrow-return"/>
+  <rect x="250" y="310" width="160" height="20" fill="#f8fafc" opacity="0.8"/>
+  <text x="330" y="324" text-anchor="middle" class="edge-label" fill="#d97706">Score &lt; 8 (Max 3 Loops)</text>
+  
+  <!-- Reviewer -> Human Review -->
+  <path d="M590 235 L700 235" class="arrow-success"/>
+  <rect x="600" y="210" width="90" height="20" fill="#f8fafc" opacity="0.8"/>
+  <text x="645" y="224" text-anchor="middle" class="edge-label" fill="#15803d">Score &gt; 8 OR Max</text>
+
+  <!-- Human Review -> Finalize -->
+  <path d="M770 270 L770 380" class="arrow-success"/>
+  <rect x="775" y="310" width="60" height="20" fill="#f8fafc" opacity="0.8"/>
+  <text x="805" y="324" text-anchor="middle" class="edge-label" fill="#15803d">Yes</text>
+
+  <!-- Human Review -> Writer (Feedback Loop) -->
+  <!-- Path goes over the nodes -->
+  <path d="M770 200 L770 120 L120 120 L120 200" class="arrow-return"/>
+  <rect x="380" y="110" width="140" height="20" fill="#f8fafc" opacity="0.8"/>
+  <text x="450" y="124" text-anchor="middle" class="edge-label" fill="#d97706">User Feedback (Restart)</text>
+
+</svg>

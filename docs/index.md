@@ -64,6 +64,8 @@ print(response)
 Don't start from scratch. Use our pre-built Python templates in the `flows/` directory:
 - `flows/blog/`: Complete Writer → Editor → Reviewer workflow with human review.
 
+![Blog Flow](assets/blog_flow.svg)
+
 To run the blog flow:
 ```bash
 python flows/blog/main.py "My Blog Topic" --writer claude --editor copilot
@@ -75,10 +77,10 @@ python flows/blog/main.py "My Blog Topic" --writer claude --editor copilot
 
 | Provider | Adapter Status | Session Support | Web Search | Model Aliases |
 | :--- | :--- | :--- | :--- | :--- |
-| **Claude Code** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful, reasoning, free |
-| **Copilot** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful, reasoning, free |
-| **Gemini CLI** | ✅ Alpha | ✅ Native | ✅ Yes | fast, balanced, powerful, reasoning, free |
-| **OpenAI Codex**| ✅ Alpha | ✅ Native | ❌ No | fast, balanced, powerful, reasoning, free |
+| **Claude Code** | ✅ Alpha | ✅ Native (Resume) | ✅ Yes | fast, balanced, powerful, reasoning, free |
+| **Copilot** | ✅ Alpha | ❌ No (Fresh Session) | ✅ Yes | fast, balanced, powerful, reasoning, free |
+| **Gemini CLI** | ✅ Alpha | ❌ No (Fresh Session) | ❌ No | fast, balanced, powerful, reasoning, free |
+| **OpenAI Codex**| ✅ Alpha | ❌ No (Fresh Session) | ❌ No | fast, balanced, powerful, reasoning, free |
 
 ---
 
@@ -91,7 +93,7 @@ DeterminAgent resolves model aliases per provider so you can keep flows consiste
 | fast | haiku | gemini-3-flash-preview | claude-haiku-4.5 | gpt-5.1-codex-mini |
 | balanced | sonnet | gemini-3-pro-preview | claude-sonnet-4.5 | gpt-5.1-codex |
 | powerful | opus | gemini-3-pro-preview | claude-opus-4.5 | gpt-5.1-codex-max |
-| reasoning | opus | gemini-3-pro-preview | gpt-5.2 | gpt-5.1-codex |
+| reasoning | opus | gemini-3-pro-preview | gpt-5.2 | gpt-5.1-codex-max |
 | free | haiku | gemini-3-flash-preview | claude-haiku-4.5 | gpt-5.1-codex-mini |
 
 Notes:
@@ -122,6 +124,8 @@ Set `LOG_LEVEL=DEBUG` to see the full subprocess commands and raw output.
 ---
 
 ## 📖 Documentation
+
+![DeterminAgent Architecture](assets/architecture.svg)
 
 - **[Project Roadmap](./roadmap.md)**: Current status and next steps.
 - **[Technical Architecture](./architecture.md)**: Design principles and internals.

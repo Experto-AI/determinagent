@@ -35,6 +35,7 @@ nav:
   - Home: index.md
   - Tutorials:
       - Your First Flow: tutorials/first_flow.md
+      - Blog Flow: tutorials/blog_flow.md
   - Reference:
       - Architecture: architecture.md
       - CLI Reference: cli-reference.md
