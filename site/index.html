@@ -682,6 +682,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/blog_flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1503,6 +1531,7 @@
 <h3 id="template-flows">Template Flows</h3>
 <p>Don't start from scratch. Use our pre-built Python templates in the <code>flows/</code> directory:
 - <code>flows/blog/</code>: Complete Writer → Editor → Reviewer workflow with human review.</p>
+<p><img alt="Blog Flow" src="assets/blog_flow.svg" /></p>
 <p>To run the blog flow:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>flows/blog/main.py<span class="w"> </span><span class="s2">&quot;My Blog Topic&quot;</span><span class="w"> </span>--writer<span class="w"> </span>claude<span class="w"> </span>--editor<span class="w"> </span>copilot
 </span></code></pre></div></p>
@@ -1522,28 +1551,28 @@
 <tr>
 <td style="text-align: left;"><strong>Claude Code</strong></td>
 <td style="text-align: left;">✅ Alpha</td>
-<td style="text-align: left;">✅ Native</td>
+<td style="text-align: left;">✅ Native (Resume)</td>
 <td style="text-align: left;">✅ Yes</td>
 <td style="text-align: left;">fast, balanced, powerful, reasoning, free</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Copilot</strong></td>
 <td style="text-align: left;">✅ Alpha</td>
-<td style="text-align: left;">✅ Native</td>
+<td style="text-align: left;">❌ No (Fresh Session)</td>
 <td style="text-align: left;">✅ Yes</td>
 <td style="text-align: left;">fast, balanced, powerful, reasoning, free</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Gemini CLI</strong></td>
 <td style="text-align: left;">✅ Alpha</td>
-<td style="text-align: left;">✅ Native</td>
-<td style="text-align: left;">✅ Yes</td>
+<td style="text-align: left;">❌ No (Fresh Session)</td>
+<td style="text-align: left;">❌ No</td>
 <td style="text-align: left;">fast, balanced, powerful, reasoning, free</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>OpenAI Codex</strong></td>
 <td style="text-align: left;">✅ Alpha</td>
-<td style="text-align: left;">✅ Native</td>
+<td style="text-align: left;">❌ No (Fresh Session)</td>
 <td style="text-align: left;">❌ No</td>
 <td style="text-align: left;">fast, balanced, powerful, reasoning, free</td>
 </tr>
@@ -1589,7 +1618,7 @@
 <td style="text-align: left;">opus</td>
 <td style="text-align: left;">gemini-3-pro-preview</td>
 <td style="text-align: left;">gpt-5.2</td>
-<td style="text-align: left;">gpt-5.1-codex</td>
+<td style="text-align: left;">gpt-5.1-codex-max</td>
 </tr>
 <tr>
 <td style="text-align: left;">free</td>
@@ -1629,6 +1658,7 @@
 <p>Set <code>LOG_LEVEL=DEBUG</code> to see the full subprocess commands and raw output.</p>
 <hr />
 <h2 id="documentation">📖 Documentation</h2>
+<p><img alt="DeterminAgent Architecture" src="assets/architecture.svg" /></p>
 <ul>
 <li><strong><a href="roadmap/">Project Roadmap</a></strong>: Current status and next steps.</li>
 <li><strong><a href="architecture/">Technical Architecture</a></strong>: Design principles and internals.</li>

@@ -25,7 +25,7 @@ python main.py "DevOps" --min-words 1000 --max-words 1500 --max-revisions 5
 
 ## Workflow
 
-![Blog Workflow](../../docs/assets/blog_flow.png)
+![Blog Workflow](https://raw.githubusercontent.com/Experto-AI/determinagent/main/docs/assets/blog_flow.svg)
 
 ## Configuration
 
@@ -70,4 +70,4 @@ Saves to: `YYYY-MM-DD-blog-<topic>.md` in current directory.
 
 ---
 
-*Part of [DeterminAgent](../../README.md) template flows.*
+*Part of [DeterminAgent](https://github.com/Experto-AI/determinagent) template flows.*

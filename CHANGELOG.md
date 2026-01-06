@@ -5,6 +5,15 @@ All notable changes to DeterminAgent will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.0] - 2026-01-06
+
+### Changed
+- **Codex Support**: Updated 'reasoning' model alias for OpenAI Codex to `gpt-5.1-codex-max`.
+- **Documentation**: Updated Compatibility Matrix to reflect accurate session and web search support.
+- **Documentation**: Integrated blog flow diagrams into README and documentation site.
+
+---
+
 ## [0.13.0] - 2026-01-06
 
 ### Added
