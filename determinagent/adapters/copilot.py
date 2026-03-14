@@ -22,7 +22,8 @@ class CopilotAdapter(ProviderAdapter):
 
     Supports:
     - Model selection via --model flag
-    - Tool access via --allow-all-tools (required for non-interactive prompts)
+    - Tool access via `--allow-all-tools` or selective `--allow-tool`
+    - URL permissions via `--allow-all-urls` when web access is enabled
 
     Note:
         Copilot doesn't support custom session IDs on creation (unlike Claude's
@@ -36,7 +37,7 @@ class CopilotAdapter(ProviderAdapter):
         cmd = adapter.build_command(
             prompt="Explain this code",
             model="balanced",
-            session_flags=[],  # Ignored for copilot
+            session_flags=[],
         )
         ```
     """
@@ -46,13 +47,13 @@ class CopilotAdapter(ProviderAdapter):
     # Copilot-specific model name mappings
     MODEL_MAPPING: dict[str, str] = {
         "haiku": "claude-haiku-4.5",
-        "sonnet": "claude-sonnet-4.5",
-        "opus": "claude-opus-4.5",
+        "sonnet": "claude-sonnet-4.6",
+        "opus": "claude-opus-4.6",
         "fast": "claude-haiku-4.5",
-        "balanced": "claude-sonnet-4.5",
-        "powerful": "claude-opus-4.5",
-        "reasoning": "gpt-5.2",
-        "free": "claude-haiku-4.5",
+        "balanced": "gpt-5-mini",
+        "powerful": "claude-opus-4.6",
+        "reasoning": "gpt-5.4",
+        "free": "gpt-5-mini",
     }
 
     def build_command(
@@ -70,29 +71,37 @@ class CopilotAdapter(ProviderAdapter):
         Args:
             prompt: The prompt to send to Copilot.
             model: Model name or alias (will be mapped to Copilot model names).
-            session_flags: Unused (copilot doesn't support session resume).
-            allow_web: Enable broader tool access via --allow-all-tools.
-            tools: Additional tools (Copilot uses --allow-all-tools).
+            session_flags: Optional provider-managed resume flags.
+            allow_web: Enable URL access via `--allow-all-urls`.
+            tools: Additional tool permissions. When omitted, `--allow-all-tools` is used.
             sandbox: Unused (Copilot doesn't support sandbox mode).
 
         Returns:
             Command array for subprocess execution.
 
         Note:
-            Copilot doesn't support custom session IDs, so session_flags is ignored.
-            Each call starts a fresh session.
+            `SessionManager` keeps Copilot on fresh sessions by default because
+            Copilot owns resume IDs. Explicit provider-managed resume flags are
+            still forwarded at the adapter level.
         """
-        cmd = ["copilot", "-p", prompt, "--allow-all-tools"]
+        cmd = ["copilot", "-p", prompt]
 
         # Add session flags
         cmd.extend(session_flags)
+
+        if tools:
+            for tool in tools:
+                cmd.extend(["--allow-tool", tool])
+        else:
+            cmd.append("--allow-all-tools")
+
+        if allow_web:
+            cmd.append("--allow-all-urls")
 
         # Map model name to Copilot-specific name
         copilot_model = self.MODEL_MAPPING.get(model, model)
         if copilot_model:
             cmd.extend(["--model", copilot_model])
-
-        # --allow-all-tools is required for non-interactive mode.
 
         return cmd
 

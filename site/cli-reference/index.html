@@ -2197,7 +2197,7 @@
 <tr>
 <td><code>-p</code> / <code>--prompt</code></td>
 <td><code>gemini -p "query"</code></td>
-<td>Deprecated (use positional prompt)</td>
+<td>Current headless/non-interactive prompt mode</td>
 </tr>
 </tbody>
 </table>
@@ -2246,7 +2246,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>Note:</strong> Gemini's session resume only works with session IDs/indices that Gemini itself created. Unlike Claude's <code>--session-id</code>, you cannot specify a custom session ID on the first call. <strong>DeterminAgent does not use Gemini's session resume</strong> for this reason—each call starts a fresh session.</p>
+<p><strong>Note:</strong> Gemini's session resume only works with session IDs/indices that Gemini itself created. Unlike Claude's <code>--session-id</code>, you cannot specify a custom session ID on the first call. <strong>DeterminAgent keeps Gemini on fresh sessions by default</strong> for deterministic multi-agent orchestration, even though upstream Gemini resume exists.</p>
 </blockquote>
 <h3 id="safety-approval">Safety &amp; Approval</h3>
 <table>
@@ -2354,7 +2354,7 @@
 <tr>
 <td><code>-p</code> / <code>--prompt</code></td>
 <td><code>copilot -p "task"</code></td>
-<td>Non-interactive prompt (requires <code>--allow-all-tools</code>)</td>
+<td>Non-interactive prompt. <code>DeterminAgent</code> uses <code>--allow-all-tools</code> by default, or selective <code>--allow-tool</code> flags when a tool list is configured.</td>
 </tr>
 <tr>
 <td><code>-i</code> / <code>--interactive</code></td>
@@ -2391,7 +2391,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>Note:</strong> Copilot's session resume only works with session IDs that Copilot itself created. Unlike Claude's <code>--session-id</code>, you cannot specify a custom session ID on the first call. <strong>DeterminAgent does not use Copilot's session resume</strong> for this reason—each call starts a fresh session.</p>
+<p><strong>Note:</strong> Copilot's session resume only works with session IDs that Copilot itself created. Unlike Claude's <code>--session-id</code>, you cannot specify a custom session ID on the first call. <strong>DeterminAgent keeps Copilot on fresh sessions by default</strong> for deterministic multi-agent orchestration, even though upstream Copilot resume exists.</p>
 </blockquote>
 <h3 id="model-selection_2">Model Selection</h3>
 <table>
@@ -2410,7 +2410,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Available Models:</strong> <code>claude-sonnet-4.5</code>, <code>claude-haiku-4.5</code>, <code>claude-opus-4.5</code>, <code>claude-sonnet-4</code>, <code>gpt-5.1-codex-max</code>, <code>gpt-5.1-codex</code>, <code>gpt-5.2</code>, <code>gpt-5.1</code>, <code>gpt-5</code>, <code>gpt-5.1-codex-mini</code>, <code>gpt-5-mini</code>, <code>gpt-4.1</code>, <code>gemini-3-pro-preview</code></p>
+<p><strong>Available Models:</strong> Official Copilot model docs now list newer families including <code>claude-haiku-4.5</code>, <code>claude-sonnet-4.6</code>, <code>claude-opus-4.6</code>, <code>gpt-5-mini</code>, <code>gpt-5.2</code>, <code>gpt-5.4</code>, and current Gemini options. Exact availability is plan- and client-dependent, so verify against your installed Copilot build.</p>
 <h3 id="tool-url-permissions">Tool &amp; URL Permissions</h3>
 <table>
 <thead>
@@ -2463,6 +2463,9 @@
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>DeterminAgent status:</strong> the adapter now supports selective <code>--allow-tool</code> passthrough when <code>UnifiedAgent(..., tools=[...])</code> is configured, and enables <code>--allow-all-urls</code> when <code>allow_web=True</code> is used.</p>
+</blockquote>
 <h3 id="output-logging">Output &amp; Logging</h3>
 <table>
 <thead>
@@ -2491,7 +2494,7 @@
 </tbody>
 </table>
 <h3 id="examples_2">Examples</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Non-interactive mode (requires allow-all-tools)</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Non-interactive mode with tool permissions</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>copilot<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;List all open issues assigned to me&quot;</span><span class="w"> </span>--allow-all-tools
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Using custom agent</span>
@@ -2501,7 +2504,7 @@
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>copilot<span class="w"> </span>--resume
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
 </span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Select specific model</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>copilot<span class="w"> </span>--model<span class="w"> </span><span class="s2">&quot;claude-sonnet-4.5&quot;</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;Analyze this code&quot;</span><span class="w"> </span>--allow-all-tools
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>copilot<span class="w"> </span>--model<span class="w"> </span><span class="s2">&quot;gpt-5.4&quot;</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;Analyze this code&quot;</span><span class="w"> </span>--allow-all-tools
 </span></code></pre></div>
 <hr />
 <h2 id="openai-codex-cli">OpenAI Codex CLI</h2>
@@ -2549,7 +2552,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>Note:</strong> Codex's session resume only works with session IDs that Codex itself created. Unlike Claude's <code>--session-id</code>, you cannot specify a custom session ID on the first call. <strong>DeterminAgent does not use Codex's session resume</strong> for this reason—each call starts a fresh session.</p>
+<p><strong>Note:</strong> Codex's session resume only works with session IDs that Codex itself created. Unlike Claude's <code>--session-id</code>, you cannot specify a custom session ID on the first call. <strong>DeterminAgent keeps Codex on fresh sessions by default</strong> for deterministic multi-agent orchestration, even though upstream Codex resume exists.</p>
 </blockquote>
 <h3 id="model-selection_3">Model Selection</h3>
 <table>
@@ -2681,6 +2684,9 @@
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>DeterminAgent status:</strong> the Codex adapter now executes in JSON event mode (<code>codex exec --json</code>) so parsed output matches the documented JSONL stream.</p>
+</blockquote>
 <h3 id="mcp-server-management">MCP Server Management</h3>
 <table>
 <thead>

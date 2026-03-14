@@ -23,7 +23,8 @@ class CodexAdapter(ProviderAdapter):
 
     Supports:
     - Sandbox execution via --sandbox flag
-    - JSONL output parsing (analyzing turn events)
+    - JSONL output parsing via --json
+    - Model selection via --model
 
     Note:
         Codex doesn't support custom session IDs on creation (unlike Claude's
@@ -74,19 +75,25 @@ class CodexAdapter(ProviderAdapter):
             Codex doesn't support custom session IDs, so session_flags is ignored.
             Each call starts a fresh session.
         """
-        cmd = ["codex", "exec"]
+        cmd = ["codex", "exec", "--json"]
 
         # session_flags ignored - Codex doesn't support custom session IDs
 
-        # Prompt is positional for Codex exec
-        cmd.append(prompt)
+        if model:
+            cmd.extend(["--model", model])
 
         # Sandbox configuration
         if sandbox:
             cmd.extend(["--sandbox", sandbox])
 
-        # Always enable full automation
-        cmd.append("--full-auto")
+        # Keep explicit sandbox values authoritative. --full-auto aliases
+        # workspace-write, so only use it when the caller did not request
+        # a specific sandbox mode.
+        if sandbox is None:
+            cmd.append("--full-auto")
+
+        # Prompt is positional for Codex exec
+        cmd.append(prompt)
 
         return cmd
 
@@ -112,16 +119,42 @@ class CodexAdapter(ProviderAdapter):
 
             try:
                 event = json.loads(line)
-                if event.get("type") == "turn.completed":
-                    # Extract content from data payload
-                    data = event.get("data", {})
-                    return str(data.get("content", ""))
+                extracted = self._extract_event_content(event)
+                if extracted:
+                    return extracted
             except json.JSONDecodeError:
                 continue
 
         # Fallback: if no structured event found, return raw output
         # (This helps debugging if CLI errors output plain text)
         return raw_output.strip()
+
+    def _extract_event_content(self, event: dict[str, object]) -> str | None:
+        """Extract the final assistant text from known Codex JSONL events."""
+        event_type = str(event.get("type", ""))
+        if event_type not in {"turn.completed", "response.completed", "message.completed"}:
+            return None
+
+        data = event.get("data")
+        if isinstance(data, dict):
+            for key in ("content", "text", "output_text"):
+                value = data.get(key)
+                if isinstance(value, str) and value.strip():
+                    return value.strip()
+                if isinstance(value, list):
+                    joined = "\n".join(
+                        part.strip() for part in value if isinstance(part, str) and part.strip()
+                    )
+                    if joined:
+                        return joined
+
+            message = data.get("message")
+            if isinstance(message, dict):
+                content = message.get("content")
+                if isinstance(content, str) and content.strip():
+                    return content.strip()
+
+        return None
 
     def handle_error(self, returncode: int, stderr: str) -> Exception:
         """

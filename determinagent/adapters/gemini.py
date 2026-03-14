@@ -25,12 +25,15 @@ class GeminiAdapter(ProviderAdapter):
     Supports:
     - JSON output parsing via --output-format json
     - Model selection via --model flag
+    - Headless prompts via --prompt
+    - Sandbox and allowed-tool passthrough
 
     Note:
         Gemini doesn't support custom session IDs on creation (unlike Claude's
         --session-id). Its --resume only works with IDs/indices that Gemini itself
-        created internally. For reliability in multi-agent workflows, session
-        resume is disabled - each call starts a fresh session.
+        created internally. `SessionManager` therefore keeps Gemini fresh by default,
+        but the low-level adapter will forward any explicit provider-managed
+        resume flags passed into `build_command()`.
 
     Example:
         ```python
@@ -62,7 +65,7 @@ class GeminiAdapter(ProviderAdapter):
         Args:
             prompt: The prompt to send to Gemini.
             model: Model name.
-            session_flags: Unused (Gemini doesn't support session resume).
+            session_flags: Optional provider-managed resume flags.
             allow_web: Enable web tools (if supported).
             tools: Additional tools.
             sandbox: Unused.
@@ -71,19 +74,25 @@ class GeminiAdapter(ProviderAdapter):
             Command array for subprocess execution.
 
         Note:
-            Gemini doesn't support custom session IDs, so session_flags is ignored.
-            Each call starts a fresh session.
+            `SessionManager` does not generate Gemini resume flags, so high-level
+            `UnifiedAgent` usage stays on fresh sessions by default.
         """
-        # Prompt is positional; -p/--prompt is deprecated.
-        cmd = ["gemini", prompt]
+        cmd = ["gemini", "--prompt", prompt]
 
-        # session_flags ignored - Gemini doesn't support custom session IDs
+        cmd.extend(session_flags)
 
         # Force JSON output format
         cmd.extend(["--output-format", "json"])
 
         if model:
             cmd.extend(["--model", model])
+
+        if sandbox:
+            cmd.append("--sandbox")
+
+        if tools:
+            for tool in tools:
+                cmd.extend(["--allowed-tools", tool])
 
         return cmd
 
@@ -98,13 +107,52 @@ class GeminiAdapter(ProviderAdapter):
             Cleaned response text.
         """
         try:
-            data: dict[str, Any] = json.loads(raw_output)
-            # Assuming the JSON structure has a "response" key based on PLAN.md notes
-            # If not, we might need to adjust.
-            return str(data.get("response", raw_output))
+            data: Any = json.loads(raw_output)
+            extracted = self._extract_text(data)
+            return extracted if extracted is not None else raw_output.strip()
         except json.JSONDecodeError:
             # Fallback for plain text or malformed JSON
             return raw_output.strip()
+
+    def _extract_text(self, data: Any) -> str | None:
+        """Extract useful text from current Gemini JSON response shapes."""
+        if isinstance(data, str):
+            text = data.strip()
+            return text or None
+
+        if isinstance(data, list):
+            for item in data:
+                extracted = self._extract_text(item)
+                if extracted:
+                    return extracted
+            return None
+
+        if not isinstance(data, dict):
+            return None
+
+        for key in ("response", "text", "content", "output", "message"):
+            extracted = self._extract_text(data.get(key))
+            if extracted:
+                return extracted
+
+        candidates = data.get("candidates")
+        if candidates:
+            extracted = self._extract_text(candidates)
+            if extracted:
+                return extracted
+
+        parts = data.get("parts")
+        if parts:
+            extracted = self._extract_text(parts)
+            if extracted:
+                return extracted
+
+        for value in data.values():
+            extracted = self._extract_text(value)
+            if extracted:
+                return extracted
+
+        return None
 
     def handle_error(self, returncode: int, stderr: str) -> Exception:
         """

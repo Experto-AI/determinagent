@@ -19,10 +19,10 @@ class SessionManager:
     Manages CLI sessions using native provider capabilities.
 
     Session support by provider:
-    - **Claude**: Full support via `--session-id <uuid>` and `-r <uuid>`
-    - **Gemini**: No session resume (always fresh sessions)
-    - **Copilot**: No session resume (always fresh sessions)
-    - **Codex**: No session resume (always fresh sessions)
+    - **Claude**: Deterministic session creation via `--session-id <uuid>` and resume via `--resume <uuid>`
+    - **Gemini**: Upstream CLI supports provider-managed resume, but DeterminAgent uses fresh sessions for deterministic orchestration
+    - **Copilot**: Upstream CLI supports provider-managed resume, but DeterminAgent uses fresh sessions for deterministic orchestration
+    - **Codex**: Upstream CLI supports provider-managed resume, but DeterminAgent uses fresh sessions for deterministic orchestration
 
     Note:
         Only Claude supports creating sessions with a custom ID on the first call.
@@ -42,7 +42,7 @@ class SessionManager:
 
         # Subsequent calls - resume session
         flags = session.get_session_flags()
-        # Returns: ["-r", "uuid-here"]
+        # Returns: ["--resume", "uuid-here"]
         ```
 
     Attributes:
@@ -62,12 +62,11 @@ class SessionManager:
         Args:
             provider: CLI provider (claude, gemini, copilot, codex).
             session_id: Optional explicit session ID. If not provided,
-                       a new UUID will be generated (Gemini defaults to
-                       "latest" since it resumes by latest or index).
+                       a new UUID will be generated.
         """
         self.provider: Provider = provider
         if session_id is None:
-            session_id = "latest" if provider == "gemini" else str(uuid.uuid4())
+            session_id = str(uuid.uuid4())
         self.session_id: str = session_id
         self.call_count: int = 0
 
@@ -83,10 +82,10 @@ class SessionManager:
         Return provider-specific session flags.
 
         Session support:
-        - Claude: `--session-id <uuid>` for first call, `-r <uuid>` for resume
-        - Gemini: Always empty (no session resume support)
-        - Copilot: Always empty (no session resume support)
-        - Codex: Always empty (no session resume support)
+        - Claude: `--session-id <uuid>` for first call, `--resume <uuid>` for resume
+        - Gemini: Always empty (DeterminAgent intentionally avoids provider-managed resume)
+        - Copilot: Always empty (DeterminAgent intentionally avoids provider-managed resume)
+        - Codex: Always empty (DeterminAgent intentionally avoids provider-managed resume)
 
         Args:
             is_first_call: Override for first-call detection. If None,
@@ -108,7 +107,7 @@ class SessionManager:
 
         if is_first_call:
             return ["--session-id", self.session_id]
-        return ["-r", self.session_id]
+        return ["--resume", self.session_id]
 
     def build_prompt(self, prompt: str) -> str:
         """

@@ -66,7 +66,7 @@ class TestClaudeSessionFlags:
         flags = manager.get_session_flags()
 
         # Assert
-        assert flags == ["-r", "test-uuid"]
+        assert flags == ["--resume", "test-uuid"]
 
     def test_get_session_flags_explicit_first_call_overrides_count(self) -> None:
         """Test explicit first call override."""
@@ -88,7 +88,7 @@ class TestClaudeSessionFlags:
         # Act
         flags = manager.get_session_flags(is_first_call=False)
         # Assert
-        assert flags == ["-r", "test-uuid"]
+        assert flags == ["--resume", "test-uuid"]
 
 
 class TestGeminiSessionFlags:

@@ -1822,12 +1822,12 @@
 </span></code></pre></div></p>
 <h4 id="sessionmanager">SessionManager</h4>
 <p>Handles native session flags for providers that support custom session IDs.
-- <strong>Claude</strong>: Full support via <code>--session-id &lt;uuid&gt;</code> for first call, <code>-r &lt;uuid&gt;</code> for resume.
-- <strong>Gemini</strong>: No session resume (always fresh sessions)
-- <strong>Copilot</strong>: No session resume (always fresh sessions)
-- <strong>Codex</strong>: No session resume (always fresh sessions)</p>
+- <strong>Claude</strong>: Full deterministic support via <code>--session-id &lt;uuid&gt;</code> for first call, <code>--resume &lt;uuid&gt;</code> for resume.
+- <strong>Gemini</strong>: Upstream resume exists, but DeterminAgent keeps fresh sessions because Gemini owns the session identity.
+- <strong>Copilot</strong>: Upstream resume exists, but DeterminAgent keeps fresh sessions because Copilot owns the session identity.
+- <strong>Codex</strong>: Upstream resume exists, but DeterminAgent keeps fresh sessions because Codex owns the session identity.</p>
 <blockquote>
-<p><strong>Note:</strong> Only Claude supports creating sessions with a custom ID. Other providers generate session IDs internally, making them incompatible with multi-agent workflows where each agent needs its own persistent session.</p>
+<p><strong>Note:</strong> Only Claude supports creating sessions with a custom ID. Other providers now expose resume/continue flows, but they generate session IDs internally, so DeterminAgent treats them as non-deterministic for multi-agent session orchestration.</p>
 </blockquote>
 <h4 id="provider-adapters">Provider Adapters</h4>
 <p>Specific implementations for each CLI tool. Each adapter handles command building, output parsing, and error normalization.
@@ -1848,32 +1848,39 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Session IDs</strong></td>
-<td>✅ <code>--session-id</code>, <code>-r</code></td>
-<td>❌ Not supported</td>
-<td>❌ Not supported</td>
-<td>❌ Not supported</td>
+<td><strong>Caller-defined Session IDs</strong></td>
+<td>✅ <code>--session-id</code>, <code>--resume</code></td>
+<td>❌ No</td>
+<td>❌ No</td>
+<td>❌ No</td>
+</tr>
+<tr>
+<td><strong>Provider-managed Resume</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
 </tr>
 <tr>
 <td><strong>System Prompt</strong></td>
 <td>✅ <code>--system-prompt</code></td>
 <td>⚠️ No direct flag</td>
-<td>⚠️ Via AGENTS/custom instructions</td>
-<td>⚠️ Via <code>AGENTS.md</code></td>
+<td>⚠️ Via agents/custom instructions</td>
+<td>⚠️ Via config/instructions</td>
 </tr>
 <tr>
 <td><strong>Output Format</strong></td>
 <td>text/json/stream-json (print mode)</td>
 <td>text/json/stream-json</td>
-<td>text (optional streaming)</td>
-<td>text (JSONL with <code>--json</code>)</td>
+<td>text/json (+ stream toggle)</td>
+<td>text or JSONL with <code>--json</code></td>
 </tr>
 <tr>
 <td><strong>Tool Permissions</strong></td>
-<td><code>--allowed-tools</code>, <code>--disallowed-tools</code></td>
+<td><code>--allowed-tools</code>, <code>--disallowed-tools</code>, <code>--tools</code></td>
 <td><code>--allowed-tools</code>, <code>--approval-mode</code></td>
-<td><code>--allow-all-tools</code>, <code>--allow-tool</code></td>
-<td><code>--search</code> (web), config.toml</td>
+<td><code>--allow-all-tools</code>, <code>--allow-tool</code>, URL allow/deny</td>
+<td>approvals, profiles, config, optional search</td>
 </tr>
 <tr>
 <td><strong>Sandbox Mode</strong></td>
@@ -1921,7 +1928,7 @@
 <h3 id="session-management">Session Management</h3>
 <ul>
 <li><strong>Alternative</strong>: File-based (JSON) or SQLite store.</li>
-<li><strong>Decision</strong>: <strong>Native sessions</strong>. Best performance, no additional storage overhead, and all 4 target CLIs now support it natively.</li>
+<li><strong>Decision</strong>: <strong>Native sessions where deterministic</strong>. Claude gets true deterministic native sessions; Gemini, Copilot, and Codex expose provider-owned resume flows upstream, but DeterminAgent deliberately keeps them fresh unless the abstraction is extended safely.</li>
 </ul>
 <h3 id="design-decisions">Design Decisions</h3>
 <ul>
@@ -1953,28 +1960,28 @@
 <tr>
 <td><code>balanced</code></td>
 <td>sonnet</td>
-<td>claude-sonnet-4.5</td>
-<td>gemini-3-pro-preview</td>
-<td>gpt-5.1</td>
+<td>gpt-5-mini</td>
+<td>gemini-3-flash-preview</td>
+<td>gpt-5.4</td>
 </tr>
 <tr>
 <td><code>powerful</code></td>
 <td>opus</td>
-<td>gpt-5</td>
-<td>gemini-3-pro-preview</td>
-<td>gpt-5.1-codex-max</td>
+<td>claude-opus-4.6</td>
+<td>gemini-3.1-pro-preview</td>
+<td>gpt-5.3-codex</td>
 </tr>
 <tr>
 <td><code>reasoning</code></td>
 <td>opus</td>
-<td>gpt-5.2</td>
-<td>gemini-3-pro-preview</td>
-<td>gpt-5.1-codex-max</td>
+<td>gpt-5.4</td>
+<td>gemini-3.1-pro-preview</td>
+<td>gpt-5.4</td>
 </tr>
 <tr>
 <td><code>free</code></td>
 <td>haiku</td>
-<td>claude-haiku-4.5</td>
+<td>gpt-5-mini</td>
 <td>gemini-3-flash-preview</td>
 <td>gpt-5.1-codex-mini</td>
 </tr>
@@ -1984,7 +1991,7 @@
 <ul>
 <li><strong>Claude</strong>: <code>["--allowed-tools", "..."]</code> or <code>["--disallowed-tools", "..."]</code></li>
 <li><strong>Gemini</strong>: <code>["--allowed-tools", "..."]</code> and <code>["--approval-mode", "..."]</code></li>
-<li><strong>Copilot</strong>: <code>["--allow-all-tools"]</code> (required for non-interactive prompts)</li>
+<li><strong>Copilot</strong>: <code>["--allow-all-tools"]</code>, <code>["--allow-tool", "..."]</code>, and <code>--allow-all-urls</code></li>
 <li><strong>Codex</strong>: <code>["--search"]</code> for web search; other permissions via config.toml</li>
 </ul>
 <hr />

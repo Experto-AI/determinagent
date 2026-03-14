@@ -14,6 +14,7 @@ from determinagent.adapters import (
     CopilotAdapter,
     GeminiAdapter,
 )
+from determinagent.adapters.base import ProviderAdapter
 from determinagent.exceptions import (
     ExecutionError,
     ProviderAuthError,
@@ -53,10 +54,10 @@ class TestClaudeAdapter:
         cmd = adapter.build_command(
             prompt="Continue the poem",
             model="sonnet",
-            session_flags=["-r", "test-uuid-123"],
+            session_flags=["--resume", "test-uuid-123"],
         )
         # Assert
-        assert "-r" in cmd
+        assert "--resume" in cmd
         assert "test-uuid-123" in cmd
         assert "-p" in cmd
 
@@ -72,8 +73,8 @@ class TestClaudeAdapter:
             allow_web=True,
         )
         # Assert
-        assert "--allowedTools" in cmd
-        tools_idx = cmd.index("--allowedTools")
+        assert "--allowed-tools" in cmd
+        tools_idx = cmd.index("--allowed-tools")
         tools_value = cmd[tools_idx + 1]
         assert "WebSearch" in tools_value
         assert "WebFetch" in tools_value
@@ -90,8 +91,8 @@ class TestClaudeAdapter:
             tools=["CustomTool1", "CustomTool2"],
         )
         # Assert
-        assert "--allowedTools" in cmd
-        tools_idx = cmd.index("--allowedTools")
+        assert "--allowed-tools" in cmd
+        tools_idx = cmd.index("--allowed-tools")
         tools_value = cmd[tools_idx + 1]
         assert "CustomTool1" in tools_value
         assert "CustomTool2" in tools_value
@@ -109,8 +110,8 @@ class TestClaudeAdapter:
             tools=["CustomTool"],
         )
         # Assert
-        assert "--allowedTools" in cmd
-        tools_idx = cmd.index("--allowedTools")
+        assert "--allowed-tools" in cmd
+        tools_idx = cmd.index("--allowed-tools")
         tools_value = cmd[tools_idx + 1]
         assert "WebSearch" in tools_value
         assert "WebFetch" in tools_value
@@ -258,6 +259,23 @@ class TestCopilotAdapter:
         )
         # Assert
         assert "--allow-all-tools" in cmd
+        assert "--allow-all-urls" in cmd
+
+    def test_build_command_with_custom_tools_returns_allow_tool_flags(self) -> None:
+        """Test command building with explicit tool permissions."""
+        adapter = CopilotAdapter()
+
+        cmd = adapter.build_command(
+            prompt="Inspect",
+            model="balanced",
+            session_flags=[],
+            tools=["write", "read"],
+        )
+
+        assert "--allow-all-tools" not in cmd
+        assert cmd.count("--allow-tool") == 2
+        assert "write" in cmd
+        assert "read" in cmd
 
     def test_model_mapping_resolves_aliases(self) -> None:
         """Test that model aliases are correctly mapped."""
@@ -269,10 +287,13 @@ class TestCopilotAdapter:
         assert "claude-haiku-4.5" in cmd_fast
 
         cmd_balanced = adapter.build_command("test", "balanced", [])
-        assert "claude-sonnet-4.5" in cmd_balanced
+        assert "gpt-5-mini" in cmd_balanced
 
         cmd_powerful = adapter.build_command("test", "powerful", [])
-        assert "claude-opus-4.5" in cmd_powerful
+        assert "claude-opus-4.6" in cmd_powerful
+
+        cmd_reasoning = adapter.build_command("test", "reasoning", [])
+        assert "gpt-5.4" in cmd_reasoning
 
     def test_model_passthrough_keeps_unknown_names(self) -> None:
         """Test that unknown model names pass through unchanged."""
@@ -359,6 +380,7 @@ class TestGeminiAdapter:
         )
         # Assert
         assert "gemini" in cmd
+        assert "--prompt" in cmd
         assert "Explain this" in cmd
         assert "--model" in cmd
         assert "gemini-1.5-pro" in cmd
@@ -376,9 +398,8 @@ class TestGeminiAdapter:
             session_flags=["--resume", "abc-123"],
         )
         # Assert
-        # Gemini adapter ignores session flags
-        assert "--resume" not in cmd
-        assert "abc-123" not in cmd
+        assert "--resume" in cmd
+        assert "abc-123" in cmd
 
     def test_parse_output_json_returns_content(self) -> None:
         """Test parsing valid JSON output."""
@@ -396,7 +417,32 @@ class TestGeminiAdapter:
         # Act
         result = adapter.parse_output('{"text": "Some text"}')
         # Assert
-        assert result == '{"text": "Some text"}'
+        assert result == "Some text"
+
+    def test_parse_output_candidates_returns_nested_text(self) -> None:
+        """Test parsing nested Gemini candidate output."""
+        adapter = GeminiAdapter()
+
+        result = adapter.parse_output(
+            '{"candidates": [{"content": {"parts": [{"text": "Nested text"}]}}]}'
+        )
+
+        assert result == "Nested text"
+
+    def test_build_command_with_sandbox_and_tools_returns_flags(self) -> None:
+        """Test Gemini sandbox and tool passthrough."""
+        adapter = GeminiAdapter()
+
+        cmd = adapter.build_command(
+            prompt="Inspect",
+            model="gemini-2.5-pro",
+            session_flags=[],
+            sandbox="workspace-write",
+            tools=["read_file", "edit_file"],
+        )
+
+        assert "--sandbox" in cmd
+        assert cmd.count("--allowed-tools") == 2
 
     def test_parse_output_malformed_json_returns_raw_text(self) -> None:
         """Test parsing malformed JSON (fallback to text)."""
@@ -451,6 +497,9 @@ class TestCodexAdapter:
         # Assert
         assert "codex" in cmd
         assert "exec" in cmd
+        assert "--json" in cmd
+        assert "--model" in cmd
+        assert "default" in cmd
         assert "Refactor this" in cmd
         assert "--full-auto" in cmd
 
@@ -483,6 +532,7 @@ class TestCodexAdapter:
         # Assert
         assert "--sandbox" in cmd
         assert "workspace-write" in cmd
+        assert "--full-auto" not in cmd
 
     def test_parse_output_jsonl_returns_completed_turn_content(self) -> None:
         """Test parsing JSONL with turn.completed event."""
@@ -496,6 +546,15 @@ class TestCodexAdapter:
         result = adapter.parse_output(raw_output)
         # Assert
         assert result == "Final Code"
+
+    def test_parse_output_message_completed_returns_nested_content(self) -> None:
+        """Test parsing alternative Codex completion events."""
+        adapter = CodexAdapter()
+        raw_output = '{"type": "message.completed", "data": {"message": {"content": "Done"}}}'
+
+        result = adapter.parse_output(raw_output)
+
+        assert result == "Done"
 
     def test_parse_output_no_event_returns_raw_text(self) -> None:
         """Test parsing output when no event is found."""
@@ -523,3 +582,136 @@ class TestCodexAdapter:
         error = adapter.handle_error(127, "codex: command not found")
         # Assert
         assert isinstance(error, ProviderNotAvailable)
+
+
+class LegacyAdapter(ProviderAdapter):
+    """Legacy adapter implementation without tools/sandbox kwargs."""
+
+    provider_name = "legacy"
+
+    def build_command(
+        self,
+        prompt: str,
+        model: str,
+        session_flags: list[str],
+        allow_web: bool = False,
+    ) -> list[str]:
+        return ["legacy", prompt, model, *session_flags, str(allow_web)]
+
+    def parse_output(self, raw_output: str) -> str:
+        return raw_output.strip()
+
+    def handle_error(self, returncode: int, stderr: str) -> Exception:
+        return ExecutionError(
+            stderr, provider=self.provider_name, returncode=returncode, stderr=stderr
+        )
+
+
+class ToolsOnlyAdapter(ProviderAdapter):
+    """Partially migrated adapter that only supports `tools`."""
+
+    provider_name = "tools-only"
+
+    def build_command(
+        self,
+        prompt: str,
+        model: str,
+        session_flags: list[str],
+        allow_web: bool = False,
+        tools: list[str] | None = None,
+    ) -> list[str]:
+        return ["tools-only", prompt, model, *session_flags, str(allow_web), str(tools)]
+
+    def parse_output(self, raw_output: str) -> str:
+        return raw_output.strip()
+
+    def handle_error(self, returncode: int, stderr: str) -> Exception:
+        return ExecutionError(
+            stderr, provider=self.provider_name, returncode=returncode, stderr=stderr
+        )
+
+
+class SandboxOnlyAdapter(ProviderAdapter):
+    """Partially migrated adapter that only supports `sandbox`."""
+
+    provider_name = "sandbox-only"
+
+    def build_command(
+        self,
+        prompt: str,
+        model: str,
+        session_flags: list[str],
+        allow_web: bool = False,
+        sandbox: str | None = None,
+    ) -> list[str]:
+        return ["sandbox-only", prompt, model, *session_flags, str(allow_web), str(sandbox)]
+
+    def parse_output(self, raw_output: str) -> str:
+        return raw_output.strip()
+
+    def handle_error(self, returncode: int, stderr: str) -> Exception:
+        return ExecutionError(
+            stderr, provider=self.provider_name, returncode=returncode, stderr=stderr
+        )
+
+
+class TestProviderAdapterCompatibility:
+    """Tests for backward compatibility in ProviderAdapter.execute."""
+
+    def test_execute_supports_legacy_build_command_signature(
+        self, mock_subprocess: MagicMock
+    ) -> None:
+        """Test legacy subclasses still execute without keyword-only failures."""
+        mock_subprocess.return_value = MagicMock(returncode=0, stdout="ok", stderr="")
+        adapter = LegacyAdapter()
+
+        result = adapter.execute(
+            prompt="Prompt",
+            model="model",
+            session_flags=["--resume", "session-1"],
+            allow_web=True,
+            tools=["Read"],
+            sandbox="read-only",
+        )
+
+        assert result == "ok"
+
+    def test_execute_forwards_tools_when_subclass_only_supports_tools(
+        self, mock_subprocess: MagicMock
+    ) -> None:
+        """Test partial adapter migrations still receive supported kwargs."""
+        mock_subprocess.return_value = MagicMock(returncode=0, stdout="ok", stderr="")
+        adapter = ToolsOnlyAdapter()
+
+        result = adapter.execute(
+            prompt="Prompt",
+            model="model",
+            session_flags=[],
+            allow_web=False,
+            tools=["Read"],
+            sandbox="read-only",
+        )
+
+        assert result == "ok"
+        called_cmd = mock_subprocess.call_args[0][0]
+        assert called_cmd[-1] == "['Read']"
+
+    def test_execute_forwards_sandbox_when_subclass_only_supports_sandbox(
+        self, mock_subprocess: MagicMock
+    ) -> None:
+        """Test partial adapter migrations still receive sandbox kwargs."""
+        mock_subprocess.return_value = MagicMock(returncode=0, stdout="ok", stderr="")
+        adapter = SandboxOnlyAdapter()
+
+        result = adapter.execute(
+            prompt="Prompt",
+            model="model",
+            session_flags=[],
+            allow_web=False,
+            tools=["Read"],
+            sandbox="read-only",
+        )
+
+        assert result == "ok"
+        called_cmd = mock_subprocess.call_args[0][0]
+        assert called_cmd[-1] == "read-only"

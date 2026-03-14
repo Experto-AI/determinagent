@@ -17,30 +17,31 @@ MODEL_MAPPING: dict[str, dict[str, str]] = {
     },
     "balanced": {
         "claude": "sonnet",
-        "gemini": "gemini-3-pro-preview",
-        "copilot": "claude-sonnet-4.5",
-        "codex": "gpt-5.1-codex",
+        "gemini": "gemini-3-flash-preview",
+        "copilot": "gpt-5-mini",
+        "codex": "gpt-5.4",
     },
     "powerful": {
         "claude": "opus",
-        "gemini": "gemini-3-pro-preview",  # Requires Gemini CLI preview features
-        "copilot": "claude-opus-4.5",
-        "codex": "gpt-5.1-codex-max",
+        "gemini": "gemini-3.1-pro-preview",
+        "copilot": "claude-opus-4.6",
+        "codex": "gpt-5.3-codex",
     },
     "reasoning": {
         "claude": "opus",  # Best available reasoning model alias in Claude Code
-        "gemini": "gemini-3-pro-preview",
-        "copilot": "gpt-5.2",
-        "codex": "gpt-5.1-codex-max",
+        "gemini": "gemini-3.1-pro-preview",
+        "copilot": "gpt-5.4",
+        "codex": "gpt-5.4",
     },
     # "free" category: Models with no additional per-token cost.
     # Since CLI tools use subscription-based access, we default to fast/efficient models.
-    # Gemini's free tier commonly exposes Flash-class models, but Gemini 3
-    # requires preview features and may not be enabled for all accounts.
+    # Gemini's free tier commonly exposes Flash-class preview models.
+    # Codex "free" should be interpreted as the lowest practical default,
+    # not a permanent no-cost guarantee.
     "free": {
         "claude": "haiku",  # Fastest, included in subscription
-        "gemini": "gemini-3-flash-preview",  # Requires Gemini CLI preview features
-        "copilot": "claude-haiku-4.5",  # Fastest, included in subscription
+        "gemini": "gemini-3-flash-preview",
+        "copilot": "gpt-5-mini",  # Conservative included-tier default
         "codex": "gpt-5.1-codex-mini",  # Fastest, included in subscription
     },
 }
@@ -59,7 +60,7 @@ def resolve_model_alias(alias: str, provider: str) -> str:
 
     Examples:
         resolve_model_alias("fast", "claude") → "haiku"
-        resolve_model_alias("balanced", "copilot") → "claude-sonnet-4.5"
+        resolve_model_alias("balanced", "copilot") → "gpt-5-mini"
         resolve_model_alias("opus", "claude") → "opus" (passthrough)
     """
     if alias in MODEL_MAPPING:
@@ -72,16 +73,16 @@ def resolve_model_alias(alias: str, provider: str) -> str:
 # ============================================================================
 
 TOOL_COMMANDS: dict[str, Callable[[list[str]], list[str]]] = {
-    "claude": lambda tools: ["--allowedTools", ",".join(tools)],
-    "gemini": lambda _: [],  # Built-in, configured via extensions
-    "copilot": lambda tools: ["--allow-all-tools"] if tools else [],
+    "claude": lambda tools: ["--allowed-tools", ",".join(tools)],
+    "gemini": lambda tools: [item for tool in tools for item in ("--allowed-tools", tool)],
+    "copilot": lambda tools: [item for tool in tools for item in ("--allow-tool", tool)],
     "codex": lambda _: [],  # Configured via config.toml features
 }
 
 WEB_SEARCH_CONFIG: dict[str, list[str]] = {
-    "claude": ["--allowedTools", "WebSearch,WebFetch"],
+    "claude": ["--allowed-tools", "WebSearch,WebFetch"],
     "gemini": [],  # Built-in
-    "copilot": ["--allow-all-tools"],
+    "copilot": ["--allow-all-urls"],
     "codex": [],  # Enabled via config.toml: web_search_request = true
 }
 

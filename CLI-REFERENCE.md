@@ -95,7 +95,7 @@ claude --continue --debug "next steps"
 |------|--------|---------|
 | `prompt` | `gemini "query"` | One-shot prompt (non-interactive) |
 | `-i` / `--prompt-interactive` | `gemini -i "text"` | Execute prompt and continue interactively |
-| `-p` / `--prompt` | `gemini -p "query"` | Deprecated (use positional prompt) |
+| `-p` / `--prompt` | `gemini -p "query"` | Current headless/non-interactive prompt mode |
 
 ### Model Selection
 
@@ -111,7 +111,7 @@ claude --continue --debug "next steps"
 | `--list-sessions` | `gemini --list-sessions` | List all sessions |
 | `--delete-session` | `gemini --delete-session 2` | Delete session by index |
 
-> **Note:** Gemini's session resume only works with session IDs/indices that Gemini itself created. Unlike Claude's `--session-id`, you cannot specify a custom session ID on the first call. **DeterminAgent does not use Gemini's session resume** for this reason—each call starts a fresh session.
+> **Note:** Gemini's session resume only works with session IDs/indices that Gemini itself created. Unlike Claude's `--session-id`, you cannot specify a custom session ID on the first call. **DeterminAgent keeps Gemini on fresh sessions by default** for deterministic multi-agent orchestration, even though upstream Gemini resume exists.
 
 ### Safety & Approval
 
@@ -158,7 +158,7 @@ gemini -m <model> -i "complex task"
 
 | Flag | Format | Purpose |
 |------|--------|---------|
-| `-p` / `--prompt` | `copilot -p "task"` | Non-interactive prompt (requires `--allow-all-tools`) |
+| `-p` / `--prompt` | `copilot -p "task"` | Non-interactive prompt. `DeterminAgent` uses `--allow-all-tools` by default, or selective `--allow-tool` flags when a tool list is configured. |
 | `-i` / `--interactive` | `copilot -i "prompt"` | Start interactive mode and run prompt |
 
 ### Session Management
@@ -169,7 +169,7 @@ gemini -m <model> -i "complex task"
 | `--resume <id>` | `copilot --resume abc123` | Resume by session ID |
 | `--continue` | `copilot --continue` | Resume most recent session |
 
-> **Note:** Copilot's session resume only works with session IDs that Copilot itself created. Unlike Claude's `--session-id`, you cannot specify a custom session ID on the first call. **DeterminAgent does not use Copilot's session resume** for this reason—each call starts a fresh session.
+> **Note:** Copilot's session resume only works with session IDs that Copilot itself created. Unlike Claude's `--session-id`, you cannot specify a custom session ID on the first call. **DeterminAgent keeps Copilot on fresh sessions by default** for deterministic multi-agent orchestration, even though upstream Copilot resume exists.
 
 ### Model Selection
 
@@ -177,7 +177,7 @@ gemini -m <model> -i "complex task"
 |------|--------|---------|
 | `--model` | `copilot --model gpt-5` | Specify model (see `copilot --help` for choices) |
 
-**Available Models:** `claude-sonnet-4.5`, `claude-haiku-4.5`, `claude-opus-4.5`, `claude-sonnet-4`, `gpt-5.1-codex-max`, `gpt-5.1-codex`, `gpt-5.2`, `gpt-5.1`, `gpt-5`, `gpt-5.1-codex-mini`, `gpt-5-mini`, `gpt-4.1`, `gemini-3-pro-preview`
+**Available Models:** Official Copilot model docs now list newer families including `claude-haiku-4.5`, `claude-sonnet-4.6`, `claude-opus-4.6`, `gpt-5-mini`, `gpt-5.2`, `gpt-5.4`, and current Gemini options. Exact availability is plan- and client-dependent, so verify against your installed Copilot build.
 
 ### Tool & URL Permissions
 
@@ -192,6 +192,8 @@ gemini -m <model> -i "complex task"
 | `--deny-url` | `copilot --deny-url https://example.com` | Deny URLs or domains |
 | `--allow-all-urls` | `copilot --allow-all-urls` | Allow all URLs without confirmation |
 
+> **DeterminAgent status:** the adapter now supports selective `--allow-tool` passthrough when `UnifiedAgent(..., tools=[...])` is configured, and enables `--allow-all-urls` when `allow_web=True` is used.
+
 ### Output & Logging
 
 | Flag | Format | Purpose |
@@ -203,7 +205,7 @@ gemini -m <model> -i "complex task"
 ### Examples
 
 ```bash
-# Non-interactive mode (requires allow-all-tools)
+# Non-interactive mode with tool permissions
 copilot -p "List all open issues assigned to me" --allow-all-tools
 
 # Using custom agent
@@ -213,7 +215,7 @@ copilot --agent=refactor-agent -p "Refactor this code" --allow-all-tools
 copilot --resume
 
 # Select specific model
-copilot --model "claude-sonnet-4.5" -p "Analyze this code" --allow-all-tools
+copilot --model "gpt-5.4" -p "Analyze this code" --allow-all-tools
 ```
 
 ---
@@ -233,7 +235,7 @@ copilot --model "claude-sonnet-4.5" -p "Analyze this code" --allow-all-tools
 | `codex resume --last` | Resume most recent interactive session |
 | `codex review` | Non-interactive code review |
 
-> **Note:** Codex's session resume only works with session IDs that Codex itself created. Unlike Claude's `--session-id`, you cannot specify a custom session ID on the first call. **DeterminAgent does not use Codex's session resume** for this reason—each call starts a fresh session.
+> **Note:** Codex's session resume only works with session IDs that Codex itself created. Unlike Claude's `--session-id`, you cannot specify a custom session ID on the first call. **DeterminAgent keeps Codex on fresh sessions by default** for deterministic multi-agent orchestration, even though upstream Codex resume exists.
 
 ### Model Selection
 
@@ -273,6 +275,8 @@ copilot --model "claude-sonnet-4.5" -p "Analyze this code" --allow-all-tools
 | `--add-dir` | `codex --add-dir ../backend` | Add extra writable roots |
 | `-i` / `--image` | `codex -i screenshot.png "explain"` | Attach images |
 | `--search` | `codex --search` | Enable web search tool |
+
+> **DeterminAgent status:** the Codex adapter now executes in JSON event mode (`codex exec --json`) so parsed output matches the documented JSONL stream.
 
 ### MCP Server Management
 

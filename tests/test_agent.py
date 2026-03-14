@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from determinagent import SessionManager, UnifiedAgent
 from determinagent.agent import get_adapter
+from determinagent.constants import resolve_model_alias
 from determinagent.exceptions import (
     ConfigurationError,
     ExecutionError,
@@ -110,6 +111,40 @@ class TestUnifiedAgentInit:
         # Assert
         # "balanced" should resolve to "sonnet" for Claude
         assert agent.model == "sonnet"
+
+    def test_init_tools_sets_attribute(self) -> None:
+        """Test configured tools are stored on the agent."""
+        session = SessionManager("claude")
+
+        agent = UnifiedAgent(
+            provider="claude",
+            model="balanced",
+            role="tester",
+            instructions="Test",
+            session=session,
+            tools=["Bash", "Read"],
+        )
+
+        assert agent.tools == ["Bash", "Read"]
+
+
+class TestModelAliases:
+    """Tests for provider model alias resolution."""
+
+    def test_resolve_model_alias_returns_latest_provider_defaults(self) -> None:
+        """Test refreshed alias mappings for all providers."""
+        assert resolve_model_alias("fast", "gemini") == "gemini-3-flash-preview"
+        assert resolve_model_alias("balanced", "gemini") == "gemini-3-flash-preview"
+        assert resolve_model_alias("powerful", "gemini") == "gemini-3.1-pro-preview"
+        assert resolve_model_alias("balanced", "copilot") == "gpt-5-mini"
+        assert resolve_model_alias("powerful", "copilot") == "claude-opus-4.6"
+        assert resolve_model_alias("reasoning", "copilot") == "gpt-5.4"
+        assert resolve_model_alias("balanced", "codex") == "gpt-5.4"
+        assert resolve_model_alias("powerful", "codex") == "gpt-5.3-codex"
+
+    def test_resolve_model_alias_unknown_value_passes_through(self) -> None:
+        """Test that explicit model names are not remapped."""
+        assert resolve_model_alias("claude-sonnet-4-6", "claude") == "claude-sonnet-4-6"
 
 
 class TestUnifiedAgentSend:
@@ -257,6 +292,34 @@ class TestUnifiedAgentSend:
         call_args = mock_subprocess.call_args[0][0]
         prompt = call_args[call_args.index("-p") + 1]
         assert "CRITICAL FORMAT REQUIREMENT" in prompt
+
+    def test_send_passes_tools_and_sandbox_to_adapter(self) -> None:
+        """Test that configured tools and sandbox reach adapter execution."""
+        session = SessionManager("codex")
+        agent = UnifiedAgent(
+            provider="codex",
+            model="balanced",
+            role="test",
+            instructions="Test",
+            session=session,
+            sandbox="workspace-write",
+            tools=["read_file"],
+        )
+
+        agent.adapter.execute = MagicMock(return_value="ok")  # type: ignore[method-assign]
+
+        result = agent.send("Test", max_retries=0, allow_web=True)
+
+        assert result == "ok"
+        agent.adapter.execute.assert_called_once_with(  # type: ignore[attr-defined]
+            "Test\n\nTest",
+            agent.model,
+            [],
+            allow_web=True,
+            tools=["read_file"],
+            sandbox="workspace-write",
+            timeout=120,
+        )
 
 
 class TestUnifiedAgentSendStructured:

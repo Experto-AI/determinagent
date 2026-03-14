@@ -20,7 +20,7 @@ class ClaudeAdapter(ProviderAdapter):
     Adapter for Claude Code CLI.
 
     Supports:
-    - Session management via --session-id and -r flags
+    - Session management via --session-id and --resume flags
     - Model selection via --model flag
     - Web search via --allowedTools WebSearch,WebFetch
     - Custom tool permissions
@@ -54,7 +54,7 @@ class ClaudeAdapter(ProviderAdapter):
         Args:
             prompt: The prompt to send to Claude.
             model: Model name (e.g., "haiku", "sonnet", "opus").
-            session_flags: Session management flags (--session-id or -r).
+            session_flags: Session management flags (--session-id or --resume).
             allow_web: Enable WebSearch and WebFetch tools.
             tools: Additional tools to allow.
             sandbox: Unused (Claude doesn't support sandbox mode).
@@ -64,9 +64,9 @@ class ClaudeAdapter(ProviderAdapter):
 
         Examples:
             First call:  ["claude", "-p", "prompt", "--session-id", "uuid"]
-            Resume:      ["claude", "-p", "prompt", "-r", "uuid"]
-            With web:    ["claude", "-p", "prompt", "-r", "uuid",
-                          "--allowedTools", "WebSearch,WebFetch"]
+            Resume:      ["claude", "-p", "prompt", "--resume", "uuid"]
+            With web:    ["claude", "-p", "prompt", "--resume", "uuid",
+                          "--allowed-tools", "WebSearch,WebFetch"]
         """
         cmd = ["claude"]
 
@@ -74,7 +74,7 @@ class ClaudeAdapter(ProviderAdapter):
         if model:
             cmd.extend(["--model", model])
 
-        # Add session flags (--session-id or -r)
+        # Add session flags (--session-id or --resume)
         cmd.extend(session_flags)
 
         # Add prompt
@@ -88,7 +88,7 @@ class ClaudeAdapter(ProviderAdapter):
             allowed_tools.extend(tools)
 
         if allowed_tools:
-            cmd.extend(["--allowedTools", ",".join(allowed_tools)])
+            cmd.extend(["--allowed-tools", ",".join(allowed_tools)])
 
         return cmd
 

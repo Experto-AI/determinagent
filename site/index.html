@@ -520,6 +520,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="🧩 Compatibility Matrix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audit-snapshot-march-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit Snapshot — March 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1385,6 +1402,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="🧩 Compatibility Matrix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audit-snapshot-march-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit Snapshot — March 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1521,12 +1555,13 @@
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;claude&quot;</span><span class="p">,</span>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;balanced&quot;</span><span class="p">,</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;Technical Blogger&quot;</span><span class="p">,</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">session</span><span class="o">=</span><span class="n">SessionManager</span><span class="p">(</span><span class="s2">&quot;claude&quot;</span><span class="p">)</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">)</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># Send a prompt - zero per-token cost!</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">response</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Explain LangGraph in 3 sentences.&quot;</span><span class="p">)</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>   <span class="n">instructions</span><span class="o">=</span><span class="s2">&quot;Write concise, technically accurate content.&quot;</span><span class="p">,</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">session</span><span class="o">=</span><span class="n">SessionManager</span><span class="p">(</span><span class="s2">&quot;claude&quot;</span><span class="p">)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">)</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1"># Send a prompt - zero per-token cost!</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">response</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Explain LangGraph in 3 sentences.&quot;</span><span class="p">)</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="template-flows">Template Flows</h3>
 <p>Don't start from scratch. Use our pre-built Python templates in the <code>flows/</code> directory:
@@ -1542,42 +1577,53 @@
 <tr>
 <th style="text-align: left;">Provider</th>
 <th style="text-align: left;">Adapter Status</th>
-<th style="text-align: left;">Session Support</th>
-<th style="text-align: left;">Web Search</th>
-<th style="text-align: left;">Model Aliases</th>
+<th style="text-align: left;">DeterminAgent Session Mode</th>
+<th style="text-align: left;">Upstream CLI Resume</th>
+<th style="text-align: left;">Search / Web in Upstream CLI</th>
+<th style="text-align: left;">Current Library Surface</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;"><strong>Claude Code</strong></td>
 <td style="text-align: left;">✅ Alpha</td>
-<td style="text-align: left;">✅ Native (Resume)</td>
+<td style="text-align: left;">✅ Deterministic <code>--session-id</code> + <code>--resume</code></td>
 <td style="text-align: left;">✅ Yes</td>
-<td style="text-align: left;">fast, balanced, powerful, reasoning, free</td>
+<td style="text-align: left;">✅ Yes</td>
+<td style="text-align: left;">Models, deterministic sessions, web tools, custom allowed tools</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Copilot</strong></td>
 <td style="text-align: left;">✅ Alpha</td>
-<td style="text-align: left;">❌ No (Fresh Session)</td>
+<td style="text-align: left;">⚠️ Fresh session by default</td>
+<td style="text-align: left;">✅ Yes (provider-managed)</td>
 <td style="text-align: left;">✅ Yes</td>
-<td style="text-align: left;">fast, balanced, powerful, reasoning, free</td>
+<td style="text-align: left;">Models, non-interactive prompts, tool/url permission flags</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Gemini CLI</strong></td>
 <td style="text-align: left;">✅ Alpha</td>
-<td style="text-align: left;">❌ No (Fresh Session)</td>
-<td style="text-align: left;">❌ No</td>
-<td style="text-align: left;">fast, balanced, powerful, reasoning, free</td>
+<td style="text-align: left;">⚠️ Fresh session by default</td>
+<td style="text-align: left;">✅ Yes (provider-managed)</td>
+<td style="text-align: left;">✅ Yes</td>
+<td style="text-align: left;">Models, headless <code>--prompt</code>, JSON output, sandbox/tool passthrough</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>OpenAI Codex</strong></td>
 <td style="text-align: left;">✅ Alpha</td>
-<td style="text-align: left;">❌ No (Fresh Session)</td>
-<td style="text-align: left;">❌ No</td>
-<td style="text-align: left;">fast, balanced, powerful, reasoning, free</td>
+<td style="text-align: left;">⚠️ Fresh session by default</td>
+<td style="text-align: left;">✅ Yes (provider-managed)</td>
+<td style="text-align: left;">✅ Yes</td>
+<td style="text-align: left;">Models, JSON exec mode, sandbox, structured event parsing</td>
 </tr>
 </tbody>
 </table>
+<h3 id="audit-snapshot-march-2026">Audit Snapshot — March 2026</h3>
+<ul>
+<li><code>Claude Code</code> remains the only provider where DeterminAgent can create a deterministic first-call session ID itself.</li>
+<li><code>Copilot CLI</code>, <code>Gemini CLI</code>, and <code>Codex CLI</code> document resume flows upstream, but those session IDs are provider-owned. DeterminAgent still defaults to fresh sessions there to keep orchestration deterministic.</li>
+<li>The library now uses Gemini headless mode, Codex JSON exec mode, and forwards configured <code>tools</code> and <code>sandbox</code> through <code>UnifiedAgent</code>.</li>
+</ul>
 <hr />
 <h2 id="model-alias-map">🎯 Model Alias Map</h2>
 <p>DeterminAgent resolves model aliases per provider so you can keep flows consistent.</p>
@@ -1602,29 +1648,29 @@
 <tr>
 <td style="text-align: left;">balanced</td>
 <td style="text-align: left;">sonnet</td>
-<td style="text-align: left;">gemini-3-pro-preview</td>
-<td style="text-align: left;">claude-sonnet-4.5</td>
-<td style="text-align: left;">gpt-5.1-codex</td>
+<td style="text-align: left;">gemini-3-flash-preview</td>
+<td style="text-align: left;">gpt-5-mini</td>
+<td style="text-align: left;">gpt-5.4</td>
 </tr>
 <tr>
 <td style="text-align: left;">powerful</td>
 <td style="text-align: left;">opus</td>
-<td style="text-align: left;">gemini-3-pro-preview</td>
-<td style="text-align: left;">claude-opus-4.5</td>
-<td style="text-align: left;">gpt-5.1-codex-max</td>
+<td style="text-align: left;">gemini-3.1-pro-preview</td>
+<td style="text-align: left;">claude-opus-4.6</td>
+<td style="text-align: left;">gpt-5.3-codex</td>
 </tr>
 <tr>
 <td style="text-align: left;">reasoning</td>
 <td style="text-align: left;">opus</td>
-<td style="text-align: left;">gemini-3-pro-preview</td>
-<td style="text-align: left;">gpt-5.2</td>
-<td style="text-align: left;">gpt-5.1-codex-max</td>
+<td style="text-align: left;">gemini-3.1-pro-preview</td>
+<td style="text-align: left;">gpt-5.4</td>
+<td style="text-align: left;">gpt-5.4</td>
 </tr>
 <tr>
 <td style="text-align: left;">free</td>
 <td style="text-align: left;">haiku</td>
 <td style="text-align: left;">gemini-3-flash-preview</td>
-<td style="text-align: left;">claude-haiku-4.5</td>
+<td style="text-align: left;">gpt-5-mini</td>
 <td style="text-align: left;">gpt-5.1-codex-mini</td>
 </tr>
 </tbody>
@@ -1632,8 +1678,10 @@
 <p>Notes:
 - You can always pass an exact model string to override the alias.
 - Availability depends on your provider plan and CLI version.
-- Gemini 3 preview models require enabling Preview Features in Gemini CLI; if unavailable, pass <code>gemini-2.5-pro</code> or <code>gemini-2.5-flash</code>.
-- Codex CLI does not enumerate models in <code>--help</code>; defaults mirror Codex model names exposed by Copilot CLI.</p>
+- Gemini aliases now target current Gemini 3.x CLI-safe models: <code>gemini-3-flash-preview</code> for fast/default work and <code>gemini-3.1-pro-preview</code> for top-end reasoning.
+- <code>gemini-3.1-flash-lite-preview</code> exists in the Gemini API, but current Gemini CLI validation does not reliably expose it yet.
+- Copilot <code>powerful</code> and <code>reasoning</code> use newer premium models and may require broader plan access than <code>gpt-5-mini</code>.
+- Codex and Copilot model inventories change frequently; aliases are conservative defaults, not an exhaustive upstream model list.</p>
 <hr />
 <h2 id="troubleshooting">🛠️ Troubleshooting</h2>
 <h3 id="common-issues">Common Issues</h3>

@@ -126,6 +126,7 @@ class UnifiedAgent:
         instructions: str,
         session: SessionManager,
         sandbox: str | None = None,
+        tools: list[str] | None = None,
     ) -> None:
         """
         Initialize a unified agent.
@@ -137,6 +138,7 @@ class UnifiedAgent:
             instructions: System prompt / instructions prepended to all prompts.
             session: `SessionManager` instance for session handling.
             sandbox: Sandbox mode for Codex (read-only/workspace-write/full-access).
+            tools: Provider-specific tools to allow for this agent.
 
         Raises:
             `ConfigurationError`: If provider is unknown.
@@ -148,6 +150,7 @@ class UnifiedAgent:
         self.role: str = role
         self.instructions: str = instructions
         self.sandbox: str | None = sandbox
+        self.tools: list[str] | None = tools
 
     def send(
         self,
@@ -210,6 +213,8 @@ class UnifiedAgent:
                         self.model,
                         session_flags,
                         allow_web=allow_web,
+                        tools=self.tools,
+                        sandbox=self.sandbox,
                         timeout=timeout,
                     )
 

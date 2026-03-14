@@ -7,7 +7,8 @@ providing a consistent API for building commands, parsing output, and handling e
 
 import subprocess
 from abc import ABC, abstractmethod
-from typing import Literal
+from inspect import Parameter, signature
+from typing import Any, Literal, cast
 
 from ..exceptions import (
     ExecutionError,
@@ -141,6 +142,8 @@ class ProviderAdapter(ABC):
         model: str,
         session_flags: list[str],
         allow_web: bool = False,
+        tools: list[str] | None = None,
+        sandbox: str | None = None,
         timeout: int = 120,
     ) -> str:
         """
@@ -157,6 +160,8 @@ class ProviderAdapter(ABC):
             model: Model name or alias.
             session_flags: Session management flags.
             allow_web: Enable web tools.
+            tools: Provider-specific allowed tool list.
+            sandbox: Provider-specific sandbox mode.
             timeout: Command timeout in seconds (default: 120).
 
         Returns:
@@ -169,7 +174,26 @@ class ProviderAdapter(ABC):
             `DeterminAgentTimeoutError`: Command timed out.
             `KeyboardInterrupt`: User interrupted.
         """
-        cmd = self.build_command(prompt, model, session_flags, allow_web)
+        build_signature = signature(self.build_command)
+        parameter_kinds = {param.kind for param in build_signature.parameters.values()}
+        accepts_kwargs = Parameter.VAR_KEYWORD in parameter_kinds
+        accepts_tools = accepts_kwargs or "tools" in build_signature.parameters
+        accepts_sandbox = accepts_kwargs or "sandbox" in build_signature.parameters
+
+        build_kwargs: dict[str, object] = {"allow_web": allow_web}
+        if accepts_tools:
+            build_kwargs["tools"] = tools
+        if accepts_sandbox:
+            build_kwargs["sandbox"] = sandbox
+
+        build_command = cast(Any, self.build_command)
+
+        cmd = build_command(
+            prompt,
+            model,
+            session_flags,
+            **build_kwargs,
+        )
 
         try:
             result = subprocess.run(

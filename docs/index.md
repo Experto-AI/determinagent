@@ -52,6 +52,7 @@ writer = UnifiedAgent(
     provider="claude",
     model="balanced",
     role="Technical Blogger",
+   instructions="Write concise, technically accurate content.",
     session=SessionManager("claude")
 )
 
@@ -75,12 +76,18 @@ python flows/blog/main.py "My Blog Topic" --writer claude --editor copilot
 
 ## 🧩 Compatibility Matrix
 
-| Provider | Adapter Status | Session Support | Web Search | Model Aliases |
-| :--- | :--- | :--- | :--- | :--- |
-| **Claude Code** | ✅ Alpha | ✅ Native (Resume) | ✅ Yes | fast, balanced, powerful, reasoning, free |
-| **Copilot** | ✅ Alpha | ❌ No (Fresh Session) | ✅ Yes | fast, balanced, powerful, reasoning, free |
-| **Gemini CLI** | ✅ Alpha | ❌ No (Fresh Session) | ❌ No | fast, balanced, powerful, reasoning, free |
-| **OpenAI Codex**| ✅ Alpha | ❌ No (Fresh Session) | ❌ No | fast, balanced, powerful, reasoning, free |
+| Provider | Adapter Status | DeterminAgent Session Mode | Upstream CLI Resume | Search / Web in Upstream CLI | Current Library Surface |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Claude Code** | ✅ Alpha | ✅ Deterministic `--session-id` + `--resume` | ✅ Yes | ✅ Yes | Models, deterministic sessions, web tools, custom allowed tools |
+| **Copilot** | ✅ Alpha | ⚠️ Fresh session by default | ✅ Yes (provider-managed) | ✅ Yes | Models, non-interactive prompts, tool/url permission flags |
+| **Gemini CLI** | ✅ Alpha | ⚠️ Fresh session by default | ✅ Yes (provider-managed) | ✅ Yes | Models, headless `--prompt`, JSON output, sandbox/tool passthrough |
+| **OpenAI Codex**| ✅ Alpha | ⚠️ Fresh session by default | ✅ Yes (provider-managed) | ✅ Yes | Models, JSON exec mode, sandbox, structured event parsing |
+
+### Audit Snapshot — March 2026
+
+- `Claude Code` remains the only provider where DeterminAgent can create a deterministic first-call session ID itself.
+- `Copilot CLI`, `Gemini CLI`, and `Codex CLI` document resume flows upstream, but those session IDs are provider-owned. DeterminAgent still defaults to fresh sessions there to keep orchestration deterministic.
+- The library now uses Gemini headless mode, Codex JSON exec mode, and forwards configured `tools` and `sandbox` through `UnifiedAgent`.
 
 ---
 
@@ -91,16 +98,18 @@ DeterminAgent resolves model aliases per provider so you can keep flows consiste
 | Alias | Claude Code | Gemini CLI | Copilot | OpenAI Codex |
 | :--- | :--- | :--- | :--- | :--- |
 | fast | haiku | gemini-3-flash-preview | claude-haiku-4.5 | gpt-5.1-codex-mini |
-| balanced | sonnet | gemini-3-pro-preview | claude-sonnet-4.5 | gpt-5.1-codex |
-| powerful | opus | gemini-3-pro-preview | claude-opus-4.5 | gpt-5.1-codex-max |
-| reasoning | opus | gemini-3-pro-preview | gpt-5.2 | gpt-5.1-codex-max |
-| free | haiku | gemini-3-flash-preview | claude-haiku-4.5 | gpt-5.1-codex-mini |
+| balanced | sonnet | gemini-3-flash-preview | gpt-5-mini | gpt-5.4 |
+| powerful | opus | gemini-3.1-pro-preview | claude-opus-4.6 | gpt-5.3-codex |
+| reasoning | opus | gemini-3.1-pro-preview | gpt-5.4 | gpt-5.4 |
+| free | haiku | gemini-3-flash-preview | gpt-5-mini | gpt-5.1-codex-mini |
 
 Notes:
 - You can always pass an exact model string to override the alias.
 - Availability depends on your provider plan and CLI version.
-- Gemini 3 preview models require enabling Preview Features in Gemini CLI; if unavailable, pass `gemini-2.5-pro` or `gemini-2.5-flash`.
-- Codex CLI does not enumerate models in `--help`; defaults mirror Codex model names exposed by Copilot CLI.
+- Gemini aliases now target current Gemini 3.x CLI-safe models: `gemini-3-flash-preview` for fast/default work and `gemini-3.1-pro-preview` for top-end reasoning.
+- `gemini-3.1-flash-lite-preview` exists in the Gemini API, but current Gemini CLI validation does not reliably expose it yet.
+- Copilot `powerful` and `reasoning` use newer premium models and may require broader plan access than `gpt-5-mini`.
+- Codex and Copilot model inventories change frequently; aliases are conservative defaults, not an exhaustive upstream model list.
 
 ---
 

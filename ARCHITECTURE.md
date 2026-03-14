@@ -72,12 +72,12 @@ class UnifiedAgent:
 
 #### SessionManager
 Handles native session flags for providers that support custom session IDs.
-- **Claude**: Full support via `--session-id <uuid>` for first call, `-r <uuid>` for resume.
-- **Gemini**: No session resume (always fresh sessions)
-- **Copilot**: No session resume (always fresh sessions)
-- **Codex**: No session resume (always fresh sessions)
+- **Claude**: Full deterministic support via `--session-id <uuid>` for first call, `--resume <uuid>` for resume.
+- **Gemini**: Upstream resume exists, but DeterminAgent keeps fresh sessions because Gemini owns the session identity.
+- **Copilot**: Upstream resume exists, but DeterminAgent keeps fresh sessions because Copilot owns the session identity.
+- **Codex**: Upstream resume exists, but DeterminAgent keeps fresh sessions because Codex owns the session identity.
 
-> **Note:** Only Claude supports creating sessions with a custom ID. Other providers generate session IDs internally, making them incompatible with multi-agent workflows where each agent needs its own persistent session.
+> **Note:** Only Claude supports creating sessions with a custom ID. Other providers now expose resume/continue flows, but they generate session IDs internally, so DeterminAgent treats them as non-deterministic for multi-agent session orchestration.
 
 #### Provider Adapters
 Specific implementations for each CLI tool. Each adapter handles command building, output parsing, and error normalization.
@@ -91,10 +91,11 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 
 | Feature | Claude Code | Gemini CLI | GitHub Copilot | OpenAI Codex |
 |---------|-------------|------------|----------------|--------------|
-| **Session IDs** | ✅ `--session-id`, `-r` | ❌ Not supported | ❌ Not supported | ❌ Not supported |
-| **System Prompt** | ✅ `--system-prompt` | ⚠️ No direct flag | ⚠️ Via AGENTS/custom instructions | ⚠️ Via `AGENTS.md` |
-| **Output Format** | text/json/stream-json (print mode) | text/json/stream-json | text (optional streaming) | text (JSONL with `--json`) |
-| **Tool Permissions** | `--allowed-tools`, `--disallowed-tools` | `--allowed-tools`, `--approval-mode` | `--allow-all-tools`, `--allow-tool` | `--search` (web), config.toml |
+| **Caller-defined Session IDs** | ✅ `--session-id`, `--resume` | ❌ No | ❌ No | ❌ No |
+| **Provider-managed Resume** | ✅ | ✅ | ✅ | ✅ |
+| **System Prompt** | ✅ `--system-prompt` | ⚠️ No direct flag | ⚠️ Via agents/custom instructions | ⚠️ Via config/instructions |
+| **Output Format** | text/json/stream-json (print mode) | text/json/stream-json | text/json (+ stream toggle) | text or JSONL with `--json` |
+| **Tool Permissions** | `--allowed-tools`, `--disallowed-tools`, `--tools` | `--allowed-tools`, `--approval-mode` | `--allow-all-tools`, `--allow-tool`, URL allow/deny | approvals, profiles, config, optional search |
 | **Sandbox Mode** | ❌ No | ✅ `--sandbox` | ❌ No | ✅ `--sandbox` |
 
 ### When to Use Each Provider
@@ -112,7 +113,7 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 
 ### Session Management
 - **Alternative**: File-based (JSON) or SQLite store.
-- **Decision**: **Native sessions**. Best performance, no additional storage overhead, and all 4 target CLIs now support it natively.
+- **Decision**: **Native sessions where deterministic**. Claude gets true deterministic native sessions; Gemini, Copilot, and Codex expose provider-owned resume flows upstream, but DeterminAgent deliberately keeps them fresh unless the abstraction is extended safely.
 
 ### Design Decisions
 - **History Truncation**: Default to last 5 messages for token efficiency in long flows.
@@ -127,15 +128,15 @@ Specific implementations for each CLI tool. Each adapter handles command buildin
 | Alias | Claude | Copilot | Gemini | Codex |
 |-------|--------|---------|--------|-------|
 | `fast` | haiku | claude-haiku-4.5 | gemini-3-flash-preview | gpt-5.1-codex-mini |
-| `balanced` | sonnet | claude-sonnet-4.5 | gemini-3-pro-preview | gpt-5.1 |
-| `powerful` | opus | gpt-5 | gemini-3-pro-preview | gpt-5.1-codex-max |
-| `reasoning` | opus | gpt-5.2 | gemini-3-pro-preview | gpt-5.1-codex-max |
-| `free` | haiku | claude-haiku-4.5 | gemini-3-flash-preview | gpt-5.1-codex-mini |
+| `balanced` | sonnet | gpt-5-mini | gemini-3-flash-preview | gpt-5.4 |
+| `powerful` | opus | claude-opus-4.6 | gemini-3.1-pro-preview | gpt-5.3-codex |
+| `reasoning` | opus | gpt-5.4 | gemini-3.1-pro-preview | gpt-5.4 |
+| `free` | haiku | gpt-5-mini | gemini-3-flash-preview | gpt-5.1-codex-mini |
 
 ### Tool Permissions
 - **Claude**: `["--allowed-tools", "..."]` or `["--disallowed-tools", "..."]`
 - **Gemini**: `["--allowed-tools", "..."]` and `["--approval-mode", "..."]`
-- **Copilot**: `["--allow-all-tools"]` (required for non-interactive prompts)
+- **Copilot**: `["--allow-all-tools"]`, `["--allow-tool", "..."]`, and `--allow-all-urls`
 - **Codex**: `["--search"]` for web search; other permissions via config.toml
 
 ---
