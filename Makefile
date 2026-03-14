@@ -6,6 +6,7 @@
 #
 # Usage:
 #   make setup                - Initialize Poetry environment and dependencies
+#   make install              - Install DeterminAgent for global access (current user)
 #   make check                - Run all checks (lint, typecheck, security, test)
 #   make test                 - Run tests
 #   make test-cov             - Run tests with coverage
@@ -19,7 +20,7 @@
 #   make build                - Build distribution package
 #   make clean                - Remove build artifacts
 
-.PHONY: setup test test-cov lint lint-fix typecheck security check env-check verify-integrations docs-build docs-serve build clean help version-check bump-version
+.PHONY: setup install test test-cov lint lint-fix typecheck security check env-check verify-integrations docs-build docs-serve build clean help version-check bump-version
 
 # Default Python command
 PYTHON ?= poetry run python
@@ -29,6 +30,7 @@ help:
 	@echo ""
 	@echo "Setup:"
 	@echo "  make setup                - Initialize Poetry environment and dependencies"
+	@echo "  make install              - Install DeterminAgent globally for current user"
 	@echo "  make env-check            - Verify local environment and CLI tools"
 	@echo ""
 	@echo "Quality Checks (via poetry run):"
@@ -56,6 +58,12 @@ help:
 # Setup development environment
 setup:
 	@poetry install
+
+# Install package for system-wide user access
+install:
+	@python3 -m pip install --user -e .
+	@echo "✅ DeterminAgent installed for current user."
+	@echo "   Ensure ~/.local/bin is in your PATH to run user-installed scripts."
 
 # Verify environment
 env-check:
