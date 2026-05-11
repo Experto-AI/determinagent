@@ -1,0 +1,18 @@
+# adaptive.yml - Global Configuration
+# tech_profile: The architectural style of the project
+# domains: The root-level bounded contexts (directories)
+# precedence_order: How conflicting rules are resolved (e.g. global > local)
+# readiness_state: The current status of the context configuration
+# required_commands: Commands that must pass before deploying
+# max_depth: How many directories deep the AI should traverse for rules
+
+tech_profile: standard
+domains:
+  - .
+precedence_order:
+  - global
+  - local
+readiness_state: configured
+required_commands:
+  - make test
+max_depth: 4
